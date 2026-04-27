@@ -1,0 +1,155 @@
+---
+import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+  showAll?: boolean;
+}
+
+const { projects, showAll = false } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+function getStatusKey(status: string | undefined) {
+  if (!status) return null;
+  return `project.status.${status}` as Parameters<typeof t>[0];
+}
+
+function getStatusClass(status: string | undefined) {
+  return `badge badge-${status ?? 'idea'}`;
+}
+---
+
+<section class="projects-section" aria-label={t('section.projects')}>
+  <div class="container">
+    {!showAll ? (
+      <a href={getLocalePath(lang, '/projects')} class="section-header" aria-label={t('link.allProjects')}>
+        <h2 class="section-title">{t('section.projects')}</h2>
+        <span class="section-arrow">{t('link.seeAll')}</span>
+      </a>
+    ) : (
+      <div class="section-header">
+        <h2 class="section-title">{t('section.projects')}</h2>
+      </div>
+    )}
+
+    <div class="projects-grid">
+      {projects.map(project => {
+        const { title, description, tags = [], status, year, pubDatetime, featured } = project.data;
+        const slug = project.id.replace(/^(en|zh)\//, '');
+        const displayYear = year ?? pubDatetime.getFullYear();
+        const statusKey = getStatusKey(status);
+
+        return (
+          <article class="project-card">
+            <a href={getLocalePath(lang, `/projects/${slug}`)} class="project-card-link">
+              <header class="project-card-header">
+                <span class="project-year">{displayYear}</span>
+                {status && statusKey && (
+                  <span class={getStatusClass(status)}>{t(statusKey)}</span>
+                )}
+              </header>
+
+              <h3 class="project-title">
+                {featured && <span class="featured-dot" aria-label="Featured"></span>}
+                {title}
+              </h3>
+
+              <p class="project-desc">{description}</p>
+
+              {tags.length > 0 && (
+                <div class="project-tags">
+                  {tags.map(tag => (
+                    <span class="tag-pill">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-section {
+    padding-bottom: var(--space-12);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .project-card:hover {
+    border-color: var(--border);
+    background: var(--card-hover);
+  }
+
+  .project-card-link {
+    display: block;
+    padding: var(--space-5);
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .project-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+  }
+
+  .project-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .project-card:hover .project-title {
+    color: var(--accent);
+  }
+
+  .project-desc {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    line-height: 1.55;
+    margin-bottom: var(--space-4);
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+  }
+
+  @media (max-width: 600px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

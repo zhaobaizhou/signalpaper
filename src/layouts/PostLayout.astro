@@ -1,0 +1,259 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const {
+  title,
+  description,
+  pubDatetime,
+  modDatetime,
+  tags = [],
+  featured,
+  ogImage,
+  canonicalURL,
+  summary,
+  author,
+  hideEditPost,
+} = post.data;
+
+const displayAuthor = author ?? SITE.author.name;
+
+// Reading time estimate — fall back gracefully in Astro v6 glob loader
+const rawBody = (post as any).body ?? post.data.summary ?? post.data.description ?? '';
+const wordCount = rawBody.split(/\s+/).length;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+
+const formattedPubDate = pubDatetime.toLocaleDateString(
+  lang === 'zh' ? 'zh-CN' : 'en-US',
+  { year: 'numeric', month: 'long', day: 'numeric' }
+);
+const formattedModDate = modDatetime?.toLocaleDateString(
+  lang === 'zh' ? 'zh-CN' : 'en-US',
+  { year: 'numeric', month: 'long', day: 'numeric' }
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  canonicalURL={canonicalURL}
+  pubDatetime={pubDatetime}
+  modDatetime={modDatetime}
+  article={true}
+>
+  <Header />
+  <main id="main-content" role="main">
+  <div class="post-layout">
+    <header class="post-header container">
+      <nav class="post-back">
+        <a href={getLocalePath(lang, '/posts')}>{t('post.backToWritings')}</a>
+      </nav>
+
+      <div class="post-meta-top">
+        <time datetime={pubDatetime.toISOString()} class="post-date">
+          {formattedPubDate}
+        </time>
+        <span class="post-reading-time">
+          {t('post.readingTime', { n: readingMinutes })}
+        </span>
+      </div>
+
+      <h1 class="post-title">
+        {featured && <span class="featured-dot" aria-hidden="true"></span>}
+        {title}
+      </h1>
+
+      {summary
+        ? <p class="post-summary">{summary}</p>
+        : <p class="post-description">{description}</p>
+      }
+
+      {tags.length > 0 && (
+        <div class="post-tags">
+          {tags.map(tag => (
+            <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {modDatetime && (
+        <p class="post-updated">
+          {t('post.updatedOn')} <time datetime={modDatetime.toISOString()}>{formattedModDate}</time>
+        </p>
+      )}
+    </header>
+
+    <div class="post-divider"></div>
+
+    <article class="prose container fade-in" role="main">
+      <slot />
+    </article>
+
+    <footer class="post-footer container">
+      {tags.length > 0 && (
+        <div class="post-footer-tags">
+          <span class="post-footer-label">{t('post.tags')}</span>
+          <div class="post-footer-tag-list">
+            {tags.map(tag => (
+              <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
+                {tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+      <nav class="post-nav-bottom">
+        <a href={getLocalePath(lang, '/posts')} class="back-link">
+          {t('post.backToWritings')}
+        </a>
+      </nav>
+    </footer>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .post-layout {
+    min-height: 100dvh;
+    padding-bottom: var(--space-20);
+  }
+
+  .post-header {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-8);
+  }
+
+  .post-back {
+    margin-bottom: var(--space-8);
+  }
+
+  .post-back a {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .post-back a:hover {
+    color: var(--accent);
+  }
+
+  .post-meta-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .post-date,
+  .post-reading-time {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+  }
+
+  .post-date::after {
+    content: '·';
+    margin-left: var(--space-4);
+    color: var(--border);
+  }
+
+  .post-title {
+    font-size: clamp(1.75rem, 4vw, var(--text-3xl));
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .post-description,
+  .post-summary {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-5);
+  }
+
+  .post-summary {
+    font-style: italic;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .post-updated {
+    font-size: var(--text-sm);
+    color: var(--fg-subtle);
+  }
+
+  .post-divider {
+    border-top: 1px solid var(--border-muted);
+    margin: 0 auto;
+    max-width: calc(var(--content-width) + var(--space-12));
+    margin-bottom: var(--space-10);
+  }
+
+  .prose.container {
+    padding-top: 0;
+  }
+
+  .post-footer {
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-muted);
+  }
+
+  .post-footer-tags {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .post-footer-label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    padding-top: 0.2em;
+    white-space: nowrap;
+  }
+
+  .post-footer-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .back-link {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+</style>

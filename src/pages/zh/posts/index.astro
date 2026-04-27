@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPosts } from '../../../lib/content';
+
+const lang = 'zh';
+const posts = await getPosts(lang);
+---
+
+<BaseLayout title="写作" description="全部文章 — AI 工作流、产品判断和独立工作相关内容。">
+  <Header />
+  <main id="main-content" role="main">
+    <div class="page-header container">
+      <h1 class="page-title">写作</h1>
+      <p class="page-subtitle">共 {posts.length} 篇</p>
+    </div>
+    <PostList posts={posts} showAll={true} />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .page-header { padding-top: var(--space-12); padding-bottom: var(--space-6); }
+  .page-title { font-family: var(--font-serif); font-size: var(--text-3xl); font-weight: 400; margin-bottom: var(--space-2); }
+  .page-subtitle { font-size: var(--text-sm); color: var(--fg-muted); }
+</style>

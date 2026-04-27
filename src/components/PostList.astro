@@ -1,0 +1,172 @@
+---
+import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  showAll?: boolean;
+}
+
+const { posts, showAll = false } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="post-list-section" aria-label={t('section.writings')}>
+  <div class="container">
+    {!showAll ? (
+      <a href={getLocalePath(lang, '/posts')} class="section-header" aria-label={t('link.allWritings')}>
+        <h2 class="section-title">{t('section.writings')}</h2>
+        <span class="section-arrow">{t('link.seeAll')}</span>
+      </a>
+    ) : (
+      <div class="section-header">
+        <h2 class="section-title">{t('section.writings')}</h2>
+      </div>
+    )}
+
+    <ul class="post-list" role="list">
+      {posts.map(post => {
+        const { title, description, pubDatetime, featured, tags, summary } = post.data;
+        const slug = post.id.replace(/^(en|zh)\//, '');
+
+        const formattedDate = pubDatetime.toLocaleDateString(
+          lang === 'zh' ? 'zh-CN' : 'en-US',
+          lang === 'zh'
+            ? { year: 'numeric', month: 'long', day: 'numeric' }
+            : { month: 'short', day: 'numeric', year: 'numeric' }
+        );
+
+        const primaryTag = tags?.[0];
+
+        return (
+          <li class="post-item">
+            <a href={getLocalePath(lang, `/posts/${slug}`)} class="post-item-link">
+              <!-- Left column: date + tag -->
+              <div class="post-item-meta">
+                <time datetime={pubDatetime.toISOString()} class="post-item-date">
+                  {formattedDate}
+                </time>
+                {primaryTag && (
+                  <span class="post-item-tag">{primaryTag}</span>
+                )}
+              </div>
+
+              <!-- Right column: title + excerpt -->
+              <div class="post-item-content">
+                <h3 class="post-item-title">
+                  {featured && <span class="featured-dot" aria-label="Featured"></span>}
+                  {title}
+                </h3>
+                <p class="post-item-desc">{description}</p>
+                {summary && (
+                  <p class="post-item-summary">{summary}</p>
+                )}
+              </div>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .post-list-section {
+    padding-bottom: var(--space-12);
+  }
+
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-item {
+    border-top: 1px solid var(--border-muted);
+  }
+
+  .post-item:last-child {
+    border-bottom: 1px solid var(--border-muted);
+  }
+
+  .post-item-link {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-6);
+    padding: var(--space-6) 0;
+    text-decoration: none;
+    color: inherit;
+    transition: background var(--transition-fast);
+  }
+
+  .post-item-link:hover .post-item-title {
+    color: var(--accent);
+  }
+
+  .post-item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: 0.15em;
+  }
+
+  .post-item-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    white-space: nowrap;
+  }
+
+  .post-item-tag {
+    font-size: var(--text-sm);
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+  }
+
+  .post-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-item-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--fg);
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .post-item-desc {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    line-height: 1.55;
+  }
+
+  .post-item-summary {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 600px) {
+    .post-item-link {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .post-item-meta {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+    }
+  }
+</style>

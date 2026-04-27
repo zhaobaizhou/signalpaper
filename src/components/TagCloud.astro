@@ -1,0 +1,62 @@
+---
+import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
+
+interface Props {
+  tags: { name: string; count: number }[];
+  showAll?: boolean;
+  activeTag?: string;
+}
+
+const { tags, showAll = false, activeTag } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const sorted = [...tags].sort((a, b) => b.count - a.count);
+---
+
+<section class="tags-section" aria-label={t('section.tags')}>
+  <div class="container">
+    {!showAll ? (
+      <a href={getLocalePath(lang, '/tags')} class="section-header" aria-label="All tags">
+        <h2 class="section-title">{t('section.tags')}</h2>
+        <span class="section-arrow">{t('link.seeAll')}</span>
+      </a>
+    ) : (
+      <div class="section-header">
+        <h2 class="section-title">{t('section.tags')}</h2>
+      </div>
+    )}
+
+    <div class="tag-cloud" role="list">
+      {sorted.map(tag => (
+        <a
+          href={getLocalePath(lang, `/tags/${tag.name}`)}
+          class={`tag-pill ${activeTag === tag.name ? 'tag-pill--active' : ''}`}
+          role="listitem"
+          aria-current={activeTag === tag.name ? 'page' : undefined}
+        >
+          {tag.name}
+          <span class="count">{tag.count}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .tags-section {
+    padding-bottom: var(--space-12);
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tag-pill--active {
+    color: var(--fg) !important;
+    background: var(--card-hover) !important;
+    border-color: var(--fg-muted) !important;
+  }
+</style>

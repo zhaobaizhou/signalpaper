@@ -1,0 +1,109 @@
+---
+import { SITE } from '../config/site';
+import { getLang, useTranslations } from '../i18n/utils';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+const bio = SITE.author.bio[lang];
+const bioLines = bio.split('\n\n');
+---
+
+<section class="hero" aria-label="Introduction">
+  <div class="container">
+    <h1 class="hero-name">
+      {lang === 'zh' ? `你好，我是${SITE.author.name}。` : SITE.author.name}
+      {lang === 'en' && <span class="hero-period" aria-hidden="true">.</span>}
+    </h1>
+
+    <div class="hero-bio">
+      {bioLines.map((line, i) => (
+        <p class={i === 0 ? 'hero-bio-primary' : 'hero-bio-secondary'}>{line}</p>
+      ))}
+    </div>
+
+    <nav class="hero-links" aria-label="Personal links">
+      <a href={SITE.social.now} class="hero-link">
+        {t('hero.now')}
+      </a>
+      <a href={SITE.social.github} target="_blank" rel="noopener noreferrer" class="hero-link">
+        {t('hero.github')}
+      </a>
+      <a href={SITE.social.x} target="_blank" rel="noopener noreferrer" class="hero-link">
+        {t('hero.x')}
+      </a>
+      <a href={SITE.social.email} class="hero-link">
+        {t('hero.email')}
+      </a>
+      <a href={SITE.social.rss} class="hero-link">
+        {t('hero.rss')}
+      </a>
+    </nav>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-8);
+  }
+
+  .hero-name {
+    font-family: var(--font-sans);
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin-bottom: var(--space-5);
+    line-height: 1.2;
+  }
+
+  .hero-period {
+    color: var(--accent);
+  }
+
+  .hero-bio {
+    max-width: 520px;
+    margin-bottom: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero-bio-primary {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+
+  .hero-bio-secondary {
+    font-size: var(--text-base);
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+
+  .hero-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-link {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--fg-muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    padding: 0.4em 0.8em;
+    transition: all var(--transition-fast);
+  }
+
+  .hero-link:hover {
+    color: var(--fg);
+    background: var(--card-hover);
+    border-color: var(--fg-muted);
+  }
+</style>

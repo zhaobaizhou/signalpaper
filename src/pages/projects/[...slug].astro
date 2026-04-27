@@ -1,0 +1,139 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ id, data }) => {
+    return id.startsWith('en/') && !data.draft;
+  });
+
+  return projects.map(project => ({
+    params: { slug: project.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '') },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, description, pubDatetime, modDatetime, tags, status, year, featured, ogImage, canonicalURL, summary } = project.data;
+const displayYear = year ?? pubDatetime.getFullYear();
+
+const statusLabels: Record<string, string> = {
+  idea: 'IDEA', active: 'ACTIVE', completed: 'COMPLETED',
+  archived: 'ARCHIVED', paused: 'PAUSED', shipped: 'SHIPPED',
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  canonicalURL={canonicalURL}
+  pubDatetime={pubDatetime}
+  modDatetime={modDatetime}
+  article={true}
+>
+  <Header />
+  <main id="main-content" role="main">
+    <article class="project-detail container" role="main">
+      <nav class="back-nav">
+        <a href="/projects">← Back to projects</a>
+      </nav>
+
+      <header class="project-detail-header">
+        <div class="project-detail-meta">
+          <span class="project-year-display">{displayYear}</span>
+          {status && (
+            <span class={`badge badge-${status}`}>{statusLabels[status] ?? status.toUpperCase()}</span>
+          )}
+        </div>
+
+        <h1 class="project-detail-title">
+          {featured && <span class="featured-dot" aria-hidden="true"></span>}
+          {title}
+        </h1>
+
+        {summary
+          ? <p class="project-detail-summary">{summary}</p>
+          : <p class="project-detail-desc">{description}</p>
+        }
+
+        {tags.length > 0 && (
+          <div class="project-detail-tags">
+            {tags.map(tag => (
+              <a href={`/tags/${tag}`} class="tag-pill">{tag}</a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <div class="project-divider"></div>
+
+      <div class="prose fade-in">
+        <Content />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .project-detail {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-20);
+  }
+
+  .back-nav { margin-bottom: var(--space-8); }
+  .back-nav a {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    transition: color var(--transition-fast);
+  }
+  .back-nav a:hover { color: var(--accent); }
+
+  .project-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .project-year-display {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+  }
+
+  .project-detail-title {
+    font-size: clamp(1.75rem, 4vw, var(--text-3xl));
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .project-detail-desc,
+  .project-detail-summary {
+    font-size: var(--text-lg);
+    color: var(--fg-muted);
+    margin-bottom: var(--space-5);
+    line-height: 1.6;
+  }
+
+  .project-detail-summary { font-style: italic; }
+
+  .project-detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .project-divider {
+    border-top: 1px solid var(--border-muted);
+    margin: var(--space-8) 0;
+  }
+</style>

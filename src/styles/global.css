@@ -1,0 +1,456 @@
+/* ==========================================================================
+   SignalPaper — Design System
+   ========================================================================== */
+
+/* Google Fonts */
+/* Google Fonts — Western */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Google Fonts — CJK (Noto Sans Simplified Chinese, subset via Google's smart subsetting) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties (Light Mode defaults)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Backgrounds */
+  --bg:          #f9f8f6; /* Parchment base */
+  --bg-alt:      #f0eee8;
+  --card-bg:     #f2f0ea;
+  --card-hover:  #e6e3da;
+
+  /* Foregrounds */
+  --fg:          #2b2a27;
+  --fg-muted:    #7b7874;
+  --fg-subtle:   #b3b0a9;
+
+  /* Accent — Vermilion */
+  --accent:      #df4c3a;
+  --accent-dim:  #e6786a;
+
+  /* Status badges */
+  --status-active:    #2e7d44;
+  --status-active-bg: #d4f0dc;
+  --status-paused:    #8a6914;
+  --status-paused-bg: #fdf2cc;
+  --status-shipped:   #1a5ea8;
+  --status-shipped-bg:#d0e4f7;
+  --status-idea:      #5a5a5a;
+  --status-idea-bg:   #e8e8e8;
+  --status-archived:  #5a5a5a;
+  --status-archived-bg:#e8e8e8;
+  --status-completed: #1a5ea8;
+  --status-completed-bg:#d0e4f7;
+
+  /* Borders */
+  --border:      #ddd9cf;
+  --border-muted:#e8e4db;
+
+  /* Typography */
+  /* Sans: Inter for Latin, Noto Sans SC for CJK */
+  --font-sans:   'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+  /* Serif: Lora for Latin display, Noto Serif SC for CJK body */
+  --font-serif:  'Lora', 'Noto Serif SC', 'STSong', Georgia, serif;
+  --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Type scale — desktop 17px base */
+  --text-xs:     0.75rem;    /* 12.75px */
+  --text-sm:     0.875rem;   /* 14.875px */
+  --text-base:   1rem;       /* 17px (set on html) */
+  --text-lg:     1.125rem;   /* 19px */
+  --text-xl:     1.3125rem;  /* 22.3px */
+  --text-2xl:    1.625rem;   /* 27.6px */
+  --text-3xl:    2.125rem;   /* 36px */
+  --text-4xl:    2.75rem;    /* 46.75px */
+
+  /* Spacing */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Layout — wider, more breathing room */
+  --content-width: 780px;
+  --nav-height:    58px;
+
+  /* Radius */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. Dark Mode
+   -------------------------------------------------------------------------- */
+[data-theme='dark'] {
+  --bg:          #0e0d0b;
+  --bg-alt:      #171612;
+  --card-bg:     #1a1915;
+  --card-hover:  #222018;
+
+  --fg:          #e8e4dc;
+  --fg-muted:    #8a867e;
+  --fg-subtle:   #5a5650;
+
+  --accent:      #c4a35a;
+  --accent-dim:  #9a7c3a;
+
+  --status-active:    #5dc478;
+  --status-active-bg: #0e2c17;
+  --status-paused:    #d4a82a;
+  --status-paused-bg: #2a2008;
+  --status-shipped:   #5aa0d4;
+  --status-shipped-bg:#0a1e32;
+  --status-idea:      #888;
+  --status-idea-bg:   #1e1e1e;
+  --status-archived:  #666;
+  --status-archived-bg:#1a1a1a;
+  --status-completed: #5aa0d4;
+  --status-completed-bg:#0a1e32;
+
+  --border:      #2a2822;
+  --border-muted:#201e1a;
+}
+
+/* --------------------------------------------------------------------------
+   3. Base Reset & Global Styles
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 17px; /* desktop base */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  background-color: var(--bg);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  min-height: 100dvh;
+}
+
+/* --------------------------------------------------------------------------
+   4. Typography
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--fg);
+}
+
+p { line-height: 1.75; margin-bottom: 0; }
+
+/* Pangu-style: breathing room between CJK and Latin/numbers */
+:lang(zh) p,
+:lang(zh) li,
+:lang(zh) blockquote {
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  word-break: break-cjk;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover { color: var(--accent); }
+
+strong { font-weight: 600; }
+em { font-style: italic; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-5);
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--space-8) 0;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   5. Layout Utilities
+   -------------------------------------------------------------------------- */
+.container {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. Section Headers
+   -------------------------------------------------------------------------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  margin-inline: calc(var(--space-3) * -1);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+a.section-header:hover {
+  background: var(--card-hover);
+}
+
+.section-title {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.section-arrow {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+a.section-header:hover .section-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   7. Status Badges
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.badge-active    { color: var(--status-active);    background: var(--status-active-bg); }
+.badge-paused    { color: var(--status-paused);    background: var(--status-paused-bg); }
+.badge-shipped   { color: var(--status-shipped);   background: var(--status-shipped-bg); }
+.badge-idea      { color: var(--status-idea);      background: var(--status-idea-bg); }
+.badge-archived  { color: var(--status-archived);  background: var(--status-archived-bg); }
+.badge-completed { color: var(--status-completed); background: var(--status-completed-bg); }
+
+/* --------------------------------------------------------------------------
+   8. Tag Pill
+   -------------------------------------------------------------------------- */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.2em 0.55em;
+  transition: color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tag-pill:hover {
+  color: var(--fg);
+  background: var(--card-hover);
+  border-color: var(--border);
+}
+
+.tag-pill .count {
+  color: var(--fg-subtle);
+  font-size: 0.7rem;
+}
+
+/* --------------------------------------------------------------------------
+   9. Featured Dot
+   -------------------------------------------------------------------------- */
+.featured-dot {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: 0.4em;
+  vertical-align: middle;
+  position: relative;
+  top: -0.05em;
+}
+
+/* --------------------------------------------------------------------------
+   10. Prose (article body)
+   -------------------------------------------------------------------------- */
+.prose {
+  color: var(--fg);
+  font-size: var(--text-base);
+  /* English prose: comfortable reading */
+  line-height: 1.78;
+}
+
+/* CJK prose: slightly more generous */
+:lang(zh) .prose,
+.prose:lang(zh) {
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  font-family: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.prose h1 { font-size: var(--text-3xl); margin-top: var(--space-12); margin-bottom: var(--space-5); }
+.prose h2 { font-size: var(--text-2xl); margin-top: var(--space-10); margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 1px solid var(--border-muted); }
+.prose h3 { font-size: var(--text-xl);  margin-top: var(--space-8);  margin-bottom: var(--space-3); }
+.prose h4 { font-size: var(--text-lg);  margin-top: var(--space-6);  margin-bottom: var(--space-2); }
+
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child { margin-top: 0; }
+
+/* Generous paragraph spacing — 1.5em breathing room */
+.prose p   { margin-bottom: 1.5em; }
+.prose ul,
+.prose ol  { margin-bottom: 1.5em; padding-left: var(--space-6); }
+.prose li  { margin-bottom: 0.5em; }
+.prose blockquote { margin: var(--space-8) 0; }
+.prose hr  { margin: var(--space-12) 0; }
+.prose pre { margin: var(--space-8) 0; }
+.prose img { margin: var(--space-10) auto; border-radius: var(--radius-md); }
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-6) 0;
+  font-size: var(--text-sm);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+.prose th { color: var(--fg-muted); font-weight: 500; }
+.prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--transition-fast);
+}
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   11. Animations
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* --------------------------------------------------------------------------
+   12. Selection & Scrollbar
+   -------------------------------------------------------------------------- */
+::selection {
+  background: var(--accent);
+  color: #0e0d0b;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fg-muted); }
+
+/* --------------------------------------------------------------------------
+   13. Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  html {
+    font-size: 16px; /* mobile: 16px base */
+  }
+  :root {
+    --text-3xl: 1.75rem;
+    --text-4xl: 2rem;
+    --content-width: 100%;
+  }
+  .container { padding-inline: var(--space-5); }
+  /* Mobile CJK line height slightly more generous */
+  :lang(zh) .prose {
+    line-height: 1.9;
+  }
+}
