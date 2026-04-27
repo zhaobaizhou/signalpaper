@@ -1,22 +1,39 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../../layouts/PostLayout.astro';
+import { getSlug } from '../../../lib/content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ id, data }) => {
     return id.startsWith('zh/') && !data.draft;
   });
 
-  return posts.map(post => ({
-    params: { slug: post.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '') },
-    props: { post },
-  }));
+  // Sort: featured first, then by date
+  const sorted = posts.sort((a, b) => {
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
+  });
+
+  return sorted.map((post, index) => {
+    const prevPost = sorted[index - 1] ?? null;
+    const nextPost = sorted[index + 1] ?? null;
+
+    return {
+      params: { slug: getSlug(post.id) },
+      props: {
+        post,
+        prev: prevPost ? { title: prevPost.data.title, url: `/zh/posts/${getSlug(prevPost.id)}` } : null,
+        next: nextPost ? { title: nextPost.data.title, url: `/zh/posts/${getSlug(nextPost.id)}` } : null,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<PostLayout post={post}>
+<PostLayout post={post} prev={prev} next={next}>
   <Content />
 </PostLayout>

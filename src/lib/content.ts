@@ -8,21 +8,27 @@ export async function getPosts(lang: Lang, includeDraft = false) {
     const isPublished = includeDraft || !data.draft;
     return isLang && isPublished;
   });
-  return all.sort(
-    (a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf()
-  );
+  return all.sort((a, b) => {
+    // Featured first, then by date descending
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
+  });
 }
 
-/** Get published projects for a given language, sorted newest first */
+/** Get published projects for a given language, sorted featured-first then newest */
 export async function getProjects(lang: Lang, includeDraft = false) {
   const all = await getCollection('projects', ({ id, data }) => {
     const isLang = id.startsWith(`${lang}/`);
     const isPublished = includeDraft || !data.draft;
     return isLang && isPublished;
   });
-  return all.sort(
-    (a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf()
-  );
+  return all.sort((a, b) => {
+    // Featured first, then by date descending
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
+  });
 }
 
 /** Get featured posts */
