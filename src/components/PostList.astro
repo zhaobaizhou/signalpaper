@@ -55,7 +55,12 @@ const t = useTranslations(lang);
               <!-- Right column: title + excerpt -->
               <div class="post-item-content">
                 <h3 class="post-item-title">
-                  {featured && <span class="featured-dot" aria-label="Featured"></span>}
+                  {featured && (
+                    <svg class="featured-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Featured">
+                      <line x1="12" y1="17" x2="12" y2="22"></line>
+                      <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+                    </svg>
+                  )}
                   {title}
                 </h3>
                 <p class="post-item-desc">{description}</p>
@@ -140,8 +145,14 @@ const t = useTranslations(lang);
     color: var(--fg);
     transition: color var(--transition-fast);
     display: flex;
-    align-items: baseline;
-    gap: 0.4em;
+    align-items: center;
+    gap: 0.35em;
+  }
+
+  .featured-icon {
+    flex-shrink: 0;
+    color: var(--accent);
+    transform: translateY(-1px);
   }
 
   .post-item-desc {

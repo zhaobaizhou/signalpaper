@@ -263,7 +263,7 @@ img, video {
 }
 
 a.section-header:hover {
-  background: var(--card-hover);
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
 }
 
 .section-title {

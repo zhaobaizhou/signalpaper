@@ -136,7 +136,7 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     } catch {}
   }
 
-  // ── Highlight helper ──────────────────────────────────────────────────────
+  // ── Highlight & Snippet helpers ───────────────────────────────────────────
   function escapeHtml(s: string) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -150,14 +150,27 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     );
   }
 
-  /** Extract ~200-char snippet around the first hit in text */
-  function snippet(text: string, query: string, maxLen = 180): string {
-    const idx = text.toLowerCase().indexOf(query.toLowerCase());
-    if (idx === -1) return escapeHtml(text.slice(0, maxLen)) + (text.length > maxLen ? '…' : '');
-    const start = Math.max(0, idx - 60);
-    const end = Math.min(text.length, idx + query.length + 120);
-    const raw = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
-    return highlight(raw, query);
+  function getSnippets(text: string, query: string, max = 3): string[] {
+    if (!query) return [];
+    const q = query.toLowerCase();
+    const txt = text.toLowerCase();
+    let lastIdx = 0;
+    const results: string[] = [];
+    while (results.length < max) {
+      const idx = txt.indexOf(q, lastIdx);
+      if (idx === -1) break;
+      
+      const start = Math.max(0, idx - 40);
+      const end = Math.min(txt.length, idx + q.length + 60);
+      
+      let snip = text.slice(start, end);
+      if (start > 0) snip = '…' + snip;
+      if (end < text.length) snip = snip + '…';
+      
+      results.push(highlight(snip, query));
+      lastIdx = end;
+    }
+    return results;
   }
 
   // ── Scoring ───────────────────────────────────────────────────────────────
@@ -194,25 +207,32 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
       return;
     }
 
-    const typeLabel = (type: string, lang: string) =>
-      type === 'project' ? (lang === 'zh' ? '项目' : 'Project') : (lang === 'zh' ? '文章' : 'Post');
-
     resultsEl.innerHTML = matches.map(({ item }) => {
       const titleHtml = highlight(item.title, query);
-      const excerptHtml = (() => {
-        // prefer body snippet, fallback to description
-        const bodySnip = snippet(item.body.replace(/^---[\s\S]*?---/,'').replace(/[#*`>]/g,''), query);
-        return bodySnip || snippet(item.description, query);
-      })();
+      const cleanBody = item.body.replace(/^---[\s\S]*?---/,'').replace(/[#*`>\[\]]/g,'').replace(/\n+/g,' ');
+      
+      let snips = getSnippets(cleanBody, query, 3);
+      if (snips.length === 0 && item.description.toLowerCase().includes(query.toLowerCase())) {
+        snips = [highlight(item.description, query)];
+      }
+
+      const count = snips.length || 1;
+      const icon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
+
       return `
-        <a href="${item.url}" class="search-result-item" role="option">
-          <div class="sr-item-header">
-            <span class="sr-item-title">${titleHtml}</span>
-            <span class="sr-item-type">${typeLabel(item.type, item.lang)}</span>
+        <div class="search-file-group">
+          <a href="${item.url}" class="sfg-header">
+            <div class="sfg-title-wrap">
+              <span class="sfg-icon">${icon}</span>
+              <span class="sfg-title">${titleHtml}</span>
+              <span class="sfg-path">${item.url.replace(/^\//, '')}</span>
+            </div>
+            <span class="sfg-badge">${count}</span>
+          </a>
+          <div class="sfg-matches">
+            ${snips.map(s => `<a href="${item.url}" class="sfg-match">${s}</a>`).join('')}
           </div>
-          ${item.tags.length ? `<div class="sr-item-tags">${item.tags.map(t => `<span class="sr-tag">${highlight(t, query)}</span>`).join('')}</div>` : ''}
-          <p class="sr-item-snippet">${excerptHtml}</p>
-        </a>
+        </div>
       `;
     }).join('');
   }
@@ -407,74 +427,91 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     padding: var(--space-6) 0;
   }
 
-  .search-result-item {
-    display: block;
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-md);
+  .search-file-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .sfg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
     text-decoration: none;
-    transition: background var(--transition-fast);
-    border: 1px solid transparent;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-1);
+    transition: background var(--transition-fast), border-color var(--transition-fast);
   }
 
-  .search-result-item + .search-result-item {
-    margin-top: var(--space-1);
-  }
-
-  .search-result-item:hover {
+  .sfg-header:hover {
     background: var(--card-hover);
     border-color: var(--border);
   }
 
-  .sr-item-header {
+  .sfg-title-wrap {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
-    margin-bottom: var(--space-1);
-  }
-
-  .sr-item-title {
-    font-size: var(--text-base);
-    font-weight: 600;
-    color: var(--fg);
-    line-height: 1.3;
-  }
-
-  .sr-item-type {
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--fg-subtle);
-    flex-shrink: 0;
-  }
-
-  .sr-item-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1);
-    margin-bottom: var(--space-1);
-  }
-
-  .sr-tag {
-    font-size: 0.7rem;
-    color: var(--accent);
-    font-weight: 500;
-    text-transform: lowercase;
-  }
-
-  .sr-item-snippet {
-    font-size: var(--text-sm);
-    color: var(--fg-muted);
-    line-height: 1.55;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    align-items: center;
+    gap: var(--space-2);
     overflow: hidden;
   }
 
-  /* keyword highlight mark */
-  .search-result-item mark {
+  .sfg-icon {
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+  }
+
+  .sfg-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  .sfg-path {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--fg-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sfg-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--fg-muted);
+    background: var(--card-bg);
+    padding: 0.1em 0.5em;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+
+  .sfg-matches {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sfg-match {
+    display: block;
+    padding: var(--space-2) var(--space-3) var(--space-2) 2.2rem;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .sfg-match:hover {
+    background: var(--card-hover);
+    color: var(--fg);
+  }
+
+  .sfg-title mark, .sfg-match mark {
     background: transparent;
     color: var(--accent);
     font-weight: 600;
