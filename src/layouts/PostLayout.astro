@@ -210,7 +210,7 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
   .post-header {
     padding-top: var(--space-8);
-    padding-bottom: var(--space-6);
+    padding-bottom: var(--space-2);
   }
 
   .post-back {
@@ -366,7 +366,6 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
   }
 
   .post-updated {
@@ -376,9 +375,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
   .post-divider {
     border-top: 1px solid var(--border-muted);
-    margin: 0 auto;
-    max-width: calc(var(--content-width) + var(--space-12));
-    margin-bottom: var(--space-10);
+    margin: var(--space-4) auto var(--space-6);
+    max-width: var(--content-width);
   }
 
   .prose.container {

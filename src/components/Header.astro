@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle.astro';
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 const alternateLang = lang === 'en' ? 'zh' : 'en';
-const alternatePath = getAlternatePath(lang, Astro.url.pathname);
+const alternatePath = alternateLang === 'zh' ? '/zh/' : '/';
 ---
 
 <header class="site-header" role="banner">
