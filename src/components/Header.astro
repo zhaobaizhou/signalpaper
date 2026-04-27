@@ -209,31 +209,47 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
 
     resultsEl.innerHTML = matches.map(({ item }) => {
       const titleHtml = highlight(item.title, query);
-      const cleanBody = item.body.replace(/^---[\s\S]*?---/,'').replace(/[#*`>\[\]]/g,'').replace(/\n+/g,' ');
+      // Clean up body: strip frontmatter, markdown syntax, collapse whitespace
+      const cleanBody = item.body
+        .replace(/^---[\s\S]*?---/, '')
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/[#*`>|\[\]()]/g, '')
+        .replace(/https?:\/\/\S+/g, '')
+        .replace(/[ \t]{2,}/g, ' ')
+        .replace(/\n{2,}/g, '\n')
+        .trim();
       
+      // Get up to 3 compact snippets (each ~120 chars around keyword)
       let snips = getSnippets(cleanBody, query, 3);
-      if (snips.length === 0 && item.description.toLowerCase().includes(query.toLowerCase())) {
-        snips = [highlight(item.description, query)];
+      if (snips.length === 0) {
+        snips = getSnippets(item.description, query, 1);
+      }
+      if (snips.length === 0) {
+        snips = [escapeHtml(item.description.slice(0, 120)) + (item.description.length > 120 ? '\u2026' : '')];
       }
 
-      const count = snips.length || 1;
-      const icon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
+      // Total keyword occurrences across body + description
+      const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      const totalMatches = (cleanBody.match(re) || []).length + (item.description.match(re) || []).length;
+      const badgeCount = totalMatches > 0 ? totalMatches : snips.length;
 
-      return `
-        <div class="search-file-group">
-          <a href="${item.url}" class="sfg-header">
-            <div class="sfg-title-wrap">
-              <span class="sfg-icon">${icon}</span>
-              <span class="sfg-title">${titleHtml}</span>
-              <span class="sfg-path">${item.url.replace(/^\//, '')}</span>
-            </div>
-            <span class="sfg-badge">${count}</span>
-          </a>
-          <div class="sfg-matches">
-            ${snips.map(s => `<a href="${item.url}" class="sfg-match">${s}</a>`).join('')}
-          </div>
-        </div>
-      `;
+      // File icon SVG (14×14, stroke style)
+      const icon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+
+      // Short display path: strip leading slash, truncate long paths
+      const displayPath = item.url.replace(/^\//, '');
+
+      return `<div class="sfg">
+  <a href="${item.url}" class="sfg-row sfg-file" aria-label="${escapeHtml(item.title)}">
+    <span class="sfg-file-left">
+      <span class="sfg-file-icon">${icon}</span>
+      <span class="sfg-file-name">${titleHtml}</span>
+      <span class="sfg-file-path">${escapeHtml(displayPath)}</span>
+    </span>
+    <span class="sfg-file-count" aria-label="${badgeCount} matches">${badgeCount}</span>
+  </a>
+  <div class="sfg-snippets">${snips.map((s, i) => `<a href="${item.url}" class="sfg-row sfg-snippet" tabindex="-1"><span class="sfg-line-gutter">${i + 1}</span><span class="sfg-line-text">${s}</span></a>`).join('')}</div>
+</div>`;
     }).join('');
   }
 
@@ -427,94 +443,132 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     padding: var(--space-6) 0;
   }
 
-  .search-file-group {
-    margin-bottom: var(--space-4);
-  }
+  /* ─── VS Code–style search results ─────────────────────────────────── */
 
-  .sfg-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-2) var(--space-3);
-    text-decoration: none;
-    background: var(--bg-alt);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-sm);
+  /* Each file group */
+  .sfg {
     margin-bottom: var(--space-1);
-    transition: background var(--transition-fast), border-color var(--transition-fast);
   }
 
-  .sfg-header:hover {
-    background: var(--card-hover);
-    border-color: var(--border);
-  }
-
-  .sfg-title-wrap {
+  /* Shared row base */
+  .sfg-row {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    text-decoration: none;
+    padding: 2px 8px;
+    gap: 6px;
+    border-radius: 3px;
+    transition: background 100ms ease;
+  }
+
+  .sfg-row:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  /* File header row */
+  .sfg-file {
+    justify-content: space-between;
+    padding-top: 5px;
+    padding-bottom: 3px;
+  }
+
+  .sfg-file-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;      /* allow truncation */
     overflow: hidden;
   }
 
-  .sfg-icon {
+  .sfg-file-icon {
+    flex-shrink: 0;
     color: var(--fg-muted);
     display: flex;
     align-items: center;
+    opacity: 0.7;
   }
 
-  .sfg-title {
-    font-size: var(--text-sm);
+  .sfg-file-name {
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--fg);
     white-space: nowrap;
-  }
-
-  .sfg-path {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--fg-subtle);
-    white-space: nowrap;
+    flex-shrink: 0;
+    max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .sfg-badge {
+  .sfg-file-path {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--fg-muted);
-    background: var(--card-bg);
-    padding: 0.1em 0.5em;
-    border-radius: 99px;
-    font-weight: 500;
+    font-size: 0.68rem;
+    color: var(--fg-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
-  .sfg-matches {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .sfg-match {
-    display: block;
-    padding: var(--space-2) var(--space-3) var(--space-2) 2.2rem;
-    text-decoration: none;
+  /* Count badge — right-aligned pill */
+  .sfg-file-count {
+    flex-shrink: 0;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.05em 0.45em;
+    border-radius: 999px;
+    min-width: 1.4em;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* Snippet rows */
+  .sfg-snippets {
+    padding-bottom: 3px;
+  }
+
+  .sfg-snippet {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 8px;
+    padding-right: 8px;
+    align-items: baseline;
+  }
+
+  .sfg-line-gutter {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--fg-subtle);
+    width: 1.6rem;
+    text-align: right;
+    user-select: none;
+  }
+
+  .sfg-line-text {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     color: var(--fg-muted);
-    line-height: 1.5;
-    border-radius: var(--radius-sm);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
-  .sfg-match:hover {
-    background: var(--card-hover);
-    color: var(--fg);
-  }
-
-  .sfg-title mark, .sfg-match mark {
+  /* Keyword highlight */
+  .sfg-file-name mark,
+  .sfg-line-text mark {
     background: transparent;
     color: var(--accent);
-    font-weight: 600;
+    font-weight: 700;
+  }
+
+  /* Separator between groups */
+  .sfg + .sfg {
+    border-top: 1px solid var(--border-muted);
+    padding-top: var(--space-1);
+    margin-top: var(--space-1);
   }
 
   /* search keyboard shortcut hint */
