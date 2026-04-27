@@ -75,9 +75,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
       <h1 class="post-title">
         {featured && (
-          <svg class="featured-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Featured">
-            <line x1="12" y1="17" x2="12" y2="22"></line>
-            <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.68V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.68a2 2 0 0 1-1.11 1.87l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="currentColor" aria-label="Featured">
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
           </svg>
         )}
         {title}
@@ -153,6 +152,51 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     </div>
   </main>
   <Footer />
+
+  <!-- Floating Article Toolbar -->
+  <aside class="post-fab" id="post-fab" aria-label="Article tools">
+    {prev && (
+      <a
+        href={prev.url}
+        class="fab-btn fab-nav"
+        data-tooltip={prev.title}
+        aria-label={(lang === 'zh' ? '上一篇：' : 'Previous: ') + prev.title}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+    )}
+    <button class="fab-btn" id="fab-top" aria-label={lang === 'zh' ? '回到顶部' : 'Back to top'}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+    {next && (
+      <a
+        href={next.url}
+        class="fab-btn fab-nav"
+        data-tooltip={next.title}
+        aria-label={(lang === 'zh' ? '下一篇：' : 'Next: ') + next.title}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    )}
+  </aside>
+
+  <script>
+    const fab = document.getElementById('post-fab');
+    const fabTop = document.getElementById('fab-top');
+
+    // Show toolbar after scrolling past the post header
+    const sentinel = document.querySelector('.post-header');
+    if (sentinel && fab) {
+      const io = new IntersectionObserver(
+        ([entry]) => fab.classList.toggle('fab-visible', !entry.isIntersecting),
+        { threshold: 0, rootMargin: '-20px 0px 0px 0px' }
+      );
+      io.observe(sentinel);
+    }
+
+    // Back to top
+    fabTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
 </BaseLayout>
 
 <style>
@@ -200,6 +244,7 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     color: var(--border);
   }
 
+  /* Featured star icon */
   .post-title {
     font-size: clamp(1.75rem, 4vw, var(--text-3xl));
     font-weight: 600;
@@ -207,13 +252,97 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     margin-bottom: var(--space-4);
     display: flex;
     align-items: center;
-    gap: 0.35em;
+    gap: 0.3em;
   }
 
-  .featured-icon {
+  .featured-star {
     flex-shrink: 0;
     color: var(--accent);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+  }
+
+  /* ── Floating article toolbar ─────────────────────────────────────────── */
+  .post-fab {
+    position: fixed;
+    right: max(16px, calc((100vw - var(--content-width)) / 2 - 68px));
+    bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 50;
+    opacity: 0;
+    transform: translateX(6px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    pointer-events: none;
+  }
+
+  .post-fab.fab-visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .fab-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    position: relative;
+    font-family: inherit;
+  }
+
+  .fab-btn:hover {
+    background: var(--bg-alt);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Tooltip: shows article title on hover */
+  .fab-nav[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 0.68rem;
+    line-height: 1.4;
+    padding: 4px 9px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+    /* Prevent tooltip overflow on narrow screens */
+    transform: translateY(-50%);
+  }
+
+  .fab-nav[data-tooltip]:hover::before {
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    .post-fab {
+      right: 12px;
+      bottom: 24px;
+    }
+    /* hide tooltip on mobile — title too long */
+    .fab-nav[data-tooltip]::before {
+      display: none;
+    }
   }
 
   .post-description,

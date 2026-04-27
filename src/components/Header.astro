@@ -209,47 +209,45 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
 
     resultsEl.innerHTML = matches.map(({ item }) => {
       const titleHtml = highlight(item.title, query);
-      // Clean up body: strip frontmatter, markdown syntax, collapse whitespace
+      // Clean up body
       const cleanBody = item.body
         .replace(/^---[\s\S]*?---/, '')
         .replace(/```[\s\S]*?```/g, '')
-        .replace(/[#*`>|\[\]()]/g, '')
+        .replace(/[#*`>|[\]()]/g, '')
         .replace(/https?:\/\/\S+/g, '')
         .replace(/[ \t]{2,}/g, ' ')
-        .replace(/\n{2,}/g, '\n')
+        .replace(/\n+/g, ' ')
         .trim();
-      
-      // Get up to 3 compact snippets (each ~120 chars around keyword)
+
       let snips = getSnippets(cleanBody, query, 3);
-      if (snips.length === 0) {
-        snips = getSnippets(item.description, query, 1);
-      }
-      if (snips.length === 0) {
-        snips = [escapeHtml(item.description.slice(0, 120)) + (item.description.length > 120 ? '\u2026' : '')];
-      }
+      if (snips.length === 0) snips = getSnippets(item.description, query, 1);
+      if (snips.length === 0) snips = [escapeHtml(item.description.slice(0, 100)) + (item.description.length > 100 ? '\u2026' : '')];
 
-      // Total keyword occurrences across body + description
+      // Count total keyword hits
       const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      const totalMatches = (cleanBody.match(re) || []).length + (item.description.match(re) || []).length;
-      const badgeCount = totalMatches > 0 ? totalMatches : snips.length;
+      const hits = (cleanBody.match(re) || []).length + (item.description.match(re) || []).length;
+      const badge = hits > 0 ? hits : snips.length;
 
-      // File icon SVG (14×14, stroke style)
-      const icon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
-
-      // Short display path: strip leading slash, truncate long paths
+      const icon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
       const displayPath = item.url.replace(/^\//, '');
 
-      return `<div class="sfg">
-  <a href="${item.url}" class="sfg-row sfg-file" aria-label="${escapeHtml(item.title)}">
-    <span class="sfg-file-left">
-      <span class="sfg-file-icon">${icon}</span>
-      <span class="sfg-file-name">${titleHtml}</span>
-      <span class="sfg-file-path">${escapeHtml(displayPath)}</span>
-    </span>
-    <span class="sfg-file-count" aria-label="${badgeCount} matches">${badgeCount}</span>
-  </a>
-  <div class="sfg-snippets">${snips.map((s, i) => `<a href="${item.url}" class="sfg-row sfg-snippet" tabindex="-1"><span class="sfg-line-gutter">${i + 1}</span><span class="sfg-line-text">${s}</span></a>`).join('')}</div>
-</div>`;
+      const snipRows = snips.map((s, i) =>
+        `<a href="${item.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${s}</span></a>`
+      ).join('');
+
+      return (
+        `<div class="sfg">` +
+          `<a href="${item.url}" class="sfg-file" aria-label="${escapeHtml(item.title)}">` +
+            `<span class="sfg-file-icon">${icon}</span>` +
+            `<span class="sfg-file-info">` +
+              `<span class="sfg-file-name">${titleHtml}</span>` +
+              `<span class="sfg-file-path">${escapeHtml(displayPath)}</span>` +
+            `</span>` +
+            `<span class="sfg-badge">${badge}</span>` +
+          `</a>` +
+          `<div class="sfg-snips">${snipRows}</div>` +
+        `</div>`
+      );
     }).join('');
   }
 
@@ -443,132 +441,133 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     padding: var(--space-6) 0;
   }
 
-  /* ─── VS Code–style search results ─────────────────────────────────── */
+  /* ─── VS Code–style search results ─────────────────────────────────────────── */
 
-  /* Each file group */
+  /* File group container */
   .sfg {
-    margin-bottom: var(--space-1);
+    margin-bottom: 2px;
+  }
+  .sfg + .sfg {
+    border-top: 1px solid var(--border-muted);
+    margin-top: 3px;
+    padding-top: 3px;
   }
 
-  /* Shared row base */
-  .sfg-row {
+  /* File header row — icon | [name/path col] | badge */
+  .sfg-file {
     display: flex;
-    align-items: center;
-    text-decoration: none;
-    padding: 2px 8px;
+    align-items: flex-start;
     gap: 6px;
+    padding: 4px 8px;
+    text-decoration: none;
     border-radius: 3px;
     transition: background 100ms ease;
-  }
-
-  .sfg-row:hover {
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-  }
-
-  /* File header row */
-  .sfg-file {
-    justify-content: space-between;
-    padding-top: 5px;
-    padding-bottom: 3px;
-  }
-
-  .sfg-file-left {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    min-width: 0;      /* allow truncation */
     overflow: hidden;
+  }
+  .sfg-file:hover {
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
   }
 
   .sfg-file-icon {
     flex-shrink: 0;
+    margin-top: 3px;
     color: var(--fg-muted);
+    opacity: 0.6;
     display: flex;
     align-items: center;
-    opacity: 0.7;
+  }
+
+  /* Column: title on top, path below */
+  .sfg-file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   .sfg-file-name {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
     color: var(--fg);
     white-space: nowrap;
-    flex-shrink: 0;
-    max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3;
   }
 
   .sfg-file-path {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     color: var(--fg-subtle);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
+    line-height: 1.2;
   }
 
-  /* Count badge — right-aligned pill */
-  .sfg-file-count {
+  /* Badge — accent pill, right side */
+  .sfg-badge {
     flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
     font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 600;
+    font-size: 0.6rem;
+    font-weight: 700;
     color: #fff;
     background: var(--accent);
-    padding: 0.05em 0.45em;
+    padding: 1px 6px;
     border-radius: 999px;
-    min-width: 1.4em;
+    min-width: 18px;
     text-align: center;
     line-height: 1.6;
   }
 
   /* Snippet rows */
-  .sfg-snippets {
-    padding-bottom: 3px;
+  .sfg-snips {
+    padding-bottom: 2px;
   }
 
-  .sfg-snippet {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 8px;
-    padding-right: 8px;
+  .sfg-snip {
+    display: flex;
     align-items: baseline;
+    gap: 8px;
+    padding: 1px 8px 1px 24px;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 100ms ease;
+  }
+  .sfg-snip:hover {
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
   }
 
-  .sfg-line-gutter {
+  .sfg-gutter {
     flex-shrink: 0;
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: var(--fg-subtle);
-    width: 1.6rem;
+    width: 14px;
     text-align: right;
+    opacity: 0.7;
     user-select: none;
   }
 
-  .sfg-line-text {
+  .sfg-text {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--fg-muted);
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-all;
+    line-height: 1.55;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Keyword highlight */
+  /* Keyword highlights */
   .sfg-file-name mark,
-  .sfg-line-text mark {
+  .sfg-text mark {
     background: transparent;
     color: var(--accent);
     font-weight: 700;
-  }
-
-  /* Separator between groups */
-  .sfg + .sfg {
-    border-top: 1px solid var(--border-muted);
-    padding-top: var(--space-1);
-    margin-top: var(--space-1);
   }
 
   /* search keyboard shortcut hint */
