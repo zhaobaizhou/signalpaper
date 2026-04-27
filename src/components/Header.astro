@@ -433,7 +433,9 @@ const alternatePath = getAlternatePath(lang, Astro.url.pathname);
     max-height: 480px;
     overflow-y: auto;
   }
+</style>
 
+<style is:global>
   .search-hint, .search-no-results {
     font-size: var(--text-sm);
     color: var(--fg-subtle);

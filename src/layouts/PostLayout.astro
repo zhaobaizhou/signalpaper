@@ -64,18 +64,9 @@ const formattedModDate = modDatetime?.toLocaleDateString(
         <a href={getLocalePath(lang, '/posts')}>{t('post.backToWritings')}</a>
       </nav>
 
-      <div class="post-meta-top">
-        <time datetime={pubDatetime.toISOString()} class="post-date">
-          {formattedPubDate}
-        </time>
-        <span class="post-reading-time">
-          {t('post.readingTime', { n: readingMinutes })}
-        </span>
-      </div>
-
       <h1 class="post-title">
         {featured && (
-          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="currentColor" aria-label="Featured">
+          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="var(--accent)" aria-label="Featured">
             <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
           </svg>
         )}
@@ -87,15 +78,27 @@ const formattedModDate = modDatetime?.toLocaleDateString(
         : <p class="post-description">{description}</p>
       }
 
-      {tags.length > 0 && (
-        <div class="post-tags">
-          {tags.map(tag => (
-            <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
-              {tag}
-            </a>
-          ))}
+      <div class="post-meta-bottom">
+        {tags.length > 0 ? (
+          <div class="post-tags">
+            {tags.map(tag => (
+              <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
+                {tag}
+              </a>
+            ))}
+          </div>
+        ) : <div></div>}
+        
+        <div class="post-date-reading">
+          <time datetime={pubDatetime.toISOString()} class="post-date">
+            {formattedPubDate}
+          </time>
+          <span class="meta-sep">·</span>
+          <span class="post-reading-time">
+            {t('post.readingTime', { n: readingMinutes })}
+          </span>
         </div>
-      )}
+      </div>
 
       {modDatetime && (
         <p class="post-updated">
@@ -206,12 +209,12 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   }
 
   .post-header {
-    padding-top: var(--space-16);
-    padding-bottom: var(--space-8);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-6);
   }
 
   .post-back {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-6);
   }
 
   .post-back a {
@@ -224,23 +227,25 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     color: var(--accent);
   }
 
-  .post-meta-top {
+  .post-meta-bottom {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin-top: var(--space-6);
+    flex-wrap: wrap;
     gap: var(--space-4);
-    margin-bottom: var(--space-4);
   }
 
-  .post-date,
-  .post-reading-time {
+  .post-date-reading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     font-size: var(--text-sm);
     color: var(--fg-muted);
     font-family: var(--font-mono);
   }
 
-  .post-date::after {
-    content: '·';
-    margin-left: var(--space-4);
+  .meta-sep {
     color: var(--border);
   }
 
