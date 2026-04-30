@@ -3,10 +3,10 @@
    ========================================================================== */
 
 /* Google Fonts */
-/* Google Fonts — Western (Using loli.net mirror for reliable loading in China) */
-@import url('https://fonts.loli.net/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Google Fonts — Western */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 /* Google Fonts — CJK (Noto Sans Simplified Chinese, subset via Google's smart subsetting) */
-@import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600&display=swap');
 
 /* --------------------------------------------------------------------------
    1. CSS Custom Properties (Light Mode defaults)

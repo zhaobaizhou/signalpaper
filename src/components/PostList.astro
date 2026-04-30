@@ -97,7 +97,7 @@ const t = useTranslations(lang);
 
   .post-item-link {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 220px 1fr;
     gap: var(--space-6);
     padding: var(--space-6) 0;
     text-decoration: none;
@@ -112,18 +112,23 @@ const t = useTranslations(lang);
   .post-item-meta {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-2);
     padding-top: 0.15em;
   }
 
   .post-item-date {
+    display: block;
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--fg-muted);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .post-item-tag {
+    display: inline-block;
     font-size: var(--text-sm);
     color: var(--accent);
     font-weight: 500;
