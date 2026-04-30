@@ -10,9 +10,8 @@ const bioLines = bio.split('\n\n');
 
 <section class="hero" aria-label="Introduction">
   <div class="container">
-    <h1 class="hero-name">
+    <h1 class="sr-only">
       {lang === 'zh' ? `你好，我是${SITE.author.name}。` : SITE.author.name}
-      {lang === 'en' && <span class="hero-period" aria-hidden="true">.</span>}
     </h1>
 
     <div class="hero-bio">
@@ -47,19 +46,7 @@ const bioLines = bio.split('\n\n');
     padding-bottom: var(--space-8);
   }
 
-  .hero-name {
-    font-family: var(--font-sans);
-    font-size: clamp(1.4rem, 3vw, 1.8rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    color: var(--fg);
-    margin-bottom: var(--space-5);
-    line-height: 1.2;
-  }
 
-  .hero-period {
-    color: var(--accent);
-  }
 
   .hero-bio {
     max-width: 520px;
