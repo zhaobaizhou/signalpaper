@@ -370,7 +370,7 @@ a.section-header:hover .section-arrow {
   font-family: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
-.prose h1, .prose h2 {
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
   font-family: var(--font-serif);
   letter-spacing: -0.02em;
 }
@@ -409,7 +409,34 @@ a.section-header:hover .section-arrow {
   border-radius: 2px;
 }
 .prose pre { margin: var(--space-8) 0; }
-.prose img { margin: var(--space-10) auto; border-radius: var(--radius-md); }
+/* Enhanced Image & Caption Styling */
+.prose img {
+  margin: var(--space-10) auto var(--space-2);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+[data-theme='dark'] .prose img {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: var(--border-muted);
+}
+
+/* Treat paragraphs containing images as figure containers */
+.prose p:has(img) {
+  text-align: center;
+  margin-bottom: var(--space-10);
+}
+
+/* Style the italic text directly following an image as a caption */
+.prose p:has(img) em {
+  display: block;
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--fg-subtle);
+  margin-top: var(--space-3);
+  letter-spacing: 0.02em;
+}
 .prose table {
   width: 100%;
   border-collapse: collapse;
