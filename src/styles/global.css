@@ -273,6 +273,11 @@ a.section-header:hover {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fg-muted);
+  transition: color var(--transition-fast);
+}
+
+a.section-header:hover .section-title {
+  color: var(--accent);
 }
 
 .section-arrow {

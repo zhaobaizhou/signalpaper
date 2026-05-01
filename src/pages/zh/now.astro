@@ -8,42 +8,42 @@ import { SITE } from '../../config/site';
 
 <BaseLayout
   title={`近况 | ${SITE.name}`}
-  description={`关于 ${SITE.name} 的当前进展与未来计划。`}
+  description={`我当前在推进什么、最近在写什么，以及接下来一段时间会关注什么。`}
 >
   <Header />
 
   <main id="main-content" role="main" class="container fade-in">
     <div class="prose">
-      <h1>NOW / 近况</h1>
+      <h1>我的近况</h1>
       <p>
         这是一个 /now 页面，灵感来自于 <a href="https://sive.rs/now" target="_blank" rel="noopener">Derek Sivers</a>。相比于“关于”页面讲述过去，这个页面更专注于<strong>我现在正在做什么</strong>。
       </p>
 
-      <h2>当前主题特色 (Features)</h2>
+      <h2>当前在推进什么</h2>
       <p>
-        SignalPaper 正在稳步演进中。目前我们已经实现了以下核心功能与体验设计：
+        我最近主要在打磨 SignalPaper 这个个人站主题，让它更接近一个真正适合长期使用的作者站：信息结构更清楚，文章页阅读体验更稳定，搜索和内容归档也更成熟。
       </p>
-      <ul>
-        <li><strong>极致的排版系统</strong>：基于精心调优的无衬线英文字体与系统级中文字体，确保长文阅读的舒适感。</li>
-        <li><strong>智能浮动目录 (TOC)</strong>：自动提取 H2/H3 标题，右侧悬浮展示，支持阅读进度高亮，当屏幕较小或无标题时优雅隐藏。</li>
-        <li><strong>多维度内容管理</strong>：区分 <code>Posts</code> (文章) 与 <code>Projects</code> (项目)。项目支持生命周期状态追踪（Idea / Active / Shipped 等）。</li>
-        <li><strong>原生双语支持</strong>：内置全站中英文一键切换，独立的 URL 路由，多语言 SEO 优化。</li>
-        <li><strong>极客搜索体验</strong>：支持快捷键 <code>⌘K</code> 呼出，基于浏览器的本地快速全文检索。</li>
-        <li><strong>高度打磨的 UI 细节</strong>：全局深浅色无缝切换、沉浸式的图片缩放 (Medium Zoom)、以及代码一键复制功能。</li>
-      </ul>
+      <p>
+        这不是一次性搭好的展示站，而是一个持续迭代的工作台。我更关心的是：它能不能承载真实写作，能不能长期维护，能不能把文章、项目、标签和现在在做的事情串成一个完整的个人站体验。
+      </p>
 
-      <h2>开发路线图 (Roadmap)</h2>
+      <h2>最近在写什么 / 调整什么</h2>
       <p>
-        独立开发是一个持续迭代的过程，以下是我未来计划为 SignalPaper 添加的功能：
+        最近这段时间，我一边补内容，一边调结构。写作上，重点仍然围绕 AI 工作流、产品判断、写作系统和独立工作中的轻量方法。站点上，则主要在修正首页表达、文章页信息节奏、相关文章与订阅模块的关系，以及中英文页面的一致性。
       </p>
-      <ul>
-        <li><strong>Webmention 接入</strong>：集成社交网络上的点赞、转发和评论互动。</li>
-        <li><strong>Timeline / Changelog 视图</strong>：适合快速发布碎碎念或项目进展的时间线组件。</li>
-        <li><strong>统计仪表盘 (Dashboard)</strong>：更直观地展示个人输出的数据（字数、标签热度等）。</li>
-        <li><strong>自动化工作流集成</strong>：提供更好的 Obsidian 或 Notion 到 Astro 的一键发布脚本示例。</li>
-      </ul>
       <p>
-        <em>最后更新于：2026年5月</em>
+        我也在刻意把它从“功能堆叠的 demo”拉回到“真正好用的作者站模板”上。很多调整都不是为了多一个 feature，而是为了让第一次访问的人更快看懂这个站是什么、值得从哪里开始看。
+      </p>
+
+      <h2>接下来一段时间关注什么</h2>
+      <p>
+        接下来我会继续做三类事情：第一，收紧首页和 About 页的表达，让站点叙事更稳定；第二，继续清理实现里的噪音和过时写法，降低维护成本；第三，补更多真实内容，确保主题的每一次调整都来自实际使用，而不是只对着空白模板优化。
+      </p>
+      <p>
+        如果你正在关注这个主题的演进，最值得看的仍然是首页、文章页，以及我接下来会持续更新的项目记录。
+      </p>
+      <p>
+        <em>最后更新于：2026 年 5 月</em>
       </p>
     </div>
 

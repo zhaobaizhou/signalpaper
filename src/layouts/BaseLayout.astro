@@ -124,8 +124,8 @@ const siteSchema = !article
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Structured Data -->
-    {articleSchema && <script type="application/ld+json" set:html={articleSchema} />}
-    {siteSchema && <script type="application/ld+json" set:html={siteSchema} />}
+    {articleSchema && <script is:inline type="application/ld+json" set:html={articleSchema} />}
+    {siteSchema && <script is:inline type="application/ld+json" set:html={siteSchema} />}
     <meta data-pagefind-filter={`lang:${lang}`} />
     {pagefindType && <meta data-pagefind-filter={`type:${pagefindType}`} />}
 

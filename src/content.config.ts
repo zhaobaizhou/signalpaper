@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const sharedSchema = z.object({
@@ -16,7 +17,7 @@ const sharedSchema = z.object({
   ]),
   tags: z.array(z.string()).default([]),
   summary: z.string().optional(),
-  canonicalURL: z.string().url().optional(),
+  canonicalURL: z.url().optional(),
   ogImage: z.string().optional(),
   timezone: z.string().optional(),
   hideEditPost: z.boolean().optional(),

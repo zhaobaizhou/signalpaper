@@ -38,7 +38,6 @@ export function getLocalePath(lang: Lang, path: string): string {
 }
 
 export function getAlternatePath(currentLang: Lang, currentPath: string): string {
-  const altLang = getAlternateLang(currentLang);
   if (currentLang === 'en') {
     // en → zh: prepend /zh
     return `/zh${currentPath}`;

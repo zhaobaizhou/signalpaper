@@ -1,11 +1,18 @@
 ---
 import { SITE } from '../config/site';
-import { getLang, useTranslations } from '../i18n/utils';
+import { getLang } from '../i18n/utils';
 
 const lang = getLang(Astro.url);
-const t = useTranslations(lang);
-const bio = SITE.author.bio[lang];
-const bioLines = bio.split('\n\n');
+const heroContent = {
+  en: [
+    `SignalPaper is my personal writing and project site, focused on <a href="/tags/ai-workflows">AI workflows</a>, <a href="/tags/design">product judgment</a>, <a href="/tags/writing">writing systems</a>, and small methods for independent work.`,
+    `You can start with <a href="/posts">writings</a>, <a href="/projects">projects</a>, or <a href="/tags">tags</a>, or jump straight to <a href="/now">Now</a> and <a href="/about">About</a> to quickly see what I am working on, what I am writing, and how this site is evolving over time.`,
+  ],
+  zh: [
+    `SignalPaper 是我的个人写作与项目站，主要记录 <a href="/zh/tags/AI工作流">AI 工作流</a>、<a href="/zh/tags/设计">产品判断</a>、<a href="/zh/tags/写作">写作系统</a> 和独立工作中的轻量方法。`,
+    `你可以从 <a href="/zh/posts">文章</a>、<a href="/zh/projects">项目</a>、<a href="/zh/tags">标签</a> 开始，也可以直接查看 <a href="/zh/now">Now</a> 和 <a href="/zh/about">About</a>，快速了解我当前在写什么、做什么，以及这个站点本身如何持续演进。`,
+  ],
+} as const;
 ---
 
 <section class="hero" aria-label="Introduction">
@@ -15,8 +22,8 @@ const bioLines = bio.split('\n\n');
     </h1>
 
     <div class="hero-bio">
-      {bioLines.map((line, i) => (
-        <p class={i === 0 ? 'hero-bio-primary' : 'hero-bio-secondary'}>{line}</p>
+      {heroContent[lang].map((line, i) => (
+        <p class={i === 0 ? 'hero-bio-primary' : 'hero-bio-secondary'} set:html={line}></p>
       ))}
     </div>
   </div>
@@ -24,12 +31,12 @@ const bioLines = bio.split('\n\n');
 
 <style>
   .hero {
-    padding-top: var(--space-10);
-    padding-bottom: var(--space-12);
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-10);
   }
 
   .hero-bio {
-    max-width: 520px;
+    max-width: 760px;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -47,5 +54,17 @@ const bioLines = bio.split('\n\n');
     line-height: 1.7;
   }
 
+  .hero-bio :global(a) {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--border-muted);
+    text-underline-offset: 3px;
+    transition: text-decoration-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .hero-bio :global(a:hover) {
+    color: var(--fg);
+    text-decoration-color: var(--fg);
+  }
 
 </style>

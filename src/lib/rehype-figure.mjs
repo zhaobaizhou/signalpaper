@@ -6,7 +6,7 @@ import { visit } from 'unist-util-visit';
  */
 export function rehypeFigure() {
   return (tree) => {
-    visit(tree, 'element', (node, index, parent) => {
+    visit(tree, 'element', (node, _index, parent) => {
       if (node.tagName === 'img' && parent && parent.tagName === 'p') {
         // Only transform if img is the only child of the paragraph
         // Or if other children are just whitespace text nodes

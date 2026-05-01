@@ -30,7 +30,7 @@ const t = useTranslations(lang);
 
     <ul class="post-list" role="list">
       {posts.map(post => {
-        const { title, description, pubDatetime, featured, tags, summary } = post.data;
+        const { title, description, pubDatetime, featured, tags } = post.data;
         const slug = post.id.replace(/^(en|zh)\//, '');
 
         const formattedDate = pubDatetime.toISOString().split('T')[0];

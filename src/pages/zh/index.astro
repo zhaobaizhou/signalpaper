@@ -8,7 +8,6 @@ import TagCloud from '../../components/TagCloud.astro';
 import ProjectGrid from '../../components/ProjectGrid.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { getPosts, getProjects, getTagsWithCount } from '../../lib/content';
-import { SITE } from '../../config/site';
 
 const lang = 'zh';
 const posts = await getPosts(lang);
