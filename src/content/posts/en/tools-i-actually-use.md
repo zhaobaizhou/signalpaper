@@ -8,6 +8,7 @@ categories: post
 tags:
   - tools
   - systems
+  - performance
   - independent-work
 summary: After five years of chasing the perfect setup, I stopped optimizing my tools and started using them. Here's what survived.
 ---

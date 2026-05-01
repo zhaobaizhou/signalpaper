@@ -8,6 +8,7 @@ categories: post
 tags:
   - 工具
   - 系统
+  - 性能
   - independent-work
 summary: 用了五年时间追求完美的工具组合之后，我停止了优化，开始真正使用它们。这是留下来的清单。
 ---
