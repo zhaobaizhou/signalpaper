@@ -30,9 +30,7 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
   <Header />
   <main id="main-content" role="main">
     <div class="page-header container">
-      <nav class="back-nav">
-        <a href="/tags">← All tags</a>
-      </nav>
+
       <h1 class="page-title">
         <span class="tag-prefix">#</span>{tag}
       </h1>
@@ -41,6 +39,23 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
     <PostList posts={taggedPosts} showAll={true} />
   </main>
   <Footer />
+
+  <aside class="post-fab" id="post-fab" aria-label="Page tools">
+    <button class="fab-btn" id="fab-top" aria-label="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+  </aside>
+
+  <script>
+    const fab = document.getElementById('post-fab');
+    const fabTop = document.getElementById('fab-top');
+    if (fab) {
+      window.addEventListener('scroll', () => {
+        fab.classList.toggle('fab-visible', window.scrollY > 300);
+      }, { passive: true });
+    }
+    fabTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
 </BaseLayout>
 
 <style>
@@ -48,13 +63,6 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
     padding-top: var(--space-12);
     padding-bottom: var(--space-6);
   }
-  .back-nav { margin-bottom: var(--space-6); }
-  .back-nav a {
-    font-size: var(--text-sm);
-    color: var(--fg-muted);
-    transition: color var(--transition-fast);
-  }
-  .back-nav a:hover { color: var(--accent); }
   .page-title {
     font-family: var(--font-serif);
     font-size: var(--text-3xl);
@@ -63,4 +71,45 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
   }
   .tag-prefix { color: var(--accent); margin-right: 0.1em; }
   .page-subtitle { font-size: var(--text-sm); color: var(--fg-muted); }
+
+  /* Floating back to top button */
+  .post-fab {
+    position: fixed;
+    right: max(16px, calc((100vw - var(--content-width)) / 2 - 68px));
+    bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 50;
+    opacity: 0;
+    transform: translateX(6px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    pointer-events: none;
+  }
+  .post-fab.fab-visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .fab-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .fab-btn:hover {
+    background: var(--bg-alt);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  @media (max-width: 900px) {
+    .post-fab { right: 12px; bottom: 24px; }
+  }
 </style>
