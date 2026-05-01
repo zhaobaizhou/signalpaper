@@ -8,17 +8,17 @@ const t = useTranslations(lang);
 const alternateLang = lang === 'en' ? 'zh' : 'en';
 const alternatePath = alternateLang === 'zh' ? '/zh/' : '/';
 
-const path = Astro.url.pathname;
+const path = Astro.url.pathname.replace(/\/$/, '');
 let currentSection = '';
 let currentSectionUrl = '';
 
-if (path.includes('/posts') || path.includes('/zh/posts')) {
+if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
   currentSection = 'Writing';
   currentSectionUrl = getLocalePath(lang, '/posts');
-} else if (path.includes('/projects') || path.includes('/zh/projects')) {
+} else if (path.startsWith('/projects/') || path.startsWith('/zh/projects/')) {
   currentSection = 'Projects';
   currentSectionUrl = getLocalePath(lang, '/projects');
-} else if (path.includes('/tags') || path.includes('/zh/tags')) {
+} else if (path.startsWith('/tags/') || path.startsWith('/zh/tags/')) {
   currentSection = 'Tags';
   currentSectionUrl = getLocalePath(lang, '/tags');
 }

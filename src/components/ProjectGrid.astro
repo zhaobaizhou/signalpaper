@@ -15,15 +15,11 @@ const t = useTranslations(lang);
 
 <section class="projects-section" aria-label={t('section.projects')}>
   <div class="container">
-    {!showAll ? (
+    {!showAll && (
       <a href={getLocalePath(lang, '/projects')} class="section-header" aria-label={t('link.allProjects')}>
         <h2 class="section-title">{t('section.projects')}</h2>
         <span class="section-arrow">{t('link.seeAll')}</span>
       </a>
-    ) : (
-      <div class="section-header">
-        <h2 class="section-title">{t('section.projects')}</h2>
-      </div>
     )}
 
     <div class="projects-grid">

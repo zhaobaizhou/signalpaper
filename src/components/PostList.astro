@@ -14,15 +14,11 @@ const t = useTranslations(lang);
 
 <section class="post-list-section" aria-label={t('section.writings')}>
   <div class="container">
-    {!showAll ? (
+    {!showAll && (
       <a href={getLocalePath(lang, '/posts')} class="section-header" aria-label={t('link.allWritings')}>
         <h2 class="section-title">{t('section.writings')}</h2>
         <span class="section-arrow">{t('link.seeAll')}</span>
       </a>
-    ) : (
-      <div class="section-header">
-        <h2 class="section-title">{t('section.writings')}</h2>
-      </div>
     )}
 
     <ul class="post-list" role="list">
