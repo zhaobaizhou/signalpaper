@@ -12,9 +12,9 @@ export const ui = {
     'nav.home': 'Home',
 
     // Sections
-    'section.writings': 'WRITINGS',
-    'section.tags': 'TAGS',
-    'section.projects': 'PROJECTS',
+    'section.writings': 'Writings',
+    'section.tags': 'Tags',
+    'section.projects': 'Projects',
 
     // Arrows / see all
     'link.seeAll': '→',

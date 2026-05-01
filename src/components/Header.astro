@@ -13,13 +13,13 @@ let currentSection = '';
 let currentSectionUrl = '';
 
 if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
-  currentSection = 'Writing';
+  currentSection = t('section.writings');
   currentSectionUrl = getLocalePath(lang, '/posts');
 } else if (path.startsWith('/projects/') || path.startsWith('/zh/projects/')) {
-  currentSection = 'Projects';
+  currentSection = t('section.projects');
   currentSectionUrl = getLocalePath(lang, '/projects');
 } else if (path.startsWith('/tags/') || path.startsWith('/zh/tags/')) {
-  currentSection = 'Tags';
+  currentSection = t('section.tags');
   currentSectionUrl = getLocalePath(lang, '/tags');
 }
 ---
