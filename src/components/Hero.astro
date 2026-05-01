@@ -5,12 +5,12 @@ import { getLang } from '../i18n/utils';
 const lang = getLang(Astro.url);
 const heroContent = {
   en: [
-    `SignalPaper is my personal writing and project site, focused on <a href="/tags/ai-workflows">AI workflows</a>, <a href="/tags/design">product judgment</a>, <a href="/tags/writing">writing systems</a>, and small methods for independent work.`,
-    `You can start with <a href="/posts">writings</a>, <a href="/projects">projects</a>, or <a href="/tags">tags</a>, or jump straight to <a href="/now">Now</a> and <a href="/about">About</a> to quickly see what I am working on, what I am writing, and how this site is evolving over time.`,
+    `SignalPaper is a content-first Astro theme for authors who want a durable home for <a href="/posts">writings</a>, <a href="/projects">projects</a>, tags, search, and bilingual publishing.`,
+    `Use this demo to explore the default structure: long-form reading, project archives, <a href="/tags">tag navigation</a>, <a href="/now">Now</a>, and <a href="/about">About</a> pages that can be replaced with your own content.`,
   ],
   zh: [
-    `SignalPaper 是我的个人写作与项目站，主要记录 <a href="/zh/tags/AI工作流">AI 工作流</a>、<a href="/zh/tags/设计">产品判断</a>、<a href="/zh/tags/写作">写作系统</a> 和独立工作中的轻量方法。`,
-    `你可以从 <a href="/zh/posts">文章</a>、<a href="/zh/projects">项目</a>、<a href="/zh/tags">标签</a> 开始，也可以直接查看 <a href="/zh/now">Now</a> 和 <a href="/zh/about">About</a>，快速了解我当前在写什么、做什么，以及这个站点本身如何持续演进。`,
+    `SignalPaper 是一个内容优先的 Astro 作者站主题，用来承载<a href="/zh/posts">文章</a>、<a href="/zh/projects">项目</a>、标签、搜索和双语发布。`,
+    `这个 demo 展示了默认站点结构：长文阅读、项目归档、<a href="/zh/tags">标签导航</a>、<a href="/zh/now">Now</a> 和 <a href="/zh/about">About</a> 页面都可以替换成你自己的内容。`,
   ],
 } as const;
 ---
@@ -18,7 +18,7 @@ const heroContent = {
 <section class="hero" aria-label="Introduction">
   <div class="container">
     <h1 class="sr-only">
-      {lang === 'zh' ? `你好，我是${SITE.author.name}。` : SITE.author.name}
+      {SITE.name}
     </h1>
 
     <div class="hero-bio">

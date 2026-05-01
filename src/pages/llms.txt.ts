@@ -9,6 +9,12 @@ export const GET: APIRoute = async () => {
     getProjects('en'),
     getProjects('zh'),
   ]);
+  const contactLines = [
+    SITE.social.github && `- GitHub: ${SITE.social.github}`,
+    SITE.social.x && `- X / Twitter: ${SITE.social.x}`,
+    SITE.social.email && `- Email: ${SITE.social.email}`,
+    SITE.social.rss && `- RSS: ${SITE.url}${SITE.social.rss}`,
+  ].filter(Boolean);
 
   const lines: string[] = [
     `# ${SITE.name}`,
@@ -47,12 +53,7 @@ export const GET: APIRoute = async () => {
       const status = p.data.status ? ` [${p.data.status.toUpperCase()}]` : '';
       return `- [${p.data.title}](${SITE.url}/zh/projects/${slug})${status}: ${p.data.description}`;
     }),
-    ``,
-    `## Contact`,
-    `- GitHub: ${SITE.social.github}`,
-    `- X / Twitter: ${SITE.social.x}`,
-    `- Email: ${SITE.social.email}`,
-    `- RSS: ${SITE.url}${SITE.social.rss}`,
+    ...(contactLines.length > 0 ? [``, `## Contact`, ...contactLines] : []),
   ];
 
   return new Response(lines.join('\n'), {

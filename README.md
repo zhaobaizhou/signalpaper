@@ -2,54 +2,61 @@
 
 中文 / English
 
-SignalPaper 是一个基于 Astro 的作者个人站模板，适合长期写作、项目归档和双语发布。它默认提供文章、项目、标签、RSS、站内搜索、`/about`、`/now` 等常见作者站能力，整体方向是内容优先，而不是营销首页。
+SignalPaper 是一个内容优先的 Astro 作者站主题，适合长期写作、项目归档、标签浏览、站内搜索和双语发布。它的默认体验面向作者站和个人知识库，而不是营销落地页。
 
-SignalPaper is an Astro-based personal author site template for long-form writing, project archiving, and bilingual publishing. It ships with posts, projects, tags, RSS, on-site search, `/about`, `/now`, and other features expected from a writing-focused site. It is designed as a content-first author template, not a marketing landing page.
+SignalPaper is a content-first Astro author theme for long-form writing, project archives, tags, on-site search, and bilingual publishing. It is designed for author sites and personal knowledge archives, not marketing landing pages.
 
 ## 特性 / Features
 
-- 双语内容结构（英文 / 中文）
+- Astro 静态站点
+- 英文 / 中文双语路由
 - 文章与项目两套内容集合
 - 标签归档与分页列表
-- 文章目录、阅读时间、相关文章
-- `Pagefind` 静态搜索
-- RSS、sitemap、结构化元数据
+- 文章目录、阅读进度、相关文章
+- Pagefind 静态搜索
+- RSS、sitemap、canonical、Open Graph、JSON-LD
 - 暗色 / 亮色主题切换
-- `/about` 与 `/now` 页面
-- Newsletter、评论、统计脚本开关
+- `/about` 与 `/now` 默认页面
+- 评论、统计、Newsletter 功能开关
 
-- Bilingual content structure (English / Chinese)
-- Separate collections for posts and projects
+- Static Astro site
+- English / Chinese routes
+- Separate post and project collections
 - Tag archives and paginated lists
-- Table of contents, reading time, and related posts
-- Static search powered by `Pagefind`
-- RSS, sitemap, and structured metadata
+- Table of contents, reading progress, and related posts
+- Static search powered by Pagefind
+- RSS, sitemap, canonical URLs, Open Graph, and JSON-LD
 - Light / dark theme toggle
-- `/about` and `/now` pages
-- Toggles for newsletter, comments, and analytics
+- Default `/about` and `/now` pages
+- Feature toggles for comments, analytics, and newsletter
 
 ## 适合谁 / Who It Is For
 
 适合：
-- 想搭建个人写作站或作品站的人
-- 需要 Markdown 内容工作流的人
+
+- 想搭建作者站、写作站或项目归档站的人
+- 需要 Markdown / MDX 内容工作流的人
 - 需要中英文双语发布的人
-- 偏好内容优先、长期可维护主题的人
+- 想要安静、可维护、内容优先界面的人
 
 不适合：
-- 需要营销型首页、产品展示页或复杂 CMS 后台的人
-- 需要多作者编辑流或重度动态功能的人
+
+- 营销型产品官网
+- 多作者 CMS
+- 重度动态应用
 
 Good fit for:
-- People building a personal writing site or portfolio
-- Markdown-first publishing workflows
+
+- Authors, builders, and independent creators
+- Markdown / MDX publishing workflows
 - Bilingual English / Chinese publishing
-- Content-first sites that should stay maintainable over time
+- Quiet, maintainable, content-first sites
 
 Not a good fit for:
-- Marketing landing pages or product showcase sites
-- Multi-author editorial workflows
-- Heavily dynamic applications
+
+- Marketing-heavy product sites
+- Multi-author CMS workflows
+- Highly dynamic applications
 
 ## 快速开始 / Quick Start
 
@@ -71,13 +78,9 @@ npm run build
 npm run preview
 ```
 
-说明：
-- `npm run build` 会先执行 `astro build`，再运行 `Pagefind` 生成静态搜索索引
-- 搜索功能在构建产物或 `preview` 环境下可用
+`npm run build` 会先执行 `astro build`，再运行 `Pagefind` 生成静态搜索索引。搜索功能需要在构建产物或 preview 环境中使用。
 
-Notes:
-- `npm run build` runs `astro build` and then generates a static `Pagefind` index
-- Search is available in the built output or preview environment
+`npm run build` runs `astro build` and then generates the static Pagefind index. Search is available in the built output or preview environment.
 
 ## 内容结构 / Content Structure
 
@@ -90,20 +93,15 @@ src/content/projects/en/
 src/content/projects/zh/
 ```
 
-页面路由目录：
+常见页面：
 
-```text
-src/pages/
-```
-
-常见页面包括：
-- 首页 `/`
-- 文章列表 `/posts`
-- 项目列表 `/projects`
-- 标签页 `/tags`
-- 关于页 `/about`
-- 近况页 `/now`
-- 中文版本位于 `/zh/*`
+- `/`
+- `/posts`
+- `/projects`
+- `/tags`
+- `/about`
+- `/now`
+- `/zh/*`
 
 Main content directories:
 
@@ -114,121 +112,93 @@ src/content/projects/en/
 src/content/projects/zh/
 ```
 
-Main route directory:
+Common routes:
 
-```text
-src/pages/
-```
+- `/`
+- `/posts`
+- `/projects`
+- `/tags`
+- `/about`
+- `/now`
+- `/zh/*`
 
 ## 站点配置 / Site Configuration
 
-核心站点配置位于：
+核心配置位于 `src/config/site.ts`。
 
-[`src/config/site.ts`](/Users/baizhou/Documents/Projects/BaiSpace/signalpaper/src/config/site.ts:1)
+发布前至少需要替换：
 
-这里可以修改：
-- 站点名称、标语、描述
-- 作者信息
-- 默认语言与双语开关
-- 社交链接
-- 每页文章数量
-- 评论配置
-- 统计配置
-- Newsletter 配置
+- `SITE.url`
+- `SITE.author`
+- `SITE.social`
+- `SITE.description`
+- `SITE.tagline`
+- Newsletter、comments、analytics 配置
 
-Primary site configuration lives in:
+默认情况下，newsletter、comments 和 analytics 都是关闭的，避免主题开箱后误触发第三方请求。
 
-[`src/config/site.ts`](/Users/baizhou/Documents/Projects/BaiSpace/signalpaper/src/config/site.ts:1)
+Primary configuration lives in `src/config/site.ts`.
 
-Edit it to update:
-- Site name, tagline, description
-- Author profile
-- Default locale and bilingual toggle
-- Social links
-- Posts per page
-- Comments
-- Analytics
-- Newsletter settings
+Before publishing, replace at least:
+
+- `SITE.url`
+- `SITE.author`
+- `SITE.social`
+- `SITE.description`
+- `SITE.tagline`
+- Newsletter, comments, and analytics settings
+
+Newsletter, comments, and analytics are disabled by default so the theme does not trigger third-party requests out of the box.
 
 ## 双语内容 / Bilingual Setup
 
-这个模板默认使用两套语言目录：
+SignalPaper 默认使用两套语言目录：
+
 - `en`
 - `zh`
 
-英文站点不带语言前缀，中文站点使用 `/zh` 前缀。
+英文路由不带语言前缀，中文路由位于 `/zh`。
 
-新增文章时，通常需要在两个语言目录中分别创建文件。例如：
+新增双语文章时，通常创建一组同名文件：
 
 ```text
 src/content/posts/en/my-post.md
 src/content/posts/zh/my-post.md
 ```
 
-This template uses two locale buckets by default:
+SignalPaper uses two locale buckets by default:
+
 - `en`
 - `zh`
 
 English routes are unprefixed. Chinese routes live under `/zh`.
 
-When publishing bilingually, create matching files in both locale directories, for example:
+For bilingual publishing, create matching files:
 
 ```text
 src/content/posts/en/my-post.md
 src/content/posts/zh/my-post.md
 ```
 
-## 内置功能开关 / Built-in Features
+## 内置功能 / Built-in Features
 
-### 搜索 / Search
+Search:
+Search is powered by Pagefind and exposed through the header modal. It covers published post and project detail pages.
 
-- 搜索由 `Pagefind` 提供
-- 入口是头部搜索弹窗
-- 搜索范围为公开的文章和项目详情页
+RSS:
+RSS is available at `/rss.xml`.
 
-### RSS
+Comments:
+Comments are disabled by default. Configure `SITE.comments` to enable Giscus.
 
-- RSS 路由位于 `/rss.xml`
+Newsletter:
+Newsletter is disabled by default. Set `SITE.newsletter.enabled` and `SITE.newsletter.actionUrl` to enable a form provider.
 
-### 评论 / Comments
+Analytics:
+Analytics is disabled by default. Set `SITE.analytics.enabled` and provider credentials before production.
 
-- 评论组件默认关闭
-- 可在 `SITE.comments` 中启用并配置 `giscus`
-
-### Newsletter
-
-- Newsletter 默认启用
-- 默认使用 Buttondown 表单接口
-
-### 统计 / Analytics
-
-- 统计脚本可在 `SITE.analytics` 中开启或关闭
-- 上线前请替换占位配置
-
-### Search
-
-- Search is powered by `Pagefind`
-- The entry point is the header modal
-- Search covers published post and project detail pages
-
-### RSS
-
-- RSS is exposed at `/rss.xml`
-
-### Comments
-
-- Comments are disabled by default
-- Configure `SITE.comments` to enable `giscus`
-
-### Newsletter
-
-- Newsletter is enabled by default
-- The default form target is Buttondown
-
-### Analytics
-
-- Analytics can be enabled or disabled in `SITE.analytics`
-- Replace placeholder values before production
+SEO / GEO:
+SignalPaper ships with canonical URLs, Open Graph, Twitter cards, sitemap, robots, RSS, JSON-LD, and `llms.txt`. Replace the default URL and content before publishing.
 
 ## 构建与部署 / Build and Deploy
 
@@ -246,7 +216,8 @@ npm run preview
 dist/
 ```
 
-这是一个纯静态站点，可以部署到常见静态托管平台，例如：
+这是一个纯静态站点，可以部署到：
+
 - Vercel
 - Netlify
 - Cloudflare Pages
@@ -266,8 +237,10 @@ Build output:
 dist/
 ```
 
-This is a static site and can be deployed to common static hosts such as:
+This is a static site and can be deployed to:
+
 - Vercel
 - Netlify
 - Cloudflare Pages
 - GitHub Pages
+

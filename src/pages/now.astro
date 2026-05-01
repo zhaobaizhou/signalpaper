@@ -8,39 +8,37 @@ import { SITE } from '../config/site';
 
 <BaseLayout
   title="Now"
-  description={`What I am working on right now at ${SITE.name}.`}
+  description={`Current status and roadmap notes for the ${SITE.name} theme demo.`}
 >
   <Header />
 
   <main id="main-content" role="main" class="container fade-in">
     <div class="prose">
-      <h1>NOW</h1>
+      <h1>Now</h1>
       <p>
-        This is a /now page, inspired by <a href="https://sive.rs/now" target="_blank" rel="noopener">Derek Sivers</a>. While an "About" page tells you about my past, this page focuses on <strong>what I am doing right now</strong>.
+        This page demonstrates how a <a href="https://sive.rs/now" target="_blank" rel="noopener">/now page</a> can work inside a SignalPaper site. Replace it with a short, current snapshot of what the author or project is focused on.
       </p>
 
-      <h2>Current Theme Features</h2>
+      <h2>Current demo focus</h2>
       <p>
-        SignalPaper is steadily evolving. We have currently implemented the following core features and experience designs:
+        This demo highlights the core theme experience:
       </p>
       <ul>
-        <li><strong>Premium Typography</strong>: Carefully tuned sans-serif fonts for English and system-level Chinese fonts, ensuring comfortable long-form reading.</li>
-        <li><strong>Smart Floating TOC</strong>: Automatically extracts H2/H3 headings, displayed on the right side with scroll-tracking highlight. Gracefully hides on smaller screens or when there are no headings.</li>
-        <li><strong>Multi-dimensional Content</strong>: Separation of <code>Posts</code> and <code>Projects</code>. Projects support lifecycle status tracking (Idea / Active / Shipped, etc.).</li>
-        <li><strong>Native Bilingual Support</strong>: Built-in global English/Chinese toggle, independent URL routing, and multilingual SEO optimization.</li>
-        <li><strong>Geeky Search Experience</strong>: <code>⌘K</code> shortcut support with fast local full-text browser search.</li>
-        <li><strong>Polished UI Details</strong>: Seamless dark/light mode toggle, immersive image zooming (Medium Zoom), and one-click code copying.</li>
+        <li><strong>Writing archive</strong>: Paginated posts, tags, reading metadata, and related writings.</li>
+        <li><strong>Project archive</strong>: Project entries with status, year, summaries, and detail pages.</li>
+        <li><strong>Bilingual publishing</strong>: English routes at the root and Chinese routes under <code>/zh</code>.</li>
+        <li><strong>Search</strong>: Pagefind-powered search for posts and projects.</li>
+        <li><strong>Long-form reading</strong>: Table of contents, reading progress, image zoom, and code copy controls.</li>
       </ul>
 
-      <h2>Development Roadmap</h2>
+      <h2>Before using it</h2>
       <p>
-        Independent development is an iterative process. Here is what I plan to add to SignalPaper in the future:
+        Replace the demo content, update <code>src/config/site.ts</code>, and enable only the integrations you actually use.
       </p>
       <ul>
-        <li><strong>Webmention Integration</strong>: Integrate likes, reposts, and comments from social networks.</li>
-        <li><strong>Timeline / Changelog View</strong>: A timeline component suitable for quick thoughts or project updates.</li>
-        <li><strong>Statistics Dashboard</strong>: Intuitively display personal output data (word counts, tag heatmaps, etc.).</li>
-        <li><strong>Automated Workflows</strong>: Provide better scripts for one-click publishing from Obsidian or Notion to Astro.</li>
+        <li>Set your production URL for canonical links, RSS, sitemap, and social cards.</li>
+        <li>Replace author, social, newsletter, comments, and analytics settings.</li>
+        <li>Keep the demo pages you need and remove anything that does not fit your site.</li>
       </ul>
       <p>
         <em>Last updated: May 2026</em>

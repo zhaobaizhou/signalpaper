@@ -5,7 +5,7 @@ import { SITE } from '../config/site';
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 
-const isEnabled = SITE.newsletter.enabled;
+const isEnabled = SITE.newsletter.enabled && SITE.newsletter.actionUrl;
 const actionUrl = SITE.newsletter.actionUrl;
 ---
 
@@ -16,11 +16,11 @@ const actionUrl = SITE.newsletter.actionUrl;
       <p class="newsletter-description">
         {lang === 'zh' ? (
           <Fragment>
-            通过邮件、<a href={SITE.social.rss} target="_blank">RSS</a>、<a href={SITE.social.x} target="_blank">Twitter</a>、<a href={SITE.social.github} target="_blank">GitHub</a> 等方式<a href="/zh/about">关注我的更新</a>。
+            通过邮件订阅更新，或使用 <a href={SITE.social.rss} target="_blank">RSS</a> 关注新的文章和项目。
           </Fragment>
         ) : (
           <Fragment>
-            Follow me via <a href={SITE.social.email}>Email</a>, <a href={SITE.social.rss} target="_blank">RSS</a>, <a href={SITE.social.x} target="_blank">X</a>, <a href={SITE.social.github} target="_blank">GitHub</a> and <a href="/about">other options</a>.
+            Subscribe for updates, or use <a href={SITE.social.rss} target="_blank">RSS</a> to follow new writings and projects.
           </Fragment>
         )}
       </p>

@@ -62,15 +62,15 @@ export const ui = {
     'search.projectLabel': 'Project',
 
     // Footer
-    'footer.tagline': 'SignalPaper is a personal writing and project site.',
+    'footer.tagline': 'SignalPaper is a content-first Astro author theme.',
 
     // Newsletter
-    'newsletter.title': 'Follow Me',
+    'newsletter.title': 'Subscribe',
     'newsletter.placeholder': 'Enter your email',
     'newsletter.button': 'Sign Up',
 
     // SEO fallbacks
-    'meta.description': 'Personal site and writing archive.',
+    'meta.description': 'Content-first Astro author theme.',
 
     // 404
     '404.title': 'Page not found',
@@ -82,7 +82,7 @@ export const ui = {
     'nav.search': 'SEARCH',
     'nav.home': '首页',
     'nav.now': '近况',
-    'nav.about': '关于我',
+    'nav.about': '关于',
 
     // Sections
     'section.writings': '写作',
@@ -133,15 +133,15 @@ export const ui = {
     'search.projectLabel': '项目',
 
     // Footer
-    'footer.tagline': 'SignalPaper 是一个个人写作与项目站。',
+    'footer.tagline': 'SignalPaper 是一个内容优先的 Astro 作者站主题。',
 
     // Newsletter
-    'newsletter.title': '关注我',
+    'newsletter.title': '订阅',
     'newsletter.placeholder': '输入你的邮箱地址',
     'newsletter.button': '邮件订阅',
 
     // SEO fallbacks
-    'meta.description': '个人网站与写作存档。',
+    'meta.description': '内容优先的 Astro 作者站主题。',
 
     // 404
     '404.title': '页面未找到',
