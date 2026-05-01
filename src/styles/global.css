@@ -398,6 +398,12 @@ a.section-header:hover .section-arrow {
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   border-left: 3px solid var(--accent);
 }
+.prose blockquote > *:first-child {
+  margin-top: 0;
+}
+.prose blockquote > *:last-child {
+  margin-bottom: 0;
+}
 .prose hr { 
   display: block;
   border: none;
