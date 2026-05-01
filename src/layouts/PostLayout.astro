@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Comments from '../components/Comments.astro';
 import Newsletter from '../components/Newsletter.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { SITE } from '../config/site';
 import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
 import type { CollectionEntry } from 'astro:content';
@@ -14,9 +15,10 @@ interface Props {
   next?: { title: string; url: string } | null;
   backUrl?: string;
   backLabel?: string;
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { post, prev, next, backUrl, backLabel } = Astro.props;
+const { post, prev, next, backUrl, backLabel, headings = [] } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 
@@ -115,6 +117,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     <article class="prose container fade-in" role="main">
       <slot />
     </article>
+
+    <TableOfContents headings={headings} />
 
     <footer class="post-footer container">
       {tags.length > 0 && (

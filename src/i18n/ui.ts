@@ -34,6 +34,7 @@ export const ui = {
     'post.publishedOn': 'Published on',
     'post.tags': 'Tags',
     'post.backToWritings': '← Back to writings',
+    'post.toc': 'On this page',
 
     // Project meta
     'project.status.idea': 'IDEA',
@@ -96,6 +97,7 @@ export const ui = {
     'post.publishedOn': '发布于',
     'post.tags': '标签',
     'post.backToWritings': '← 返回写作列表',
+    'post.toc': '本页导航',
 
     // Project meta
     'project.status.idea': '构想',

@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 }
 
 const { project, prev, next } = Astro.props;
-const { Content } = await render(project);
+const { Content, headings } = await render(project);
 const lang = getLang(Astro.url);
 ---
 
@@ -43,6 +43,7 @@ const lang = getLang(Astro.url);
   next={next} 
   backUrl={getLocalePath(lang, '/projects')} 
   backLabel="Back to projects"
+  headings={headings}
 >
   <Content />
 </PostLayout>
