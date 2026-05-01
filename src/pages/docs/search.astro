@@ -1,0 +1,18 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Search"
+  description="SignalPaper uses Pagefind to provide static search across posts and projects."
+>
+  <h2>How it works</h2>
+  <p>The build command runs Astro first, then Pagefind. Pagefind reads the generated static pages and creates the search index inside <code>dist/pagefind</code>.</p>
+
+  <h2>Search scope</h2>
+  <p>The default search modal covers public post and project detail pages. Results are filtered by the current page language.</p>
+
+  <h2>Local testing</h2>
+  <p>Use <code>npm run build</code> and <code>npm run preview</code> when testing search. Search is not expected to work in the same way during raw development mode.</p>
+</DocsLayout>
+

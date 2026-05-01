@@ -1,0 +1,60 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main id="main-content" role="main" class="container fade-in">
+    <article class="docs-page">
+      <header class="docs-header">
+        <h1>{title}</h1>
+        <p>{description}</p>
+      </header>
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+
+  .docs-page {
+    max-width: 760px;
+  }
+
+  .docs-header {
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-muted);
+  }
+
+  .docs-header h1 {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    margin-bottom: var(--space-3);
+  }
+
+  .docs-header p {
+    color: var(--fg-muted);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    max-width: 680px;
+  }
+</style>
+

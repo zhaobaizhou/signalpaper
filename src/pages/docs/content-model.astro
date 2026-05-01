@@ -1,0 +1,18 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Content Model"
+  description="SignalPaper uses Astro content collections for posts and projects."
+>
+  <h2>Posts</h2>
+  <p>Posts are long-form writings. They support titles, descriptions, publish dates, summaries, tags, featured status, draft status, and optional canonical URLs.</p>
+
+  <h2>Projects</h2>
+  <p>Projects use the same base fields as posts and add project status and year. Use projects for tools, experiments, documentation, case studies, or long-running work.</p>
+
+  <h2>Language folders</h2>
+  <p>English content lives under <code>src/content/*/en</code>. Chinese content lives under <code>src/content/*/zh</code>. Matching slugs make bilingual navigation easier to reason about.</p>
+</DocsLayout>
+

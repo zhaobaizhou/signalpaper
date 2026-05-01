@@ -1,0 +1,25 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Getting Started"
+  description="Install SignalPaper, run the local site, and understand what should be replaced before publishing."
+>
+  <h2>Install</h2>
+  <pre><code>npm install
+npm run dev</code></pre>
+
+  <h2>Build</h2>
+  <pre><code>npm run build
+npm run preview</code></pre>
+
+  <h2>Replace before publishing</h2>
+  <ul>
+    <li>Update <code>src/config/site.ts</code>.</li>
+    <li>Replace demo posts and projects.</li>
+    <li>Set the production URL in both site configuration and Astro config.</li>
+    <li>Enable newsletter, comments, or analytics only after adding real provider settings.</li>
+  </ul>
+</DocsLayout>
+

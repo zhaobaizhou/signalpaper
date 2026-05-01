@@ -1,0 +1,18 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Configuration"
+  description="The main SignalPaper configuration lives in src/config/site.ts."
+>
+  <h2>Main settings</h2>
+  <p>Use <code>src/config/site.ts</code> to configure the site name, tagline, description, production URL, author profile, language settings, social links, posts per page, and feature toggles.</p>
+
+  <h2>Production URL</h2>
+  <p>Set the same production URL in <code>SITE.url</code> and <code>astro.config.mjs</code>. This keeps canonical URLs, sitemap entries, RSS links, and social cards aligned.</p>
+
+  <h2>Integrations</h2>
+  <p>Comments, analytics, and newsletter are disabled by default. Enable them only after replacing provider-specific IDs and endpoints.</p>
+</DocsLayout>
+

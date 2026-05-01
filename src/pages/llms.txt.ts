@@ -20,25 +20,36 @@ export const GET: APIRoute = async () => {
     `# ${SITE.name}`,
     `> ${SITE.description}`,
     ``,
-    `## About`,
-    `Author: ${SITE.author.name}`,
+    `## What this is`,
+    `SignalPaper is a content-first Astro author theme for long-form writing, project archives, bilingual publishing, static search, and long-form reading.`,
     `Site: ${SITE.url}`,
+    `Repository: replace this with the public theme repository URL after release.`,
     ``,
-    `## Writings (English)`,
+    `## High-value entry points`,
+    `- [Features](${SITE.url}/features): Core theme capabilities and default surfaces.`,
+    `- [Docs](${SITE.url}/docs): Configuration, content model, bilingual setup, and search.`,
+    `- [Getting Started](${SITE.url}/docs/getting-started): Install, build, and replace the demo content.`,
+    `- [Configuration](${SITE.url}/docs/configuration): Site config, production URL, and integration settings.`,
+    `- [Content Model](${SITE.url}/docs/content-model): Posts, projects, and language folders.`,
+    `- [Bilingual Setup](${SITE.url}/docs/bilingual): English and Chinese route structure.`,
+    `- [Search](${SITE.url}/docs/search): Pagefind search behavior and preview notes.`,
+    `- [FAQ](${SITE.url}/faq): Common questions about using the theme.`,
+    ``,
+    `## Demo writings (English)`,
     ``,
     ...enPosts.map(p => {
       const slug = p.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '');
       return `- [${p.data.title}](${SITE.url}/posts/${slug}): ${p.data.description}`;
     }),
     ``,
-    `## Writings (Chinese)`,
+    `## Demo writings (Chinese)`,
     ``,
     ...zhPosts.map(p => {
       const slug = p.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '');
       return `- [${p.data.title}](${SITE.url}/zh/posts/${slug}): ${p.data.description}`;
     }),
     ``,
-    `## Projects (English)`,
+    `## Demo projects (English)`,
     ``,
     ...enProjects.map(p => {
       const slug = p.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '');
@@ -46,7 +57,7 @@ export const GET: APIRoute = async () => {
       return `- [${p.data.title}](${SITE.url}/projects/${slug})${status}: ${p.data.description}`;
     }),
     ``,
-    `## Projects (Chinese)`,
+    `## Demo projects (Chinese)`,
     ``,
     ...zhProjects.map(p => {
       const slug = p.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '');
