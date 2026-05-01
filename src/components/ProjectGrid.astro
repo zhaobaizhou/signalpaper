@@ -30,7 +30,6 @@ const t = useTranslations(lang);
         const { title, description, tags = [], status, year, pubDatetime, featured } = project.data;
         const slug = project.id.replace(/^(en|zh)\//, '');
         const displayYear = year ?? pubDatetime.getFullYear();
-        const statusKey = getStatusKey(status);
 
         return (
           <article class="project-card">
