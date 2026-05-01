@@ -6,20 +6,27 @@ interface Props {
   projects: CollectionEntry<'projects'>[];
   showAll?: boolean;
   showStatus?: boolean;
+  title?: string;
 }
 
-const { projects, showAll = false, showStatus = false } = Astro.props;
+const { projects, showAll = false, showStatus = false, title } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<section class="projects-section" aria-label={t('section.projects')}>
+<section class="projects-section" aria-label={title || t('section.projects')}>
   <div class="container">
-    {!showAll && (
+    {!showAll && !title && (
       <a href={getLocalePath(lang, '/projects')} class="section-header" aria-label={t('link.allProjects')}>
         <h2 class="section-title">{t('section.projects')}</h2>
         <span class="section-arrow">{t('link.seeAll')}</span>
       </a>
+    )}
+
+    {title && (
+      <div class="section-header static-header">
+        <h2 class="section-title">{title}</h2>
+      </div>
     )}
 
     <div class="projects-grid">

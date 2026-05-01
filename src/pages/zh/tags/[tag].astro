@@ -36,10 +36,10 @@ const totalCount = taggedPosts.length + taggedProjects.length;
       </h1>
       <p class="page-subtitle">共 {totalCount} 篇</p>
     </div>
-    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} />}
+    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} title="文章" />}
     {taggedProjects.length > 0 && (
       <div style={taggedPosts.length > 0 ? "margin-top: var(--space-12);" : ""}>
-        <ProjectGrid projects={taggedProjects} showAll={true} />
+        <ProjectGrid projects={taggedProjects} showAll={true} title="项目" />
       </div>
     )}
   </main>

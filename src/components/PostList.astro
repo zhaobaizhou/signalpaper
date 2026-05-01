@@ -5,20 +5,27 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   posts: CollectionEntry<'posts'>[];
   showAll?: boolean;
+  title?: string;
 }
 
-const { posts, showAll = false } = Astro.props;
+const { posts, showAll = false, title } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<section class="post-list-section" aria-label={t('section.writings')}>
+<section class="post-list-section" aria-label={title || t('section.writings')}>
   <div class="container">
-    {!showAll && (
+    {!showAll && !title && (
       <a href={getLocalePath(lang, '/posts')} class="section-header" aria-label={t('link.allWritings')}>
         <h2 class="section-title">{t('section.writings')}</h2>
         <span class="section-arrow">{t('link.seeAll')}</span>
       </a>
+    )}
+    
+    {title && (
+      <div class="section-header static-header">
+        <h2 class="section-title">{title}</h2>
+      </div>
     )}
 
     <ul class="post-list" role="list">

@@ -40,10 +40,10 @@ const totalCount = taggedPosts.length + taggedProjects.length;
       </h1>
       <p class="page-subtitle">{totalCount} item{totalCount !== 1 ? 's' : ''}</p>
     </div>
-    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} />}
+    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} title="Writings" />}
     {taggedProjects.length > 0 && (
       <div style={taggedPosts.length > 0 ? "margin-top: var(--space-12);" : ""}>
-        <ProjectGrid projects={taggedProjects} showAll={true} />
+        <ProjectGrid projects={taggedProjects} showAll={true} title="Projects" />
       </div>
     )}
   </main>
