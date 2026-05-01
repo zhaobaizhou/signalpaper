@@ -5,8 +5,9 @@ import { SITE } from '../config/site';
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 
-const isEnabled = SITE.newsletter.enabled && SITE.newsletter.actionUrl;
+const isEnabled = SITE.newsletter.enabled;
 const actionUrl = SITE.newsletter.actionUrl;
+const isConfigured = Boolean(actionUrl);
 ---
 
 {isEnabled && (
@@ -16,21 +17,21 @@ const actionUrl = SITE.newsletter.actionUrl;
       <p class="newsletter-description">
         {lang === 'zh' ? (
           <Fragment>
-            通过邮件订阅更新，或使用 <a href={SITE.social.rss} target="_blank">RSS</a> 关注新的文章和项目。
+            通过邮件、<a href={SITE.social.rss} target="_blank">RSS</a>、<a href={SITE.social.x} target="_blank">Twitter</a>、<a href={SITE.social.github} target="_blank">GitHub</a> 等方式<a href="/zh/about">关注我的更新</a>。
           </Fragment>
         ) : (
           <Fragment>
-            Subscribe for updates, or use <a href={SITE.social.rss} target="_blank">RSS</a> to follow new writings and projects.
+            Follow me via <a href={SITE.social.email}>Email</a>, <a href={SITE.social.rss} target="_blank">RSS</a>, <a href={SITE.social.x} target="_blank">Twitter</a>, <a href={SITE.social.github} target="_blank">GitHub</a> and <a href="/about">other options</a>.
           </Fragment>
         )}
       </p>
     </div>
     <form
-      action={actionUrl}
+      action={isConfigured ? actionUrl : '#'}
       method="post"
       target="_blank"
       class="newsletter-form"
-      onsubmit={`window.open('${actionUrl}', 'popupwindow')`}
+      onsubmit={isConfigured ? `window.open('${actionUrl}', 'popupwindow')` : 'event.preventDefault()'}
     >
       <input
         type="email"

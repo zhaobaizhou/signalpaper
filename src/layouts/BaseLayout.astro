@@ -166,5 +166,97 @@ const siteSchema = !article
 
   <body>
     <slot />
+    <script is:inline>
+      (() => {
+        const headingSelector = '.prose :is(h2, h3, h4, h5, h6)';
+
+        function slugify(text, index) {
+          const base = text
+            .trim()
+            .toLowerCase()
+            .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+
+          return base || `section-${index + 1}`;
+        }
+
+        function decorateHeadings() {
+          const headings = Array.from(document.querySelectorAll(headingSelector));
+          const usedIds = new Set(
+            Array.from(document.querySelectorAll('[id]'))
+              .map((node) => node.id)
+              .filter(Boolean)
+          );
+
+          headings.forEach((heading, index) => {
+            if (!(heading instanceof HTMLElement)) return;
+
+            if (!heading.id) {
+              let slug = slugify(heading.textContent || '', index);
+              let suffix = 2;
+              while (usedIds.has(slug)) {
+                slug = `${slugify(heading.textContent || '', index)}-${suffix}`;
+                suffix += 1;
+              }
+              heading.id = slug;
+              usedIds.add(slug);
+            }
+
+            heading.classList.add('heading-anchor-target', `heading-anchor-target-level-${heading.tagName.slice(1)}`);
+
+            if (heading.querySelector(':scope > .heading-anchor-link')) return;
+
+            const anchor = document.createElement('a');
+            anchor.href = `#${heading.id}`;
+            anchor.className = 'heading-anchor-link';
+            anchor.setAttribute('aria-label', `Link to heading: ${heading.textContent?.trim() || heading.id}`);
+
+            const label = document.createElement('span');
+            label.className = 'heading-anchor-label';
+            label.setAttribute('aria-hidden', 'true');
+            label.textContent = heading.tagName;
+
+            anchor.appendChild(label);
+            heading.prepend(anchor);
+
+            heading.addEventListener('click', (event) => {
+              const target = event.target;
+              if (!(target instanceof HTMLElement)) return;
+              if (target.closest('a') && !target.closest('.heading-anchor-link')) return;
+
+              const hash = `#${heading.id}`;
+              if (window.location.hash !== hash) {
+                history.pushState(null, '', hash);
+              }
+              scrollToHashTarget();
+            });
+          });
+        }
+
+        function scrollToHashTarget() {
+          if (!window.location.hash) return;
+          const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+          const header = document.querySelector('.site-header');
+          if (!target) return;
+
+          const headerHeight = header instanceof HTMLElement ? header.getBoundingClientRect().height : 0;
+          const top = window.scrollY + target.getBoundingClientRect().top - headerHeight - 15;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+          decorateHeadings();
+          if (window.location.hash) {
+            requestAnimationFrame(() => {
+              setTimeout(scrollToHashTarget, 20);
+            });
+          }
+        });
+
+        window.addEventListener('hashchange', scrollToHashTarget);
+      })();
+    </script>
   </body>
 </html>

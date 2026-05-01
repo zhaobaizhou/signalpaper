@@ -54,7 +54,7 @@ export const SITE = {
     }
   },
   newsletter: {
-    enabled: false,
+    enabled: true,
     actionUrl: '',
   }
 };

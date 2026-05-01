@@ -65,7 +65,7 @@ export const ui = {
     'footer.tagline': 'SignalPaper is a content-first Astro author theme.',
 
     // Newsletter
-    'newsletter.title': 'Subscribe',
+    'newsletter.title': 'Follow Me',
     'newsletter.placeholder': 'Enter your email',
     'newsletter.button': 'Sign Up',
 
@@ -136,7 +136,7 @@ export const ui = {
     'footer.tagline': 'SignalPaper 是一个内容优先的 Astro 作者站主题。',
 
     // Newsletter
-    'newsletter.title': '订阅',
+    'newsletter.title': '关注我',
     'newsletter.placeholder': '输入你的邮箱地址',
     'newsletter.button': '邮件订阅',
 
