@@ -7,15 +7,38 @@ const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 const alternateLang = lang === 'en' ? 'zh' : 'en';
 const alternatePath = alternateLang === 'zh' ? '/zh/' : '/';
+
+const path = Astro.url.pathname;
+let currentSection = '';
+let currentSectionUrl = '';
+
+if (path.includes('/posts') || path.includes('/zh/posts')) {
+  currentSection = 'WRITING';
+  currentSectionUrl = getLocalePath(lang, '/posts');
+} else if (path.includes('/projects') || path.includes('/zh/projects')) {
+  currentSection = 'PROJECTS';
+  currentSectionUrl = getLocalePath(lang, '/projects');
+} else if (path.includes('/tags') || path.includes('/zh/tags')) {
+  currentSection = 'TAGS';
+  currentSectionUrl = getLocalePath(lang, '/tags');
+}
 ---
 
 <header class="site-header" role="banner">
   <div class="header-inner container">
     <!-- Logo / Brand -->
-    <a href={getLocalePath(lang, '/')} class="header-brand" aria-label={SITE.author.name}>
-      <span class="header-logo" aria-hidden="true">SP</span>
-      <span class="header-site-name">{SITE.author.name}<span class="header-period">.</span></span>
-    </a>
+    <div class="header-brand-group">
+      <a href={getLocalePath(lang, '/')} class="header-brand" aria-label={SITE.name}>
+        <span class="header-logo" aria-hidden="true">SP</span>
+        <span class="header-site-name">{SITE.name}</span>
+      </a>
+      {currentSection && (
+        <>
+          <span class="header-section-sep">/</span>
+          <a href={currentSectionUrl} class="header-section-link">{currentSection}</a>
+        </>
+      )}
+    </div>
 
     <!-- Right controls -->
     <nav class="header-controls" aria-label="Site controls">
@@ -300,6 +323,12 @@ const alternatePath = alternateLang === 'zh' ? '/zh/' : '/';
     gap: var(--space-4);
   }
 
+  .header-brand-group {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+  }
+
   .header-brand {
     display: flex;
     align-items: center;
@@ -337,11 +366,26 @@ const alternatePath = alternateLang === 'zh' ? '/zh/' : '/';
     color: var(--fg);
   }
 
-  .header-period {
-    color: var(--accent);
+  .header-section-sep {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--fg-muted);
+    user-select: none;
+    margin: 0 var(--space-1);
   }
 
+  .header-section-link {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+  }
 
+  .header-section-link:hover {
+    opacity: 0.8;
+  }
 
   .header-controls {
     display: flex;
