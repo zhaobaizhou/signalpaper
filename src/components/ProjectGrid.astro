@@ -34,8 +34,8 @@ const t = useTranslations(lang);
 
         let displayMeta = displayYear.toString();
         if (showStatus && status) {
-          const statusKey = `project.status.${status}` as Parameters<typeof t>[0];
-          displayMeta = t(statusKey);
+          const statusKey = `project.status.${status}`;
+          displayMeta = t(statusKey as any);
         }
 
         return (
