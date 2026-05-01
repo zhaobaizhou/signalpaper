@@ -147,11 +147,6 @@ const formattedModDate = modDatetime?.toLocaleDateString(
         </nav>
       )}
 
-      <nav class="post-nav-bottom">
-        <a href={finalBackUrl} class="back-link">
-          {finalBackLabel}
-        </a>
-      </nav>
     </footer>
     </div>
   </main>
@@ -411,16 +406,6 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-  }
-
-  .back-link {
-    font-size: var(--text-sm);
-    color: var(--fg-muted);
-    transition: color var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--accent);
   }
 
   /* Prev / Next navigation */
