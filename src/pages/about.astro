@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+---
+
+<BaseLayout
+  title={`About | ${SITE.name}`}
+  description={`About ${SITE.name} and the author.`}
+>
+  <Header />
+
+  <main id="main-content" role="main" class="container prose fade-in">
+    <h1>About Me</h1>
+    <p>
+      Welcome to SignalPaper. I write about AI workflows, product judgment, and small systems for independent work.
+    </p>
+    <p>
+      This site is my digital garden, where I turn pressure, experience, and judgment into reusable personal assets. 
+      If you enjoy my writings, consider following me on <a href={SITE.social.x}>Twitter</a>, checking out my code on <a href={SITE.social.github}>GitHub</a>, or subscribing via <a href={SITE.social.rss}>RSS</a>.
+    </p>
+    <h2>What is SignalPaper?</h2>
+    <p>
+      SignalPaper is a high-density, minimalist creator OS template built with Astro. It's designed to help independent creators focus on what matters most: content, without the noise.
+    </p>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+  }
+</style>

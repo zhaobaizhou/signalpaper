@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE } from '../../config/site';
+---
+
+<BaseLayout
+  title={`关于 | ${SITE.name}`}
+  description={`关于 ${SITE.name} 与作者。`}
+>
+  <Header />
+
+  <main id="main-content" role="main" class="container prose fade-in">
+    <h1>关于我</h1>
+    <p>
+      欢迎来到 SignalPaper。我写 AI 工作流、产品判断，以及面向独立工作的轻量系统。
+    </p>
+    <p>
+      这个网站是我的数字花园。在这里，我把压力、经验和判断，整理成可复用的个人资产。
+      如果你喜欢我的内容，可以关注我的 <a href={SITE.social.x}>Twitter</a>、在 <a href={SITE.social.github}>GitHub</a> 查看我的代码，或者通过 <a href={SITE.social.rss}>RSS</a> 订阅更新。
+    </p>
+    <h2>关于 SignalPaper</h2>
+    <p>
+      SignalPaper 是一个基于 Astro 构建的高密度、极简创作者操作系统（Creator OS）模板。它的设计初衷是帮助独立创作者专注于最重要的事情：内容，而免去繁杂视觉的干扰。
+    </p>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+  }
+</style>

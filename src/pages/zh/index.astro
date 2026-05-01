@@ -31,9 +31,24 @@ const homeTags = tags.slice(0, 20);
     <PostList posts={homePosts} />
     <ProjectGrid projects={homeProjects} />
     
+    <div class="container">
+      <hr class="section-divider" />
+    </div>
+
     <section class="container">
       <Newsletter />
     </section>
   </main>
   <Footer />
 </BaseLayout>
+
+<style>
+  main {
+    padding-bottom: 0;
+  }
+  .section-divider {
+    border: 0;
+    border-top: 1px solid var(--border-muted);
+    margin: var(--space-8) 0;
+  }
+</style>

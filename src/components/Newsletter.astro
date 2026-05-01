@@ -16,11 +16,11 @@ const actionUrl = SITE.newsletter.actionUrl;
       <p class="newsletter-description">
         {lang === 'zh' ? (
           <Fragment>
-            通过邮件、<a href={SITE.social.rss} target="_blank">RSS</a>、<a href={SITE.social.x} target="_blank">Twitter</a> 或是 <a href={SITE.social.github} target="_blank">GitHub</a> 等方式关注我的更新。
+            通过邮件、<a href={SITE.social.rss} target="_blank">RSS</a>、<a href={SITE.social.x} target="_blank">Twitter</a>、<a href={SITE.social.github} target="_blank">GitHub</a> 等方式<a href="/zh/about">关注我的更新</a>。
           </Fragment>
         ) : (
           <Fragment>
-            Follow me via email, <a href={SITE.social.rss} target="_blank">RSS</a>, <a href={SITE.social.x} target="_blank">Twitter</a>, and <a href={SITE.social.github} target="_blank">other options</a>.
+            Follow me via <a href={SITE.social.email}>Email</a>, <a href={SITE.social.rss} target="_blank">RSS</a>, <a href={SITE.social.x} target="_blank">Twitter</a>, <a href={SITE.social.github} target="_blank">GitHub</a> and <a href="/about">other options</a>.
           </Fragment>
         )}
       </p>
@@ -92,13 +92,14 @@ const actionUrl = SITE.newsletter.actionUrl;
   .newsletter-form input[type="email"] {
     flex: 1;
     min-width: 0;
-    padding: var(--space-sm) 0;
+    padding: var(--space-md) var(--space-xs);
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--border);
     border-radius: 0;
     color: var(--fg);
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
+    line-height: 1.5;
     transition: border-color var(--transition-fast);
   }
 
@@ -112,7 +113,7 @@ const actionUrl = SITE.newsletter.actionUrl;
   }
 
   .newsletter-form button {
-    padding: var(--space-sm) var(--space-xl);
+    padding: 0 var(--space-2xl);
     background-color: var(--fg);
     color: var(--bg);
     border: none;
@@ -124,7 +125,10 @@ const actionUrl = SITE.newsletter.actionUrl;
       transform var(--transition-fast),
       opacity var(--transition-fast);
     white-space: nowrap;
-    height: 42px; /* Ensure button has a good click target height */
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .newsletter-form button:hover {
