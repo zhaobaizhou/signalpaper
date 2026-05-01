@@ -523,27 +523,27 @@ a.section-header:hover .section-arrow {
 }
 
 .astro-code {
-  color: var(--shiki-light);
+  color: var(--shiki-light, var(--fg));
   background-color: var(--bg-alt) !important;
 }
 
 .astro-code span {
-  color: var(--shiki-light);
-  font-style: var(--shiki-light-font-style);
-  font-weight: var(--shiki-light-font-weight);
-  text-decoration: var(--shiki-light-text-decoration);
+  color: var(--shiki-light, inherit);
+  font-style: var(--shiki-light-font-style, inherit);
+  font-weight: var(--shiki-light-font-weight, inherit);
+  text-decoration: var(--shiki-light-text-decoration, inherit);
 }
 
 html[data-theme='dark'] .astro-code {
-  color: var(--shiki-dark);
+  color: var(--shiki-dark, var(--fg));
   background-color: var(--bg-alt) !important;
 }
 
 html[data-theme='dark'] .astro-code span {
-  color: var(--shiki-dark);
-  font-style: var(--shiki-dark-font-style);
-  font-weight: var(--shiki-dark-font-weight);
-  text-decoration: var(--shiki-dark-text-decoration);
+  color: var(--shiki-dark, inherit);
+  font-style: var(--shiki-dark-font-style, inherit);
+  font-weight: var(--shiki-dark-font-weight, inherit);
+  text-decoration: var(--shiki-dark-text-decoration, inherit);
 }
 
 /* Copy Code Button */
