@@ -22,6 +22,32 @@ export const SITE = {
     rss: '/rss.xml',
   },
   postsPerPage: 10,
+  comments: {
+    enabled: true,
+    provider: 'giscus', // 'giscus' | 'waline'
+    giscus: {
+      repo: 'baizhou/signalpaper-comments', // Replace with your repo
+      repoId: '',
+      category: 'Announcements',
+      categoryId: '',
+      mapping: 'pathname',
+      reactionsEnabled: '1',
+      emitMetadata: '0',
+      theme: 'preferred_color_scheme',
+      lang: 'en',
+    }
+  },
+  analytics: {
+    enabled: true,
+    provider: 'google', // 'google' | 'umami' | 'plausible'
+    google: {
+      measurementId: 'G-XXXXXXXXXX', // Replace with your Measurement ID
+    },
+    umami: {
+      websiteId: '',
+      src: 'https://us.umami.is/script.js',
+    }
+  }
 };
 
 export type SiteConfig = typeof SITE;

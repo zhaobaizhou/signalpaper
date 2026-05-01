@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Comments from '../components/Comments.astro';
 import { SITE } from '../config/site';
 import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
 import type { CollectionEntry } from 'astro:content';
@@ -147,6 +148,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
         </nav>
       )}
 
+      <Comments />
+
     </footer>
     </div>
   </main>
@@ -180,6 +183,41 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   </aside>
 
   <script>
+    import mediumZoom from 'medium-zoom';
+
+    // 1. Medium Zoom
+    mediumZoom('.prose img:not(a img)', {
+      margin: 24,
+      background: 'var(--bg)'
+    });
+
+    // 2. Copy Code Buttons
+    const codeBlocks = document.querySelectorAll('.astro-code');
+    codeBlocks.forEach((block) => {
+      const code = block.querySelector('code');
+      const button = document.createElement('button');
+      button.className = 'copy-code-btn';
+      button.textContent = 'Copy';
+      button.setAttribute('aria-label', 'Copy code to clipboard');
+      
+      button.addEventListener('click', () => {
+        const text = code ? code.textContent : block.textContent;
+        if (text) {
+          navigator.clipboard.writeText(text).then(() => {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            setTimeout(() => {
+              button.textContent = 'Copy';
+              button.classList.remove('copied');
+            }, 2000);
+          });
+        }
+      });
+      
+      block.appendChild(button);
+    });
+
+    // 3. Floating Action Button
     const fab = document.getElementById('post-fab');
     const fabTop = document.getElementById('fab-top');
 

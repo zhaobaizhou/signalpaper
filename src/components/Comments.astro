@@ -1,0 +1,68 @@
+---
+import { SITE } from '../config/site';
+import { getLang } from '../i18n/utils';
+
+const { enabled, provider, giscus } = SITE.comments;
+const lang = getLang(Astro.url);
+const giscusLang = lang === 'zh' ? 'zh-CN' : 'en';
+
+const shouldRender = enabled && provider === 'giscus' && giscus.repo;
+---
+
+{shouldRender && (
+  <section class="comments-section container" aria-label="Comments">
+    <div class="giscus-wrapper">
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category}
+        data-category-id={giscus.categoryId}
+        data-mapping={giscus.mapping}
+        data-strict="0"
+        data-reactions-enabled={giscus.reactionsEnabled}
+        data-emit-metadata={giscus.emitMetadata}
+        data-input-position="bottom"
+        data-theme={giscus.theme}
+        data-lang={giscusLang}
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+    
+    <script is:inline>
+      // Sync Giscus theme with Site theme
+      function updateGiscusTheme() {
+        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'transparent_dark' : 'light';
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          'https://giscus.app'
+        );
+      }
+
+      // Initial sync is handled by preferred_color_scheme, but we observe mutations to catch manual toggles
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'data-theme') {
+            updateGiscusTheme();
+          }
+        });
+      });
+      observer.observe(document.documentElement, { attributes: true });
+    </script>
+  </section>
+)}
+
+<style>
+  .comments-section {
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-muted);
+  }
+  .giscus-wrapper {
+    min-height: 250px; /* Prevent cumulative layout shift */
+  }
+</style>

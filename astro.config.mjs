@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { rehypeFigure } from './src/lib/rehype-figure.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,6 +22,8 @@ export default defineConfig({
         dark: 'github-dark',
       },
       wrap: true,
+      defaultColor: false,
     },
+    rehypePlugins: [rehypeFigure],
   },
 });

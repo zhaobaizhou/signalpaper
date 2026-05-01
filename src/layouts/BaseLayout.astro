@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { SITE } from '../config/site';
 import { getLang } from '../i18n/utils';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title?: string;
@@ -79,6 +80,7 @@ const siteSchema = !article
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <Analytics />
 
     <!-- Primary Meta -->
     <title>{pageTitle}</title>
