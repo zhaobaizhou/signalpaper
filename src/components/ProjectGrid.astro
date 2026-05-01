@@ -5,9 +5,10 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   projects: CollectionEntry<'projects'>[];
   showAll?: boolean;
+  showStatus?: boolean;
 }
 
-const { projects, showAll = false } = Astro.props;
+const { projects, showAll = false, showStatus = false } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -31,6 +32,12 @@ const t = useTranslations(lang);
         const slug = project.id.replace(/^(en|zh)\//, '');
         const displayYear = year ?? pubDatetime.getFullYear();
 
+        let displayMeta = displayYear.toString();
+        if (showStatus && status) {
+          const statusKey = `project.status.${status}` as Parameters<typeof t>[0];
+          displayMeta = t(statusKey);
+        }
+
         return (
           <article class="project-card">
             <a href={getLocalePath(lang, `/projects/${slug}`)} class="project-card-link">
@@ -39,7 +46,7 @@ const t = useTranslations(lang);
                   {featured && <span class="featured-dot" aria-label="Featured"></span>}
                   {title}
                 </h3>
-                <span class="project-year">{displayYear}</span>
+                <span class="project-year">{displayMeta}</span>
               </header>
 
               <p class="project-desc">{description}</p>

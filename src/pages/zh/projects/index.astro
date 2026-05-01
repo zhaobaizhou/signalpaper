@@ -7,6 +7,15 @@ import { getProjects } from '../../../lib/content';
 
 const lang = 'zh';
 const projects = await getProjects(lang);
+
+const groupedProjects = projects.reduce((acc, proj) => {
+  const y = proj.data.year ?? proj.data.pubDatetime.getFullYear();
+  if (!acc[y]) acc[y] = [];
+  acc[y].push(proj);
+  return acc;
+}, {} as Record<string, typeof projects>);
+
+const sortedYears = Object.keys(groupedProjects).sort((a, b) => Number(b) - Number(a));
 ---
 
 <BaseLayout title="项目" description="我正在构建或已经构建的项目。">
@@ -16,13 +25,52 @@ const projects = await getProjects(lang);
       <h1 class="page-title">项目</h1>
       <p class="page-subtitle">共 {projects.length} 个</p>
     </div>
-    <ProjectGrid projects={projects} showAll={true} />
+    
+    <div class="projects-list">
+      {sortedYears.map(year => (
+        <section class="year-group">
+          <div class="container">
+            <h2 class="year-heading">{year}</h2>
+          </div>
+          <ProjectGrid projects={groupedProjects[year]} showAll={true} showStatus={true} />
+        </section>
+      ))}
+    </div>
   </main>
   <Footer />
 </BaseLayout>
 
 <style>
-  .page-header { padding-top: var(--space-12); padding-bottom: var(--space-6); }
-  .page-title { font-family: var(--font-serif); font-size: var(--text-3xl); font-weight: 400; margin-bottom: var(--space-2); }
-  .page-subtitle { font-size: var(--text-sm); color: var(--fg-muted); }
+  .page-header {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-6);
+  }
+  .page-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .page-subtitle {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+  }
+  .projects-list {
+    padding-bottom: var(--space-16);
+  }
+  .year-heading {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xl);
+    color: var(--fg);
+    margin-bottom: var(--space-6);
+    padding-top: var(--space-10);
+    border-top: 1px solid var(--border-muted);
+  }
+  .year-group :global(.projects-section .container) {
+    border-top: none;
+    padding-top: 0;
+  }
+  .year-group :global(.projects-section) {
+    padding-bottom: var(--space-6);
+  }
 </style>

@@ -1,18 +1,32 @@
 ---
-title: Omicron API
-description: This is a dummy project description for Omicron API, designed to test layout and pagination.
-pubDatetime: 2024-01-01T10:00:00+08:00
+title: SignalPaper Docs
+description: "The official documentation site for the SignalPaper Astro theme."
+pubDatetime: 2022-01-01T10:00:00+08:00
 draft: false
 featured: false
 categories: project
-status: active
-year: 2024
+status: shipped
+year: 2022
 tags:
-  - ai
-  - llm
-summary: A minimal test project.
+  - docs
+  - astro
+  - signalpaper
+summary: "The official documentation site for the SignalPaper Astro theme."
 ---
 
-This is the detailed content for **Omicron API**. 
+## Overview
 
-It serves as placeholder text to ensure the inner project pages render perfectly with the new magazine-style layout constraints.
+**SignalPaper Docs** is built around the philosophy of the SignalPaper theme. It prioritizes clarity, performance, and aesthetic minimalism.
+
+> The goal is to maximize the signal-to-noise ratio. Focus on the core value and eliminate the rest.
+
+### Key Features
+- High information density
+- Minimalist typography
+- No unnecessary dependencies
+
+This project perfectly integrates with the Astro ecosystem and extends the Creator OS vision.
+
+### Technical Details
+- Built in 2022
+- Status: shipped

@@ -1,18 +1,31 @@
 ---
-title: Theta Tracker
-description: This is a dummy project description for Theta Tracker, designed to test layout and pagination.
-pubDatetime: 2022-01-01T10:00:00+08:00
+title: CSS Grid Refactor
+description: "Modernizing the legacy layout system using CSS Grid to drop 30% of CSS payload."
+pubDatetime: 2024-01-01T10:00:00+08:00
 draft: false
 featured: false
 categories: project
-status: active
-year: 2022
+status: completed
+year: 2024
 tags:
-  - backend
-  - go
-summary: A minimal test project.
+  - css
+  - performance
+summary: "Modernizing the legacy layout system using CSS Grid to drop 30% of CSS payload."
 ---
 
-This is the detailed content for **Theta Tracker**. 
+## Overview
 
-It serves as placeholder text to ensure the inner project pages render perfectly with the new magazine-style layout constraints.
+**CSS Grid Refactor** is built around the philosophy of the SignalPaper theme. It prioritizes clarity, performance, and aesthetic minimalism.
+
+> The goal is to maximize the signal-to-noise ratio. Focus on the core value and eliminate the rest.
+
+### Key Features
+- High information density
+- Minimalist typography
+- No unnecessary dependencies
+
+This project perfectly integrates with the Astro ecosystem and extends the Creator OS vision.
+
+### Technical Details
+- Built in 2024
+- Status: completed

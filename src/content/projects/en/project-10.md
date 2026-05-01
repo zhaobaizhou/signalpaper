@@ -1,18 +1,32 @@
 ---
-title: Kappa CLI
-description: This is a dummy project description for Kappa CLI, designed to test layout and pagination.
-pubDatetime: 2024-01-01T10:00:00+08:00
+title: RSS Newsletter Bot
+description: "A Telegram bot that reads the RSS feed and automatically broadcasts new essays to subscribers."
+pubDatetime: 2023-01-01T10:00:00+08:00
 draft: false
 featured: false
 categories: project
-status: active
-year: 2024
+status: archived
+year: 2023
 tags:
-  - ai
-  - llm
-summary: A minimal test project.
+  - bot
+  - telegram
+  - rss
+summary: "A Telegram bot that reads the RSS feed and automatically broadcasts new essays to subscribers."
 ---
 
-This is the detailed content for **Kappa CLI**. 
+## Overview
 
-It serves as placeholder text to ensure the inner project pages render perfectly with the new magazine-style layout constraints.
+**RSS Newsletter Bot** is built around the philosophy of the SignalPaper theme. It prioritizes clarity, performance, and aesthetic minimalism.
+
+> The goal is to maximize the signal-to-noise ratio. Focus on the core value and eliminate the rest.
+
+### Key Features
+- High information density
+- Minimalist typography
+- No unnecessary dependencies
+
+This project perfectly integrates with the Astro ecosystem and extends the Creator OS vision.
+
+### Technical Details
+- Built in 2023
+- Status: archived

@@ -16,6 +16,7 @@ const tags = await getTagsWithCount(lang);
 
 const homePosts = posts.slice(0, 5);
 const homeProjects = projects.slice(0, 2);
+const homeTags = tags.slice(0, 20);
 ---
 
 <BaseLayout
@@ -27,7 +28,7 @@ const homeProjects = projects.slice(0, 2);
   <main id="main-content" role="main">
     <Hero />
 
-    <TagCloud tags={tags} />
+    <TagCloud tags={homeTags} />
 
     <PostList posts={homePosts} />
 

@@ -1,11 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
-import PostLayout from '../../layouts/PostLayout.astro';
-import { getLang, getLocalePath } from '../../i18n/utils';
+import PostLayout from '../../../layouts/PostLayout.astro';
+import { getLang, getLocalePath } from '../../../i18n/utils';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ id, data }) => {
-    return id.startsWith('en/') && !data.draft;
+    return id.startsWith('zh/') && !data.draft;
   });
 
   // Sort by featured then year descending
@@ -22,11 +22,11 @@ export async function getStaticPaths() {
     const nextProj = sorted[index + 1] ?? null;
 
     return {
-      params: { slug: project.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '') },
+      params: { slug: project.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '') },
       props: {
         project,
-        prev: prevProj ? { title: prevProj.data.title, url: `/projects/${prevProj.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
-        next: nextProj ? { title: nextProj.data.title, url: `/projects/${nextProj.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
+        prev: prevProj ? { title: prevProj.data.title, url: `/zh/projects/${prevProj.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
+        next: nextProj ? { title: nextProj.data.title, url: `/zh/projects/${nextProj.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
       },
     };
   });
@@ -42,7 +42,7 @@ const lang = getLang(Astro.url);
   prev={prev} 
   next={next} 
   backUrl={getLocalePath(lang, '/projects')} 
-  backLabel="Back to projects"
+  backLabel="返回项目列表"
 >
   <Content />
 </PostLayout>

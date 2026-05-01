@@ -7,14 +7,19 @@ import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  post: CollectionEntry<'posts'>;
+  post: CollectionEntry<'posts'> | CollectionEntry<'projects'>;
   prev?: { title: string; url: string } | null;
   next?: { title: string; url: string } | null;
+  backUrl?: string;
+  backLabel?: string;
 }
 
-const { post, prev, next } = Astro.props;
+const { post, prev, next, backUrl, backLabel } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
+
+const finalBackUrl = backUrl ?? getLocalePath(lang, '/posts');
+const finalBackLabel = backLabel ?? t('post.backToWritings');
 
 const {
   title,
@@ -28,7 +33,7 @@ const {
   summary,
   author,
   hideEditPost,
-} = post.data;
+} = post.data as any;
 
 const displayAuthor = author ?? SITE.author.name;
 
@@ -61,7 +66,7 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   <div class="post-layout">
     <header class="post-header container">
       <nav class="post-back">
-        <a href={getLocalePath(lang, '/posts')}>{t('post.backToWritings')}</a>
+        <a href={finalBackUrl}>{finalBackLabel}</a>
       </nav>
 
       <h1 class="post-title">
@@ -147,8 +152,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
       )}
 
       <nav class="post-nav-bottom">
-        <a href={getLocalePath(lang, '/posts')} class="back-link">
-          {t('post.backToWritings')}
+        <a href={finalBackUrl} class="back-link">
+          {finalBackLabel}
         </a>
       </nav>
     </footer>

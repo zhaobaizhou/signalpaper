@@ -1,18 +1,31 @@
 ---
-title: Delta Framework
-description: This is a dummy project description for Delta Framework, designed to test layout and pagination.
-pubDatetime: 2023-01-01T10:00:00+08:00
+title: Typeface Experiment
+description: "A typography exploration prioritizing reading comfort and screen density for long-form essays."
+pubDatetime: 2025-01-01T10:00:00+08:00
 draft: false
-featured: false
+featured: true
 categories: project
-status: active
-year: 2023
+status: archived
+year: 2025
 tags:
   - design
-  - css
-summary: A minimal test project.
+  - typography
+summary: "A typography exploration prioritizing reading comfort and screen density for long-form essays."
 ---
 
-This is the detailed content for **Delta Framework**. 
+## Overview
 
-It serves as placeholder text to ensure the inner project pages render perfectly with the new magazine-style layout constraints.
+**Typeface Experiment** is built around the philosophy of the SignalPaper theme. It prioritizes clarity, performance, and aesthetic minimalism.
+
+> The goal is to maximize the signal-to-noise ratio. Focus on the core value and eliminate the rest.
+
+### Key Features
+- High information density
+- Minimalist typography
+- No unnecessary dependencies
+
+This project perfectly integrates with the Astro ecosystem and extends the Creator OS vision.
+
+### Technical Details
+- Built in 2025
+- Status: archived

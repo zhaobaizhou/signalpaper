@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getTagsWithCount } from '../../lib/content';
+import { pinyin } from 'pinyin-pro';
+
+const lang = 'en';
+const tags = await getTagsWithCount(lang);
+
+const groupedTags = tags.reduce((acc, tag) => {
+  const firstChar = tag.name.charAt(0);
+  let letter = firstChar.toUpperCase();
+  
+  if (/[\u4e00-\u9fa5]/.test(firstChar)) {
+    const py = pinyin(firstChar, { toneType: 'none', type: 'array' });
+    if (py && py[0]) letter = py[0][0].toUpperCase();
+  }
+  
+  if (!/[A-Z]/.test(letter)) {
+    letter = '#';
+  }
+  
+  if (!acc[letter]) acc[letter] = [];
+  acc[letter].push(tag);
+  return acc;
+}, {} as Record<string, typeof tags>);
+
+const sortedLetters = Object.keys(groupedTags).sort((a, b) => {
+  if (a === '#') return 1;
+  if (b === '#') return -1;
+  return a.localeCompare(b);
+});
+---
+
+<BaseLayout title="Tags" description="All tags used on this site.">
+  <Header />
+  <main id="main-content" role="main">
+    <div class="page-header container">
+      <h1 class="page-title">Tags</h1>
+      <p class="page-subtitle">{tags.length} tags in total</p>
+    </div>
+    
+    <div class="tags-container container">
+      {sortedLetters.map(letter => (
+        <div class="tag-group">
+          <h2 class="tag-letter">{letter}</h2>
+          <div class="tag-cloud" role="list">
+            {groupedTags[letter].map(tag => (
+              <a href={`/tags/${tag.name}`} class="tag-pill" role="listitem">
+                {tag.name}
+                <span class="count">{tag.count}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-6);
+  }
+  .page-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .page-subtitle {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+  }
+  .tags-container {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+  .tag-letter {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xl);
+    color: var(--fg-muted);
+    border-bottom: 1px solid var(--border-muted);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>
