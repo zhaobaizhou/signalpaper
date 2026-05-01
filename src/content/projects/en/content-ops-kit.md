@@ -1,36 +1,26 @@
 ---
 title: Content Ops Kit
-description: A paused toolkit for turning research notes into repeatable publishing workflows.
-pubDatetime: 2025-03-01T10:00:00+08:00
+description: A demo project for managing drafts, publishing checklists, metadata, and distribution steps.
+pubDatetime: 2026-04-01T10:00:00+08:00
 draft: false
 featured: false
 categories: project
-status: paused
-year: 2025
+status: idea
+year: 2026
 tags:
-  - systems
   - publishing
-  - tools
-summary: An attempt to systematize the messy middle of content production — from idea to published piece.
+  - workflow
+  - metadata
+summary: A project example for the operational side of maintaining a small publishing system.
 ---
 
-Content Ops Kit was an attempt to systematize the messy middle of content production.
+Content Ops Kit is a demo project about the operational side of publishing.
 
-The gap between "I have an idea" and "this is published" involves a lot of invisible work: research organization, draft management, editorial passes, publication formatting. Most of this work is done ad-hoc every time.
+It gathers the small repeatable tasks that keep a site maintainable: draft status, metadata, image checks, links, RSS, social cards, and release notes.
 
-## What I built
+## Why this project exists
 
-A set of templates and scripts for:
+Most publishing friction is not writing. It is the set of small checks that happen before and after publishing.
 
-- Organizing research into structured "evidence files"
-- Tracking draft status across a folder system
-- Converting research notes into first drafts
-- Publishing checklists by platform
+Putting those checks into a project page makes the system visible.
 
-## Why it's paused
-
-The templates worked, but I kept modifying them for each new project. The kit became a meta-project — I was maintaining the system instead of using it.
-
-The real insight: the right "system" for content production is probably much simpler than any kit. A single well-structured folder and a consistent daily practice beats an elaborate system.
-
-I may return to this as a simpler set of Obsidian templates.

@@ -1,40 +1,33 @@
 ---
 title: SignalPaper
-description: An Astro Creator OS theme for independent creators who write, build, and publish with judgment.
-pubDatetime: 2026-01-01T10:00:00+08:00
+description: A content-first Astro author theme for writing, projects, tags, search, bilingual publishing, and long-form reading.
+pubDatetime: 2026-04-24T10:00:00+08:00
 draft: false
 featured: true
 categories: project
 status: active
 year: 2026
 tags:
-  - creator-os
   - astro
   - theme
-summary: A lightweight, minimal Astro theme designed for independent writers and builders. Bilingual (EN/ZH), dark/light mode, SEO + GEO optimized.
+  - author-site
+summary: The theme demonstrated by this site, built for authors who want a durable home for writing and projects.
 ---
 
-SignalPaper is the theme you're currently looking at.
+SignalPaper is the theme demonstrated by this site.
 
-It was designed for independent creators who prioritize judgment over volume. The goal was a site that reveals how you think, not just what you've shipped.
+It provides a compact structure for author sites: writings, projects, tags, search, bilingual routes, RSS, metadata, and long-form reading tools.
 
-## Design decisions
+## What it includes
 
-**Minimal by default.** No sidebars, no featured images required, no comment sections. The content is the interface.
+- Astro content collections
+- English and Chinese route structure
+- Pagefind search
+- Reading progress and table of contents
+- Related writings by shared tags
+- Safe defaults for comments, analytics, and newsletters
 
-**Bilingual first.** Chinese and English live in parallel content trees, with Astro's native i18n routing. The language switch in the header maintains your current page context.
+## Status
 
-**Dark/light auto-mode.** The theme reads local time on load (6am–8pm = light, rest = dark) and stores user preference in localStorage. No flash of unstyled content.
+The public theme is being prepared for release. This demo content is designed to show the default experience without depending on a real personal brand.
 
-**Featured content system.** Use `featured: true` in frontmatter to surface your best work on the homepage. Gold dots (◆) mark featured items in the list.
-
-**Status badges for projects.** Use `status: active | paused | shipped | completed | archived | idea` to show where each project stands.
-
-## Stack
-
-- Astro 6 with Content Collections
-- Vanilla CSS with custom properties
-- No JavaScript frameworks
-- MDX for rich content
-- @astrojs/sitemap, @astrojs/rss
-- `/llms.txt` for GEO (AI agent accessibility)
