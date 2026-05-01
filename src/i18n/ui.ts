@@ -58,7 +58,7 @@ export const ui = {
     // Newsletter
     'newsletter.title': 'Follow Me',
     'newsletter.placeholder': 'Enter your email',
-    'newsletter.button': 'Sign up',
+    'newsletter.button': 'Sign Up',
 
     // SEO fallbacks
     'meta.description': 'Personal site and writing archive.',
@@ -120,7 +120,7 @@ export const ui = {
     // Newsletter
     'newsletter.title': '关注我',
     'newsletter.placeholder': '输入你的邮箱地址',
-    'newsletter.button': '订阅',
+    'newsletter.button': '邮件订阅',
 
     // SEO fallbacks
     'meta.description': '个人网站与写作存档。',
