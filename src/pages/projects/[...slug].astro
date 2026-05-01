@@ -19,11 +19,6 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 const { title, description, pubDatetime, modDatetime, tags, status, year, featured, ogImage, canonicalURL, summary } = project.data;
 const displayYear = year ?? pubDatetime.getFullYear();
-
-const statusLabels: Record<string, string> = {
-  idea: 'IDEA', active: 'ACTIVE', completed: 'COMPLETED',
-  archived: 'ARCHIVED', paused: 'PAUSED', shipped: 'SHIPPED',
-};
 ---
 
 <BaseLayout
@@ -43,17 +38,14 @@ const statusLabels: Record<string, string> = {
       </nav>
 
       <header class="project-detail-header">
-        <div class="project-detail-meta">
-          <span class="project-year-display">{displayYear}</span>
-          {status && (
-            <span class={`badge badge-${status}`}>{statusLabels[status] ?? status.toUpperCase()}</span>
-          )}
-        </div>
-
         <h1 class="project-detail-title">
           {featured && <span class="featured-dot" aria-hidden="true"></span>}
           {title}
         </h1>
+
+        <div class="project-detail-meta">
+          <span class="project-year-display">{displayYear}</span>
+        </div>
 
         {summary
           ? <p class="project-detail-summary">{summary}</p>
@@ -97,19 +89,19 @@ const statusLabels: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
   }
 
   .project-year-display {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     color: var(--fg-muted);
   }
 
   .project-detail-title {
-    font-size: clamp(1.75rem, 4vw, var(--text-3xl));
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1.15;
     margin-bottom: var(--space-4);
     display: flex;
     align-items: baseline;
