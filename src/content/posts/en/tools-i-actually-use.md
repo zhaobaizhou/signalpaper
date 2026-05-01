@@ -102,3 +102,16 @@ The tool isn't the bottleneck. Your attention is.
 Once you accept that, the question stops being "what's the best tool for X" and becomes "how do I spend less time managing tools and more time using them?"
 
 The answer, in my case, was: **stop switching**.
+
+---
+
+## Media Display Tests
+
+Here is a test for our new image caption and zoom feature:
+![A minimalist desk setup](https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop)
+
+Here is a YouTube responsive embed test:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Here is a Twitter embed test:
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Design is not just what it looks like and feels like. Design is how it works.</p>&mdash; Steve Jobs (@stevejobs_bot) <a href="https://twitter.com/stevejobs_bot/status/123456789">January 9, 2007</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

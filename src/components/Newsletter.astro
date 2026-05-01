@@ -1,0 +1,130 @@
+---
+import { getLang, useTranslations } from '../i18n/utils';
+import { SITE } from '../config/site';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const isEnabled = SITE.newsletter.enabled;
+const actionUrl = SITE.newsletter.actionUrl;
+---
+
+{isEnabled && (
+  <aside class="newsletter-wrapper">
+    <div class="newsletter-content">
+      <h3 class="newsletter-title">{t('newsletter.title')}</h3>
+      <p class="newsletter-description">{t('newsletter.description')}</p>
+    </div>
+    <form
+      action={actionUrl}
+      method="post"
+      target="_blank"
+      class="newsletter-form"
+      onsubmit={`window.open('${actionUrl}', 'popupwindow')`}
+    >
+      <input
+        type="email"
+        name="email"
+        placeholder={t('newsletter.placeholder')}
+        required
+        aria-label={t('newsletter.placeholder')}
+      />
+      <!-- This is used by Buttondown to prevent spam -->
+      <input type="hidden" value="1" name="embed" />
+      <button type="submit">{t('newsletter.button')}</button>
+    </form>
+  </aside>
+)}
+
+<style>
+  .newsletter-wrapper {
+    margin-top: var(--space-4xl);
+    padding: var(--space-xl);
+    background-color: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  /* Desktop layout */
+  @media (min-width: 640px) {
+    .newsletter-wrapper {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .newsletter-content {
+    flex: 1;
+  }
+
+  .newsletter-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: var(--space-xs);
+  }
+
+  .newsletter-description {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: var(--space-sm);
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .newsletter-form {
+      max-width: 300px;
+    }
+  }
+
+  .newsletter-form input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--fg);
+    font-size: var(--text-sm);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .newsletter-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--fg-muted);
+    box-shadow: 0 0 0 1px var(--fg-muted);
+  }
+
+  .newsletter-form button {
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--fg);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      transform var(--transition-fast),
+      opacity var(--transition-fast);
+  }
+
+  .newsletter-form button:hover {
+    opacity: 0.9;
+  }
+
+  .newsletter-form button:active {
+    transform: scale(0.98);
+  }
+</style>

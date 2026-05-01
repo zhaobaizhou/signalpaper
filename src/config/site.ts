@@ -47,6 +47,11 @@ export const SITE = {
       websiteId: '',
       src: 'https://us.umami.is/script.js',
     }
+  },
+  newsletter: {
+    enabled: true,
+    // By default, this uses Buttondown. You can use any provider that accepts standard form POST.
+    actionUrl: 'https://buttondown.com/api/emails/embed-subscribe/baizhou',
   }
 };
 

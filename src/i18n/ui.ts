@@ -55,6 +55,12 @@ export const ui = {
     // Footer
     'footer.tagline': 'SignalPaper is an Astro Creator OS theme.',
 
+    // Newsletter
+    'newsletter.title': 'Subscribe to updates',
+    'newsletter.description': 'Get new posts delivered directly to your inbox. No spam, unsubscribe anytime.',
+    'newsletter.placeholder': 'Your email address',
+    'newsletter.button': 'Subscribe',
+
     // SEO fallbacks
     'meta.description': 'Personal site and writing archive.',
 
@@ -111,6 +117,12 @@ export const ui = {
 
     // Footer
     'footer.tagline': 'SignalPaper 是一个 Astro Creator OS 主题。',
+
+    // Newsletter
+    'newsletter.title': '订阅更新',
+    'newsletter.description': '将新文章直接推送到你的邮箱。无垃圾邮件，随时可退订。',
+    'newsletter.placeholder': '你的邮箱地址',
+    'newsletter.button': '订阅',
 
     // SEO fallbacks
     'meta.description': '个人网站与写作存档。',
