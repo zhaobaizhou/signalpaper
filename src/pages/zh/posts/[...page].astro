@@ -12,11 +12,16 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+const pageTitle = isFirstPage ? '写作' : `写作 — 第 ${page.currentPage} 页`;
+const pageDescription = isFirstPage
+  ? '所有文章 — 关于 AI 工作流、产品判断力与独立工作的记录。'
+  : `文章归档第 ${page.currentPage} 页 — 关于 AI 工作流、产品判断力与独立工作的记录。`;
 ---
 
 <BaseLayout
-  title="写作"
-  description="所有文章 — 关于 AI 工作流、产品判断力与独立工作的记录。"
+  title={pageTitle}
+  description={pageDescription}
 >
   <Header />
   <main id="main-content" role="main">

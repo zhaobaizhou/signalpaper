@@ -6,7 +6,6 @@ Allow: /
 
 # AI Agent accessibility
 Allow: /llms.txt
-Allow: /llms-full.txt
 
 Sitemap: https://baizhou.me/sitemap-index.xml
 `;

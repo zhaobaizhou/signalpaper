@@ -62,7 +62,7 @@ export const ui = {
     'search.projectLabel': 'Project',
 
     // Footer
-    'footer.tagline': 'SignalPaper is an Astro Creator OS theme.',
+    'footer.tagline': 'SignalPaper is a personal writing and project site.',
 
     // Newsletter
     'newsletter.title': 'Follow Me',
@@ -133,7 +133,7 @@ export const ui = {
     'search.projectLabel': '项目',
 
     // Footer
-    'footer.tagline': 'SignalPaper 是一个 Astro Creator OS 主题。',
+    'footer.tagline': 'SignalPaper 是一个个人写作与项目站。',
 
     // Newsletter
     'newsletter.title': '关注我',

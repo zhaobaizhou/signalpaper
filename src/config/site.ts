@@ -1,6 +1,9 @@
 export const SITE = {
   name: 'SignalPaper',
-  tagline: 'A creator OS homepage theme.',
+  tagline: {
+    en: 'A personal writing and project site.',
+    zh: '一个个人写作与项目站。',
+  },
   description: 'Writing about AI workflows, product judgment, and small systems for independent work.',
   url: 'https://baizhou.me',
   author: {

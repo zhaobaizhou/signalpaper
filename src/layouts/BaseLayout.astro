@@ -29,7 +29,12 @@ const {
 } = Astro.props;
 
 const lang = getLang(Astro.url);
-const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const defaultTagline = SITE.tagline[lang];
+const pageTitle = title
+  ? title === SITE.name
+    ? SITE.name
+    : `${title} — ${SITE.name}`
+  : `${SITE.name} — ${defaultTagline}`;
 const canonicalURL = canonicalProp ?? new URL(Astro.url.pathname, SITE.url).href;
 const ogImageURL = ogImage
   ? new URL(ogImage, SITE.url).href
@@ -67,7 +72,7 @@ const siteSchema = !article
       '@type': 'WebSite',
       name: SITE.name,
       url: SITE.url,
-      description: SITE.description,
+      description,
       author: {
         '@type': 'Person',
         name: SITE.author.name,

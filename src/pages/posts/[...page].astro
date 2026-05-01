@@ -12,11 +12,16 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+const pageTitle = isFirstPage ? 'Writings' : `Writings — Page ${page.currentPage}`;
+const pageDescription = isFirstPage
+  ? 'All writings — articles on AI workflows, product judgment, and independent work.'
+  : `Writings archive page ${page.currentPage} — articles on AI workflows, product judgment, and independent work.`;
 ---
 
 <BaseLayout
-  title="Writings"
-  description="All writings — articles on AI workflows, product judgment, and independent work."
+  title={pageTitle}
+  description={pageDescription}
 >
   <Header />
   <main id="main-content" role="main">
