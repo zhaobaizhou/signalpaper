@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import remarkGfm from 'remark-gfm';
 import { rehypeFigure } from './src/lib/rehype-figure.mjs';
 
 // https://astro.build/config
@@ -16,6 +17,7 @@ export default defineConfig({
     },
   },
   markdown: {
+    remarkPlugins: [remarkGfm],
     shikiConfig: {
       themes: {
         light: 'github-light',

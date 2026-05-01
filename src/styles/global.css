@@ -379,7 +379,7 @@ a.section-header:hover .section-arrow {
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
   font-family: var(--font-serif);
   letter-spacing: -0.02em;
-  scroll-margin-top: 100px;
+  scroll-margin-top: calc(var(--nav-height) + var(--space-5));
 }
 
 .prose h1 { font-size: var(--text-3xl); margin-top: var(--space-12); margin-bottom: var(--space-5); }
@@ -482,6 +482,34 @@ a.section-header:hover .section-arrow {
 }
 .prose a:hover {
   text-decoration-color: var(--accent);
+}
+
+.prose .contains-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose .task-list-item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.prose .task-list-item input[type='checkbox'] {
+  margin-top: 0.38em;
+  accent-color: var(--accent);
+}
+
+.prose del {
+  color: var(--fg-muted);
+}
+
+.prose .footnotes {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-muted);
+  color: var(--fg-muted);
+  font-size: var(--text-sm);
 }
 
 /* --------------------------------------------------------------------------

@@ -7,6 +7,7 @@ import Newsletter from '../components/Newsletter.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
+import { getSlug } from '../lib/content';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -49,6 +50,7 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   lang === 'zh' ? 'zh-CN' : 'en-US',
   { year: 'numeric', month: 'long', day: 'numeric' }
 );
+const postTitleId = `${getSlug(post.id)}-title`;
 ---
 
 <BaseLayout
@@ -66,13 +68,20 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   <main id="main-content" role="main">
   <div class="post-layout">
     <header class="post-header container">
-      <h1 class="post-title">
-        {featured && (
-          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="var(--accent)" aria-label="Featured">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-          </svg>
-        )}
-        {title}
+      <h1 class="post-title" id={postTitleId}>
+        <a
+          href={`#${postTitleId}`}
+          class="post-title-link"
+          aria-label={lang === 'zh' ? `定位标题：${title}` : `Link to title: ${title}`}
+        >
+          <span class="post-title-anchor-label" aria-hidden="true">H1</span>
+          {featured && (
+            <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="var(--accent)" aria-label="Featured">
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+            </svg>
+          )}
+          <span class="post-title-text">{title}</span>
+        </a>
       </h1>
 
       {summary
@@ -323,9 +332,41 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: var(--space-4);
-    display: flex;
+    scroll-margin-top: calc(var(--nav-height) + var(--space-5));
+  }
+
+  .post-title-link {
+    position: relative;
+    display: inline-flex;
     align-items: flex-start;
     gap: 0.3em;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-title-text {
+    display: inline;
+  }
+
+  .post-title-anchor-label {
+    position: absolute;
+    top: 0.32em;
+    left: calc(-1 * clamp(2.6rem, 6vw, 4.2rem));
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--fg-subtle);
+    opacity: 0.65;
+    transition: color var(--transition-fast), opacity var(--transition-fast);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .post-title-link:hover .post-title-anchor-label,
+  .post-title:target .post-title-anchor-label {
+    color: var(--accent);
+    opacity: 0.9;
   }
 
   .featured-star {
@@ -411,6 +452,10 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     .post-fab {
       right: 12px;
       bottom: 24px;
+    }
+
+    .post-title-anchor-label {
+      display: none;
     }
     /* hide tooltip on mobile — title too long */
     .fab-nav[data-tooltip]::before {

@@ -176,7 +176,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
 
   async function loadPagefind() {
     if (!pagefindModulePromise) {
-      pagefindModulePromise = import(pagefindBundlePath)
+      pagefindModulePromise = import(/* @vite-ignore */ pagefindBundlePath)
         .then(async (module) => {
           await module.init();
           return module;
