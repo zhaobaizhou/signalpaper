@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import PostList from '../../../components/PostList.astro';
+import ProjectGrid from '../../../components/ProjectGrid.astro';
 import { getPosts, getProjects } from '../../../lib/content';
 
 export async function getStaticPaths() {
@@ -19,10 +20,13 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const allPosts = await getPosts('zh');
+const allProjects = await getProjects('zh');
 const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
+const taggedProjects = allProjects.filter(p => p.data.tags?.includes(tag));
+const totalCount = taggedPosts.length + taggedProjects.length;
 ---
 
-<BaseLayout title={`标签：${tag}`} description={`标签"${tag}"下的全部文章`}>
+<BaseLayout title={`标签：${tag}`} description={`标签"${tag}"下的全部内容`}>
   <Header />
   <main id="main-content" role="main">
     <div class="page-header container">
@@ -30,9 +34,14 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
       <h1 class="page-title">
         <span class="tag-prefix">#</span>{tag}
       </h1>
-      <p class="page-subtitle">共 {taggedPosts.length} 篇</p>
+      <p class="page-subtitle">共 {totalCount} 篇</p>
     </div>
-    <PostList posts={taggedPosts} showAll={true} />
+    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} />}
+    {taggedProjects.length > 0 && (
+      <div style={taggedPosts.length > 0 ? "margin-top: var(--space-12);" : ""}>
+        <ProjectGrid projects={taggedProjects} showAll={true} />
+      </div>
+    )}
   </main>
   <Footer />
 

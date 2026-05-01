@@ -3,7 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PostList from '../../components/PostList.astro';
-import { getPosts, getProjects, getTagsWithCount } from '../../lib/content';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { getPosts, getProjects } from '../../lib/content';
 
 export async function getStaticPaths() {
   // Collect all tags from EN posts + projects
@@ -20,12 +21,15 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const allPosts = await getPosts('en');
+const allProjects = await getProjects('en');
 const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
+const taggedProjects = allProjects.filter(p => p.data.tags?.includes(tag));
+const totalCount = taggedPosts.length + taggedProjects.length;
 ---
 
 <BaseLayout
   title={`Tag: ${tag}`}
-  description={`Articles tagged "${tag}"`}
+  description={`Items tagged "${tag}"`}
 >
   <Header />
   <main id="main-content" role="main">
@@ -34,9 +38,14 @@ const taggedPosts = allPosts.filter(p => p.data.tags?.includes(tag));
       <h1 class="page-title">
         <span class="tag-prefix">#</span>{tag}
       </h1>
-      <p class="page-subtitle">{taggedPosts.length} article{taggedPosts.length !== 1 ? 's' : ''}</p>
+      <p class="page-subtitle">{totalCount} item{totalCount !== 1 ? 's' : ''}</p>
     </div>
-    <PostList posts={taggedPosts} showAll={true} />
+    {taggedPosts.length > 0 && <PostList posts={taggedPosts} showAll={true} />}
+    {taggedProjects.length > 0 && (
+      <div style={taggedPosts.length > 0 ? "margin-top: var(--space-12);" : ""}>
+        <ProjectGrid projects={taggedProjects} showAll={true} />
+      </div>
+    )}
   </main>
   <Footer />
 
