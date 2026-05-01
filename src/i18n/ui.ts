@@ -57,6 +57,9 @@ export const ui = {
     'search.noResults': 'No results found.',
     'search.loading': 'Loading search index…',
     'search.unavailable': 'Search is available after a production build or preview.',
+    'search.emptyHint': 'Try a title, tag, or phrase from the article body.',
+    'search.postLabel': 'Writing',
+    'search.projectLabel': 'Project',
 
     // Footer
     'footer.tagline': 'SignalPaper is an Astro Creator OS theme.',
@@ -125,6 +128,9 @@ export const ui = {
     'search.noResults': '没有找到相关内容。',
     'search.loading': '正在加载搜索索引…',
     'search.unavailable': '搜索功能需要在构建后或预览环境中使用。',
+    'search.emptyHint': '可以试试文章标题、标签，或者正文里的短语。',
+    'search.postLabel': '文章',
+    'search.projectLabel': '项目',
 
     // Footer
     'footer.tagline': 'SignalPaper 是一个 Astro Creator OS 主题。',

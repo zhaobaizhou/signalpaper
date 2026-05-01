@@ -117,8 +117,6 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
     <TableOfContents headings={headings} />
 
-    {isPost && <RelatedPosts posts={relatedPosts} />}
-
     <footer class="post-footer container">
       {(prev || next) && (
         <nav class="post-nav-adjacent" aria-label="Adjacent posts">
@@ -138,6 +136,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
           )}
         </nav>
       )}
+
+      {isPost && <RelatedPosts posts={relatedPosts} />}
 
       <Newsletter />
       <Comments />

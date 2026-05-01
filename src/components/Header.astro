@@ -112,6 +112,9 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
       data-no-results={t('search.noResults')}
       data-loading={t('search.loading')}
       data-unavailable={t('search.unavailable')}
+      data-empty-hint={t('search.emptyHint')}
+      data-post-label={t('search.postLabel')}
+      data-project-label={t('search.projectLabel')}
     >
       <p class="search-hint">{t('search.placeholder')}</p>
     </div>
@@ -137,6 +140,9 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     noResults: resultsEl?.getAttribute('data-no-results') ?? 'No results found.',
     loading: resultsEl?.getAttribute('data-loading') ?? 'Loading search index…',
     unavailable: resultsEl?.getAttribute('data-unavailable') ?? 'Search is unavailable.',
+    emptyHint: resultsEl?.getAttribute('data-empty-hint') ?? '',
+    postLabel: resultsEl?.getAttribute('data-post-label') ?? 'Writing',
+    projectLabel: resultsEl?.getAttribute('data-project-label') ?? 'Project',
   };
   let currentLang = document.documentElement.lang || 'en';
   let pagefindModulePromise: Promise<any> | null = null;
@@ -188,27 +194,45 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     resultsEl.innerHTML = `<p class="${className}">${escapeHtml(message)}</p>`;
   }
 
+  function renderEmptyState(title: string, body: string) {
+    if (!resultsEl) return;
+    resultsEl.innerHTML = `
+      <div class="search-empty-state">
+        <p class="search-empty-title">${escapeHtml(title)}</p>
+        <p class="search-empty-body">${escapeHtml(body)}</p>
+      </div>
+    `;
+  }
+
   function renderHint() {
     if (!resultsEl || !input) return;
     resultsEl.innerHTML = `<p class="search-hint">${input.placeholder}</p>`;
+  }
+
+  function getResultKind(url: string) {
+    return url.includes('/projects/')
+      ? searchMessages.projectLabel
+      : searchMessages.postLabel;
   }
 
   function renderResults(results: Array<any>) {
     if (!resultsEl) return;
 
     if (results.length === 0) {
-      renderMessage(searchMessages.noResults, 'search-no-results');
+      renderEmptyState(searchMessages.noResults, searchMessages.emptyHint);
       return;
     }
 
     resultsEl.innerHTML = results.map((item) => {
       const icon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
       const displayPath = item.url.replace(/^\//, '');
+      const kind = getResultKind(item.url);
       const snippets = (item.sub_results?.length ? item.sub_results : [item]).slice(0, 3);
+      const summary = item.excerpt || snippets[0]?.excerpt || '';
       const badge = snippets.length;
 
       const snipRows = snippets.map((snippet: any, i: number) =>
-        `<a href="${snippet.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${snippet.excerpt || ''}</span></a>`
+        `<a href="${snippet.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${snippet.title && snippet.title !== item.meta?.title ? `${escapeHtml(snippet.title)} · ` : ''}${snippet.excerpt || ''}</span></a>`
       ).join('');
 
       return (
@@ -216,8 +240,9 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
           `<a href="${item.url}" class="sfg-file" aria-label="${escapeHtml(item.meta?.title || item.url)}">` +
             `<span class="sfg-file-icon">${icon}</span>` +
             `<span class="sfg-file-info">` +
+              `<span class="sfg-file-meta"><span class="sfg-file-kind">${escapeHtml(kind)}</span><span class="sfg-file-path">${escapeHtml(displayPath)}</span></span>` +
               `<span class="sfg-file-name">${escapeHtml(item.meta?.title || item.url)}</span>` +
-              `<span class="sfg-file-path">${escapeHtml(displayPath)}</span>` +
+              `${summary ? `<span class="sfg-file-excerpt">${summary}</span>` : ''}` +
             `</span>` +
             `<span class="sfg-badge">${badge}</span>` +
           `</a>` +
@@ -252,7 +277,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
 
       renderResults(results);
     } catch {
-      renderMessage(searchMessages.unavailable, 'search-no-results');
+      renderEmptyState(searchMessages.unavailable, searchMessages.emptyHint);
     }
   });
 
@@ -500,64 +525,108 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     padding: var(--space-6) 0;
   }
 
-  /* ─── VS Code–style search results ─────────────────────────────────────────── */
+  .search-empty-state {
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+  }
 
-  /* File group container */
+  .search-empty-title {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--fg);
+    margin-bottom: var(--space-2);
+  }
+
+  .search-empty-body {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+
   .sfg {
-    margin-bottom: 2px;
-  }
-  .sfg + .sfg {
-    border-top: 1px solid var(--border-muted);
-    margin-top: 3px;
-    padding-top: 3px;
+    margin-bottom: var(--space-2);
   }
 
-  /* File header row — icon | [name/path col] | badge */
+  .sfg + .sfg {
+    margin-top: 0;
+  }
+
   .sfg-file {
     display: flex;
     align-items: flex-start;
-    gap: 6px;
-    padding: 4px 8px;
+    gap: var(--space-3);
+    padding: var(--space-4);
     text-decoration: none;
-    border-radius: 3px;
-    transition: background 100ms ease;
+    border-radius: var(--radius-md);
+    transition: background 120ms ease, border-color 120ms ease;
     overflow: hidden;
+    background: color-mix(in srgb, var(--card-bg) 65%, transparent);
+    border: 1px solid var(--border-muted);
   }
+
   .sfg-file:hover {
-    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    background: color-mix(in srgb, var(--card-hover) 82%, transparent);
+    border-color: var(--border);
   }
 
   .sfg-file-icon {
     flex-shrink: 0;
-    margin-top: 3px;
+    margin-top: 2px;
     color: var(--fg-muted);
-    opacity: 0.6;
+    opacity: 0.8;
     display: flex;
     align-items: center;
   }
 
-  /* Column: title on top, path below */
   .sfg-file-info {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+  }
+
+  .sfg-file-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .sfg-file-kind {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--fg-muted);
+    flex-shrink: 0;
   }
 
   .sfg-file-name {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--fg);
-    white-space: nowrap;
+    line-height: 1.35;
+  }
+
+  .sfg-file-excerpt {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.3;
   }
 
   .sfg-file-path {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     color: var(--fg-subtle);
     white-space: nowrap;
     overflow: hidden;
@@ -565,11 +634,10 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     line-height: 1.2;
   }
 
-  /* Badge — accent pill, right side */
   .sfg-badge {
     flex-shrink: 0;
     align-self: flex-start;
-    margin-top: 2px;
+    margin-top: 1px;
     font-family: var(--font-mono);
     font-size: 0.6rem;
     font-weight: 700;
@@ -582,22 +650,25 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     line-height: 1.6;
   }
 
-  /* Snippet rows */
   .sfg-snips {
-    padding-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 0 0 28px;
   }
 
   .sfg-snip {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     gap: 8px;
-    padding: 1px 8px 1px 24px;
+    padding: 4px 8px;
     text-decoration: none;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     transition: background 100ms ease;
   }
+
   .sfg-snip:hover {
-    background: color-mix(in srgb, var(--accent) 5%, transparent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
   }
 
   .sfg-gutter {
@@ -612,24 +683,30 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
   }
 
   .sfg-text {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     color: var(--fg-muted);
     line-height: 1.55;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  /* Keyword highlights */
+  .sfg-text strong {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
   .sfg-file-name mark,
+  .sfg-file-excerpt mark,
   .sfg-text mark {
-    background: transparent;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
     color: var(--accent);
-    font-weight: 700;
+    font-weight: 600;
+    padding: 0 0.1em;
+    border-radius: 2px;
   }
 
-  /* search keyboard shortcut hint */
   .search-shortcut {
     display: flex;
     align-items: center;
@@ -656,5 +733,11 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
   @media (max-width: 480px) {
     .header-btn-text { display: none; }
     .search-box { max-width: 100%; }
+    .sfg-file {
+      padding: var(--space-3);
+    }
+    .sfg-snips {
+      padding-left: 18px;
+    }
   }
 </style>
