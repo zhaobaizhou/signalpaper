@@ -4,8 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Comments from '../components/Comments.astro';
 import Newsletter from '../components/Newsletter.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import { SITE } from '../config/site';
 import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
 import type { CollectionEntry } from 'astro:content';
 
@@ -13,17 +13,16 @@ interface Props {
   post: CollectionEntry<'posts'> | CollectionEntry<'projects'>;
   prev?: { title: string; url: string } | null;
   next?: { title: string; url: string } | null;
+  relatedPosts?: { title: string; url: string; description: string; pubDatetime: Date }[];
   backUrl?: string;
   backLabel?: string;
   headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { post, prev, next, backUrl, backLabel, headings = [] } = Astro.props;
+const { post, prev, next, relatedPosts = [], headings = [] } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
-
-const finalBackUrl = backUrl ?? getLocalePath(lang, '/posts');
-const finalBackLabel = backLabel ?? t('post.backToWritings');
+const isPost = post.collection === 'posts';
 
 const {
   title,
@@ -35,11 +34,7 @@ const {
   ogImage,
   canonicalURL,
   summary,
-  author,
-  hideEditPost,
 } = post.data as any;
-
-const displayAuthor = author ?? SITE.author.name;
 
 // Reading time estimate — fall back gracefully in Astro v6 glob loader
 const rawBody = (post as any).body ?? post.data.summary ?? post.data.description ?? '';
@@ -63,8 +58,10 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   canonicalURL={canonicalURL}
   pubDatetime={pubDatetime}
   modDatetime={modDatetime}
+  pagefindType={isPost ? 'post' : 'project'}
   article={true}
 >
+  {isPost && <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>}
   <Header />
   <main id="main-content" role="main">
   <div class="post-layout">
@@ -86,7 +83,7 @@ const formattedModDate = modDatetime?.toLocaleDateString(
       <div class="post-meta-bottom">
         {tags.length > 0 ? (
           <div class="post-tags">
-            {tags.map(tag => (
+            {tags.map((tag: string) => (
               <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
                 {tag}
               </a>
@@ -114,11 +111,13 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
     <div class="post-divider"></div>
 
-    <article class="prose container fade-in" role="main">
+    <article class="prose container fade-in" role="main" id="post-content" data-pagefind-body>
       <slot />
     </article>
 
     <TableOfContents headings={headings} />
+
+    {isPost && <RelatedPosts posts={relatedPosts} />}
 
     <footer class="post-footer container">
       {(prev || next) && (
@@ -213,6 +212,8 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     // 3. Floating Action Button
     const fab = document.getElementById('post-fab');
     const fabTop = document.getElementById('fab-top');
+    const progressBar = document.getElementById('reading-progress');
+    const postContent = document.getElementById('post-content');
 
     // Show toolbar after scrolling past the post header
     const sentinel = document.querySelector('.post-header');
@@ -226,10 +227,50 @@ const formattedModDate = modDatetime?.toLocaleDateString(
 
     // Back to top
     fabTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    function updateReadingProgress() {
+      if (!progressBar || !postContent) return;
+
+      const rect = postContent.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const start = window.scrollY + rect.top;
+      const end = start + postContent.offsetHeight - viewportHeight;
+
+      if (window.scrollY <= start) {
+        progressBar.style.transform = 'scaleX(0)';
+        return;
+      }
+
+      if (end <= start) {
+        progressBar.style.transform = 'scaleX(1)';
+        return;
+      }
+
+      const progress = Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
+      progressBar.style.transform = `scaleX(${progress})`;
+    }
+
+    if (progressBar && postContent) {
+      updateReadingProgress();
+      window.addEventListener('scroll', updateReadingProgress, { passive: true });
+      window.addEventListener('resize', updateReadingProgress);
+    }
   </script>
 </BaseLayout>
 
 <style>
+  .reading-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 220;
+    opacity: 0.85;
+    transition: transform 80ms linear;
+  }
+
   .post-layout {
     min-height: 100dvh;
     padding-bottom: var(--space-20);

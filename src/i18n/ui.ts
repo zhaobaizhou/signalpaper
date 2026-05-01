@@ -37,6 +37,7 @@ export const ui = {
     'post.tags': 'Tags',
     'post.backToWritings': '← Back to writings',
     'post.toc': 'Contents',
+    'post.related': 'Related writings',
 
     // Project meta
     'project.status.idea': 'IDEA',
@@ -54,6 +55,8 @@ export const ui = {
     // Search
     'search.placeholder': 'Search writings and projects…',
     'search.noResults': 'No results found.',
+    'search.loading': 'Loading search index…',
+    'search.unavailable': 'Search is available after a production build or preview.',
 
     // Footer
     'footer.tagline': 'SignalPaper is an Astro Creator OS theme.',
@@ -102,6 +105,7 @@ export const ui = {
     'post.tags': '标签',
     'post.backToWritings': '← 返回写作列表',
     'post.toc': '目录',
+    'post.related': '相关文章',
 
     // Project meta
     'project.status.idea': '构想',
@@ -119,6 +123,8 @@ export const ui = {
     // Search
     'search.placeholder': '搜索文章和项目…',
     'search.noResults': '没有找到相关内容。',
+    'search.loading': '正在加载搜索索引…',
+    'search.unavailable': '搜索功能需要在构建后或预览环境中使用。',
 
     // Footer
     'footer.tagline': 'SignalPaper 是一个 Astro Creator OS 主题。',

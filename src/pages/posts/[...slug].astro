@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { getSlug } from '../../lib/content';
+import { getRelatedPosts, getSlug } from '../../lib/content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ id, data }) => {
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
     return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
   });
 
-  return sorted.map((post, index) => {
+  return Promise.all(sorted.map(async (post, index) => {
     const prevPost = sorted[index - 1] ?? null;
     const nextPost = sorted[index + 1] ?? null;
 
@@ -25,15 +25,16 @@ export async function getStaticPaths() {
         post,
         prev: prevPost ? { title: prevPost.data.title, url: `/posts/${getSlug(prevPost.id)}` } : null,
         next: nextPost ? { title: nextPost.data.title, url: `/posts/${getSlug(nextPost.id)}` } : null,
+        relatedPosts: await getRelatedPosts(post, 'en'),
       },
     };
-  });
+  }));
 }
 
-const { post, prev, next } = Astro.props;
+const { post, prev, next, relatedPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<PostLayout post={post} prev={prev} next={next} headings={headings}>
+<PostLayout post={post} prev={prev} next={next} relatedPosts={relatedPosts} headings={headings}>
   <Content />
 </PostLayout>

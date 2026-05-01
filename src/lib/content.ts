@@ -1,4 +1,6 @@
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { getLocalePath } from '../i18n/utils';
 import type { Lang } from '../i18n/utils';
 
 /** Get published posts for a given language, sorted newest first */
@@ -13,6 +15,17 @@ export async function getPosts(lang: Lang, includeDraft = false) {
     if (!a.data.featured && b.data.featured) return 1;
     return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
   });
+}
+
+/** Get posts for a given language, sorted by publish date descending */
+async function getPostsByDate(lang: Lang, includeDraft = false) {
+  const all = await getCollection('posts', ({ id, data }) => {
+    const isLang = id.startsWith(`${lang}/`);
+    const isPublished = includeDraft || !data.draft;
+    return isLang && isPublished;
+  });
+
+  return all.sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf());
 }
 
 /** Get published projects for a given language, sorted newest first */
@@ -53,6 +66,43 @@ export async function getProjects(lang: Lang, includeDraft = false) {
 export async function getFeaturedPosts(lang: Lang) {
   const posts = await getPosts(lang);
   return posts.filter(p => p.data.featured);
+}
+
+export async function getRelatedPosts(
+  currentPost: CollectionEntry<'posts'>,
+  lang: Lang,
+  limit = 3
+) {
+  const posts = await getPostsByDate(lang);
+  const others = posts.filter(post => post.id !== currentPost.id);
+  const currentTags = new Set(currentPost.data.tags ?? []);
+
+  const toCard = (post: CollectionEntry<'posts'>) => ({
+    title: post.data.title,
+    description: post.data.description,
+    pubDatetime: post.data.pubDatetime,
+    url: getLocalePath(lang, `/posts/${getSlug(post.id)}`),
+  });
+
+  if (currentTags.size === 0) {
+    return others.slice(0, limit).map(toCard);
+  }
+
+  const ranked = others
+    .map((post) => {
+      const sharedTags = (post.data.tags ?? []).filter(tag => currentTags.has(tag)).length;
+      return { post, sharedTags };
+    })
+    .filter(({ sharedTags }) => sharedTags > 0)
+    .sort((a, b) => {
+      if (a.sharedTags !== b.sharedTags) {
+        return b.sharedTags - a.sharedTags;
+      }
+      return b.post.data.pubDatetime.valueOf() - a.post.data.pubDatetime.valueOf();
+    })
+    .map(({ post }) => post);
+
+  return (ranked.length > 0 ? ranked : others).slice(0, limit).map(toCard);
 }
 
 /** Aggregate all tags from posts + projects with counts */

@@ -105,7 +105,14 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
         </svg>
       </button>
     </div>
-    <div id="search-results" class="search-results" role="listbox">
+    <div
+      id="search-results"
+      class="search-results"
+      role="listbox"
+      data-no-results={t('search.noResults')}
+      data-loading={t('search.loading')}
+      data-unavailable={t('search.unavailable')}
+    >
       <p class="search-hint">{t('search.placeholder')}</p>
     </div>
     <div class="search-shortcut" aria-hidden="true">
@@ -125,6 +132,14 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
   const closeBtn = document.getElementById('search-close');
   const input = document.getElementById('search-input') as HTMLInputElement | null;
   const resultsEl = document.getElementById('search-results');
+  const pagefindBundlePath = '/pagefind/pagefind.js';
+  const searchMessages = {
+    noResults: resultsEl?.getAttribute('data-no-results') ?? 'No results found.',
+    loading: resultsEl?.getAttribute('data-loading') ?? 'Loading search index…',
+    unavailable: resultsEl?.getAttribute('data-unavailable') ?? 'Search is unavailable.',
+  };
+  let currentLang = document.documentElement.lang || 'en';
+  let pagefindModulePromise: Promise<any> | null = null;
 
   function openSearch() {
     if (!dialog || !toggle) return;
@@ -132,6 +147,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     toggle.setAttribute('aria-expanded', 'true');
     setTimeout(() => input?.focus(), 50);
     document.body.style.overflow = 'hidden';
+    void loadPagefind().catch(() => {});
   }
 
   function closeSearch() {
@@ -152,128 +168,55 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
   });
 
-  // ── Search index ──────────────────────────────────────────────────────────
-  type IndexItem = {
-    lang: string; type: string; title: string;
-    description: string; summary: string; body: string;
-    tags: string[]; url: string; pubDatetime: string;
-  };
-  let searchIndex: IndexItem[] = [];
-  let currentLang = document.documentElement.lang || 'en';
-
-  async function loadIndex() {
-    if (searchIndex.length > 0) return;
-    try {
-      const res = await fetch('/search-index.json');
-      if (res.ok) searchIndex = await res.json();
-    } catch {}
+  async function loadPagefind() {
+    if (!pagefindModulePromise) {
+      pagefindModulePromise = import(pagefindBundlePath)
+        .then(async (module) => {
+          await module.init();
+          return module;
+        });
+    }
+    return pagefindModulePromise;
   }
 
-  // ── Highlight & Snippet helpers ───────────────────────────────────────────
   function escapeHtml(s: string) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function highlight(text: string, query: string): string {
-    if (!query) return escapeHtml(text);
-    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return escapeHtml(text).replace(
-      new RegExp(`(${escaped})`, 'gi'),
-      '<mark>$1</mark>'
-    );
+  function renderMessage(message: string, className = 'search-hint') {
+    if (!resultsEl) return;
+    resultsEl.innerHTML = `<p class="${className}">${escapeHtml(message)}</p>`;
   }
 
-  function getSnippets(text: string, query: string, max = 3): string[] {
-    if (!query) return [];
-    const q = query.toLowerCase();
-    const txt = text.toLowerCase();
-    let lastIdx = 0;
-    const results: string[] = [];
-    while (results.length < max) {
-      const idx = txt.indexOf(q, lastIdx);
-      if (idx === -1) break;
-      
-      const start = Math.max(0, idx - 40);
-      const end = Math.min(txt.length, idx + q.length + 60);
-      
-      let snip = text.slice(start, end);
-      if (start > 0) snip = '…' + snip;
-      if (end < text.length) snip = snip + '…';
-      
-      results.push(highlight(snip, query));
-      lastIdx = end;
-    }
-    return results;
-  }
-
-  // ── Scoring ───────────────────────────────────────────────────────────────
-  function scoreItem(item: IndexItem, q: string): number {
-    const ql = q.toLowerCase();
-    let score = 0;
-    if (item.title.toLowerCase().includes(ql)) score += 10;
-    if (item.description.toLowerCase().includes(ql)) score += 5;
-    if (item.summary.toLowerCase().includes(ql)) score += 4;
-    if (item.tags.some(t => t.toLowerCase().includes(ql))) score += 3;
-    const bodyMatches = (item.body.toLowerCase().match(new RegExp(ql.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g')) || []).length;
-    score += Math.min(bodyMatches, 8);
-    return score;
-  }
-
-  // ── Render ────────────────────────────────────────────────────────────────
   function renderHint() {
     if (!resultsEl || !input) return;
     resultsEl.innerHTML = `<p class="search-hint">${input.placeholder}</p>`;
   }
 
-  function renderResults(query: string) {
+  function renderResults(results: Array<any>) {
     if (!resultsEl) return;
 
-    const langFilter = currentLang.startsWith('zh') ? 'zh' : 'en';
-    const matches = searchIndex
-      .filter(item => item.lang === langFilter && scoreItem(item, query) > 0)
-      .map(item => ({ item, score: scoreItem(item, query) }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 6);
-
-    if (matches.length === 0) {
-      resultsEl.innerHTML = `<p class="search-no-results">No results for "<strong>${escapeHtml(query)}</strong>"</p>`;
+    if (results.length === 0) {
+      renderMessage(searchMessages.noResults, 'search-no-results');
       return;
     }
 
-    resultsEl.innerHTML = matches.map(({ item }) => {
-      const titleHtml = highlight(item.title, query);
-      // Clean up body
-      const cleanBody = item.body
-        .replace(/^---[\s\S]*?---/, '')
-        .replace(/```[\s\S]*?```/g, '')
-        .replace(/[#*`>|[\]()]/g, '')
-        .replace(/https?:\/\/\S+/g, '')
-        .replace(/[ \t]{2,}/g, ' ')
-        .replace(/\n+/g, ' ')
-        .trim();
-
-      let snips = getSnippets(cleanBody, query, 3);
-      if (snips.length === 0) snips = getSnippets(item.description, query, 1);
-      if (snips.length === 0) snips = [escapeHtml(item.description.slice(0, 100)) + (item.description.length > 100 ? '\u2026' : '')];
-
-      // Count total keyword hits
-      const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      const hits = (cleanBody.match(re) || []).length + (item.description.match(re) || []).length;
-      const badge = hits > 0 ? hits : snips.length;
-
+    resultsEl.innerHTML = results.map((item) => {
       const icon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
       const displayPath = item.url.replace(/^\//, '');
+      const snippets = (item.sub_results?.length ? item.sub_results : [item]).slice(0, 3);
+      const badge = snippets.length;
 
-      const snipRows = snips.map((s, i) =>
-        `<a href="${item.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${s}</span></a>`
+      const snipRows = snippets.map((snippet: any, i: number) =>
+        `<a href="${snippet.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${snippet.excerpt || ''}</span></a>`
       ).join('');
 
       return (
         `<div class="sfg">` +
-          `<a href="${item.url}" class="sfg-file" aria-label="${escapeHtml(item.title)}">` +
+          `<a href="${item.url}" class="sfg-file" aria-label="${escapeHtml(item.meta?.title || item.url)}">` +
             `<span class="sfg-file-icon">${icon}</span>` +
             `<span class="sfg-file-info">` +
-              `<span class="sfg-file-name">${titleHtml}</span>` +
+              `<span class="sfg-file-name">${escapeHtml(item.meta?.title || item.url)}</span>` +
               `<span class="sfg-file-path">${escapeHtml(displayPath)}</span>` +
             `</span>` +
             `<span class="sfg-badge">${badge}</span>` +
@@ -284,14 +227,33 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     }).join('');
   }
 
-  let debounceTimer: ReturnType<typeof setTimeout>;
   input?.addEventListener('input', async () => {
-    clearTimeout(debounceTimer);
     const query = (input?.value ?? '').trim();
     if (!resultsEl) return;
     if (!query) { renderHint(); return; }
-    await loadIndex();
-    debounceTimer = setTimeout(() => renderResults(query), 120);
+    renderMessage(searchMessages.loading);
+
+    try {
+      const pagefind = await loadPagefind();
+      const search = await pagefind.debouncedSearch(query, {
+        filters: {
+          lang: currentLang.startsWith('zh') ? 'zh' : 'en',
+          type: {
+            any: ['post', 'project'],
+          },
+        },
+      }, 180);
+
+      if (search === null) return;
+
+      const results = await Promise.all(
+        search.results.slice(0, 6).map((result: any) => result.data())
+      );
+
+      renderResults(results);
+    } catch {
+      renderMessage(searchMessages.unavailable, 'search-no-results');
+    }
   });
 
   // ── Scroll Header ─────────────────────────────────────────────────────────

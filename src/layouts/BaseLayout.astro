@@ -13,6 +13,7 @@ interface Props {
   modDatetime?: Date | null;
   article?: boolean;
   noIndex?: boolean;
+  pagefindType?: 'post' | 'project';
 }
 
 const {
@@ -24,6 +25,7 @@ const {
   modDatetime,
   article = false,
   noIndex = false,
+  pagefindType,
 } = Astro.props;
 
 const lang = getLang(Astro.url);
@@ -124,6 +126,8 @@ const siteSchema = !article
     <!-- Structured Data -->
     {articleSchema && <script type="application/ld+json" set:html={articleSchema} />}
     {siteSchema && <script type="application/ld+json" set:html={siteSchema} />}
+    <meta data-pagefind-filter={`lang:${lang}`} />
+    {pagefindType && <meta data-pagefind-filter={`type:${pagefindType}`} />}
 
     <!-- Theme Script: runs before paint to prevent FOUC -->
     <script is:inline>
