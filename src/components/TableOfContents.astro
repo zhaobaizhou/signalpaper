@@ -14,17 +14,19 @@ const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 ---
 
 {toc.length > 0 && (
-  <nav class="toc-container" aria-label="Table of Contents">
+  <nav class="toc-wrapper" aria-label="Table of Contents">
     <h2 class="toc-title">{t('post.toc')}</h2>
-    <ul class="toc-list" id="toc-list">
-      {toc.map(heading => (
-        <li class={`toc-item toc-depth-${heading.depth}`}>
-          <a href={`#${heading.slug}`} class="toc-link" data-slug={heading.slug} title={heading.text}>
-            {heading.text}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="toc-container">
+      <ul class="toc-list" id="toc-list">
+        {toc.map(heading => (
+          <li class={`toc-item toc-depth-${heading.depth}`}>
+            <a href={`#${heading.slug}`} class="toc-link" data-slug={heading.slug} title={heading.text}>
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </nav>
 )}
 
@@ -55,31 +57,39 @@ const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 </script>
 
 <style>
-  .toc-container {
+  .toc-wrapper {
     position: fixed;
-    top: 160px;
+    top: 140px;
     right: max(16px, calc((100vw - var(--content-width)) / 2 - 240px));
-    width: 220px;
-    /* User request 3: Control height */
-    max-height: calc(100vh - 200px);
-    overflow-y: hidden; /* Hide scrollbar by default */
-    /* Default transparent, full opacity on hover */
-    opacity: 0.3;
-    transition: opacity var(--transition-fast);
+    width: 200px;
     z-index: 40;
+    opacity: 0.25;
+    transition: opacity var(--transition-slow);
   }
 
-  .toc-container:hover {
+  .toc-wrapper:hover {
     opacity: 1;
-    overflow-y: auto; /* Show scrollbar on hover */
   }
 
+  /* Title is outside the scroll container so it never moves */
   .toc-title {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--fg);
-    margin-bottom: var(--space-4);
-    letter-spacing: 0.02em;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: var(--space-3);
+    letter-spacing: 0.05em;
+    padding-left: 16px;
+  }
+
+  .toc-container {
+    /* Height calculation: 100vh - top(140) - floating-tools(~150) - title(~30) */
+    max-height: calc(100vh - 320px);
+    overflow-y: hidden;
+  }
+
+  .toc-wrapper:hover .toc-container {
+    overflow-y: auto;
   }
 
   .toc-list {
@@ -88,7 +98,7 @@ const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
     margin: 0;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid var(--border);
+    border-left: 1px solid var(--border-muted);
   }
 
   .toc-item {
@@ -97,55 +107,51 @@ const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 
   .toc-link {
     display: block;
-    padding: 6px 0 6px 16px;
-    font-size: var(--text-sm);
-    color: var(--fg-muted);
+    padding: 4px 0 4px 16px;
+    font-size: 13px;
+    color: var(--fg-subtle);
     text-decoration: none;
-    line-height: 1.4;
+    line-height: 1.5;
     transition: color var(--transition-fast), border-color var(--transition-fast);
     position: relative;
     margin-left: -1px;
     border-left: 2px solid transparent;
     
-    /* User request 2: Truncate long text with ellipsis */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  /* Indent H3 */
   .toc-depth-3 .toc-link {
-    padding-left: 28px;
-    font-size: 0.85em;
+    padding-left: 24px;
+    font-size: 12px;
+    color: var(--fg-muted);
   }
 
   .toc-link:hover {
     color: var(--fg);
   }
 
-  /* Active state styling */
   .toc-link.active {
     color: var(--fg);
     border-left-color: var(--accent);
     font-weight: 500;
   }
 
-  /* Hide on screens smaller than 1280px */
   @media (max-width: 1280px) {
-    .toc-container {
+    .toc-wrapper {
       display: none;
     }
   }
 
-  /* Custom scrollbar */
   .toc-container::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
   }
   .toc-container::-webkit-scrollbar-track {
     background: transparent;
   }
   .toc-container::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
   }
 </style>

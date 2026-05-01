@@ -121,19 +121,6 @@ const formattedModDate = modDatetime?.toLocaleDateString(
     <TableOfContents headings={headings} />
 
     <footer class="post-footer container">
-      {tags.length > 0 && (
-        <div class="post-footer-tags">
-          <span class="post-footer-label">{t('post.tags')}</span>
-          <div class="post-footer-tag-list">
-            {tags.map(tag => (
-              <a href={getLocalePath(lang, `/tags/${tag}`)} class="tag-pill">
-                {tag}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
       {(prev || next) && (
         <nav class="post-nav-adjacent" aria-label="Adjacent posts">
           {prev && (

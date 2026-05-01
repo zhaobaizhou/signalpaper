@@ -9,24 +9,42 @@ export async function getPosts(lang: Lang, includeDraft = false) {
     return isLang && isPublished;
   });
   return all.sort((a, b) => {
-    // Featured first, then by date descending
     if (a.data.featured && !b.data.featured) return -1;
     if (!a.data.featured && b.data.featured) return 1;
     return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
   });
 }
 
-/** Get published projects for a given language, sorted featured-first then newest */
+/** Get published projects for a given language, sorted newest first */
 export async function getProjects(lang: Lang, includeDraft = false) {
   const all = await getCollection('projects', ({ id, data }) => {
     const isLang = id.startsWith(`${lang}/`);
     const isPublished = includeDraft || !data.draft;
     return isLang && isPublished;
   });
+
+  const statusWeight: Record<string, number> = {
+    active: 1,
+    shipped: 2,
+    completed: 3,
+    idea: 4,
+    paused: 5,
+    archived: 6,
+  };
+
   return all.sort((a, b) => {
-    // Featured first, then by date descending
+    // 1. Featured first
     if (a.data.featured && !b.data.featured) return -1;
     if (!a.data.featured && b.data.featured) return 1;
+
+    // 2. Sort by status
+    const weightA = a.data.status ? statusWeight[a.data.status] || 99 : 99;
+    const weightB = b.data.status ? statusWeight[b.data.status] || 99 : 99;
+    if (weightA !== weightB) {
+      return weightA - weightB;
+    }
+
+    // 3. Sort by date descending
     return b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf();
   });
 }

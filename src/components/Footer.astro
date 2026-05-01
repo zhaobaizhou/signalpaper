@@ -4,11 +4,22 @@ import { getLang, useTranslations } from '../i18n/utils';
 
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer" role="contentinfo">
   <div class="footer-inner container">
-    <p class="footer-tagline">{t('footer.tagline')}</p>
+    <div class="footer-left">
+      <span class="theme-credit">
+        <a href="https://github.com/zhaobaizhou/signalpaper" target="_blank" rel="noopener noreferrer">
+          SignalPaper
+        </a> - Built by <a href="https://baizhou.cc" target="_blank" rel="noopener noreferrer">Baizhou</a> With Google Antigravity
+      </span>
+    </div>
+
+    <div class="footer-right">
+      <a href={SITE.social.email}>Email</a> <a href={SITE.social.rss} target="_blank">RSS</a> <a href={SITE.social.x} target="_blank">X</a> <a href={SITE.social.github} target="_blank">GitHub</a>
+    </div>
   </div>
 </footer>
 
@@ -25,14 +36,71 @@ const t = useTranslations(lang);
     justify-content: space-between;
     gap: var(--space-4);
     flex-wrap: wrap;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
   }
 
-  .footer-tagline {
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .theme-credit a {
+    color: var(--fg-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--border-muted);
+    text-underline-offset: 2px;
+    transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+  }
+
+  .theme-credit a:hover {
+    color: var(--fg);
+    text-decoration-color: var(--fg);
+  }
+
+  .back-to-top {
     font-size: var(--text-xs);
-    color: var(--fg-subtle);
+    color: var(--fg-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-1) var(--space-2);
+    margin-right: -8px; /* offset padding to align right visually */
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .back-to-top:hover {
+    color: var(--fg);
+    background: var(--card-hover);
   }
 
   @media (max-width: 480px) {
-    .footer-inner { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+    .footer-inner { 
+      flex-direction: column; 
+      align-items: flex-start; 
+      gap: var(--space-3); 
+    }
+    .back-to-top {
+      margin-right: 0;
+      margin-left: -8px; /* Align left on mobile */
+    }
   }
 </style>
+
+<script>
+  // Setup back to top functionality
+  document.addEventListener('astro:page-load', () => {
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+  });
+</script>

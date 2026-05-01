@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { SITE } from '../../config/site';
+---
+
+<BaseLayout
+  title={`近况 | ${SITE.name}`}
+  description={`关于 ${SITE.name} 的当前进展与未来计划。`}
+>
+  <Header />
+
+  <main id="main-content" role="main" class="container fade-in">
+    <div class="prose">
+      <h1>NOW / 近况</h1>
+      <p>
+        这是一个 /now 页面，灵感来自于 <a href="https://sive.rs/now" target="_blank" rel="noopener">Derek Sivers</a>。相比于“关于”页面讲述过去，这个页面更专注于<strong>我现在正在做什么</strong>。
+      </p>
+
+      <h2>当前主题特色 (Features)</h2>
+      <p>
+        SignalPaper 正在稳步演进中。目前我们已经实现了以下核心功能与体验设计：
+      </p>
+      <ul>
+        <li><strong>极致的排版系统</strong>：基于精心调优的无衬线英文字体与系统级中文字体，确保长文阅读的舒适感。</li>
+        <li><strong>智能浮动目录 (TOC)</strong>：自动提取 H2/H3 标题，右侧悬浮展示，支持阅读进度高亮，当屏幕较小或无标题时优雅隐藏。</li>
+        <li><strong>多维度内容管理</strong>：区分 <code>Posts</code> (文章) 与 <code>Projects</code> (项目)。项目支持生命周期状态追踪（Idea / Active / Shipped 等）。</li>
+        <li><strong>原生双语支持</strong>：内置全站中英文一键切换，独立的 URL 路由，多语言 SEO 优化。</li>
+        <li><strong>极客搜索体验</strong>：支持快捷键 <code>⌘K</code> 呼出，基于浏览器的本地快速全文检索。</li>
+        <li><strong>高度打磨的 UI 细节</strong>：全局深浅色无缝切换、沉浸式的图片缩放 (Medium Zoom)、以及代码一键复制功能。</li>
+      </ul>
+
+      <h2>开发路线图 (Roadmap)</h2>
+      <p>
+        独立开发是一个持续迭代的过程，以下是我未来计划为 SignalPaper 添加的功能：
+      </p>
+      <ul>
+        <li><strong>Webmention 接入</strong>：集成社交网络上的点赞、转发和评论互动。</li>
+        <li><strong>Timeline / Changelog 视图</strong>：适合快速发布碎碎念或项目进展的时间线组件。</li>
+        <li><strong>统计仪表盘 (Dashboard)</strong>：更直观地展示个人输出的数据（字数、标签热度等）。</li>
+        <li><strong>自动化工作流集成</strong>：提供更好的 Obsidian 或 Notion 到 Astro 的一键发布脚本示例。</li>
+      </ul>
+      <p>
+        <em>最后更新于：2026年5月</em>
+      </p>
+    </div>
+
+    <div class="divider-wrap">
+      <hr class="section-divider" />
+    </div>
+
+    <section class="newsletter-section">
+      <Newsletter />
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+  .prose h1 {
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+  }
+  .prose h2 {
+    margin-top: var(--space-10);
+  }
+  .divider-wrap {
+    margin: var(--space-12) 0 var(--space-8) 0;
+  }
+  .section-divider {
+    border: 0;
+    border-top: 1px solid var(--border-muted);
+  }
+</style>

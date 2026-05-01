@@ -10,6 +10,8 @@ export const ui = {
     // Navigation
     'nav.search': 'SEARCH',
     'nav.home': 'Home',
+    'nav.now': 'NOW',
+    'nav.about': 'ABOUT',
 
     // Sections
     'section.writings': 'Writings',
@@ -34,7 +36,7 @@ export const ui = {
     'post.publishedOn': 'Published on',
     'post.tags': 'Tags',
     'post.backToWritings': '← Back to writings',
-    'post.toc': 'On this page',
+    'post.toc': 'Contents',
 
     // Project meta
     'project.status.idea': 'IDEA',
@@ -73,6 +75,8 @@ export const ui = {
     // Navigation
     'nav.search': 'SEARCH',
     'nav.home': '首页',
+    'nav.now': '近况',
+    'nav.about': '关于我',
 
     // Sections
     'section.writings': '写作',
@@ -97,7 +101,7 @@ export const ui = {
     'post.publishedOn': '发布于',
     'post.tags': '标签',
     'post.backToWritings': '← 返回写作列表',
-    'post.toc': '本页导航',
+    'post.toc': '目录',
 
     // Project meta
     'project.status.idea': '构想',

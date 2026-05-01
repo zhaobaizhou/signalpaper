@@ -11,6 +11,8 @@ export const SITE = {
     },
   },
   locale: {
+    // If true, enables the language switcher in the navigation header
+    multiLanguage: true,
     default: 'en' as const,
     alternate: 'zh' as const,
   },
