@@ -522,19 +522,25 @@ a.section-header:hover .section-arrow {
   position: relative;
 }
 
-.astro-code,
+.astro-code {
+  color: var(--shiki-light);
+  background-color: var(--bg-alt) !important;
+}
+
 .astro-code span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
   font-style: var(--shiki-light-font-style);
   font-weight: var(--shiki-light-font-weight);
   text-decoration: var(--shiki-light-text-decoration);
 }
 
-html[data-theme='dark'] .astro-code,
+html[data-theme='dark'] .astro-code {
+  color: var(--shiki-dark);
+  background-color: var(--bg-alt) !important;
+}
+
 html[data-theme='dark'] .astro-code span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
   font-style: var(--shiki-dark-font-style);
   font-weight: var(--shiki-dark-font-weight);
   text-decoration: var(--shiki-dark-text-decoration);

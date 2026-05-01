@@ -60,10 +60,11 @@
     color: var(--fg);
   }
 
-  /* Show sun in dark mode, moon in light mode */
-  :root[data-theme='dark']  .icon-moon { display: none; }
-  :root[data-theme='light'] .icon-sun  { display: none; }
-
-  /* Default: show sun (dark mode is default) */
+  /* By default (dark mode is default), hide the moon */
   .icon-moon { display: none; }
+  .icon-sun { display: block; }
+
+  /* In light mode, hide the sun and show the moon */
+  :root[data-theme='light'] .icon-sun { display: none; }
+  :root[data-theme='light'] .icon-moon { display: block; }
 </style>

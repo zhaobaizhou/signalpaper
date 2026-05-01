@@ -23,7 +23,7 @@ export const SITE = {
   },
   postsPerPage: 10,
   comments: {
-    enabled: true,
+    enabled: false,
     provider: 'giscus', // 'giscus' | 'waline'
     giscus: {
       repo: 'baizhou/signalpaper-comments', // Replace with your repo
