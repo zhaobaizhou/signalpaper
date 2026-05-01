@@ -13,7 +13,17 @@ const actionUrl = SITE.newsletter.actionUrl;
   <aside class="newsletter-wrapper">
     <div class="newsletter-content">
       <h3 class="newsletter-title">{t('newsletter.title')}</h3>
-      <p class="newsletter-description">{t('newsletter.description')}</p>
+      <p class="newsletter-description">
+        {lang === 'zh' ? (
+          <Fragment>
+            通过邮件、<a href={SITE.social.rss} target="_blank">RSS</a>、<a href={SITE.social.x} target="_blank">Twitter</a> 或是 <a href={SITE.social.github} target="_blank">GitHub</a> 等方式关注我的更新。
+          </Fragment>
+        ) : (
+          <Fragment>
+            Follow me via email, <a href={SITE.social.rss} target="_blank">RSS</a>, <a href={SITE.social.x} target="_blank">Twitter</a>, and <a href={SITE.social.github} target="_blank">other options</a>.
+          </Fragment>
+        )}
+      </p>
     </div>
     <form
       action={actionUrl}
@@ -58,6 +68,18 @@ const actionUrl = SITE.newsletter.actionUrl;
     margin: 0;
     margin-bottom: var(--space-md);
     line-height: 1.5;
+  }
+
+  .newsletter-description a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--border-muted);
+    text-underline-offset: 3px;
+    transition: text-decoration-color var(--transition-fast);
+  }
+
+  .newsletter-description a:hover {
+    text-decoration-color: var(--fg);
   }
 
   .newsletter-form {

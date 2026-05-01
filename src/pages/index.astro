@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import PostList from '../components/PostList.astro';
 import TagCloud from '../components/TagCloud.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { getPosts, getProjects, getTagsWithCount } from '../lib/content';
 import { SITE } from '../config/site';
 
@@ -33,6 +34,10 @@ const homeTags = tags.slice(0, 20);
     <PostList posts={homePosts} />
 
     <ProjectGrid projects={homeProjects} />
+
+    <section class="container">
+      <Newsletter />
+    </section>
   </main>
 
   <Footer />
