@@ -70,7 +70,7 @@ const postTitleId = `${getSlug(post.id)}-title`;
     <header class="post-header container">
       <h1 class="post-title" id={postTitleId}>
         {featured && (
-          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="var(--accent)" aria-label="Featured">
+          <svg class="featured-star" xmlns="http://www.w3.org/2000/svg" width="0.85em" height="0.85em" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true">
             <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
           </svg>
         )}
@@ -113,7 +113,7 @@ const postTitleId = `${getSlug(post.id)}-title`;
 
     <div class="post-divider"></div>
 
-    <article class="prose container fade-in" role="main" id="post-content" data-pagefind-body>
+    <article class="prose container fade-in" id="post-content" data-pagefind-body>
       <slot />
     </article>
 

@@ -46,7 +46,7 @@ const t = useTranslations(lang);
             <a href={getLocalePath(lang, `/projects/${slug}`)} class="project-card-link">
               <header class="project-title-row">
                 <h3 class="project-title">
-                  {featured && <span class="featured-dot" aria-label="Featured"></span>}
+                  {featured && <span class="featured-dot" aria-hidden="true"></span>}
                   {title}
                 </h3>
                 <span class="project-year">{displayMeta}</span>
