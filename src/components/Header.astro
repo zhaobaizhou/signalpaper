@@ -127,12 +127,12 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
   </div>
 </div>
 
-<script>
+<script is:inline>
   // ── Search toggle ─────────────────────────────────────────────────────────
   const toggle = document.getElementById('search-toggle');
   const dialog = document.getElementById('search-dialog');
   const closeBtn = document.getElementById('search-close');
-  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const input = document.getElementById('search-input');
   const resultsEl = document.getElementById('search-results');
   const pagefindBundlePath = '/pagefind/pagefind.js';
   const searchMessages = {
@@ -144,7 +144,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     projectLabel: resultsEl?.getAttribute('data-project-label') ?? 'Project',
   };
   let currentLang = document.documentElement.lang || 'en';
-  let pagefindModulePromise: Promise<any> | null = null;
+  let pagefindModulePromise = null;
   let searchStylesReady = false;
 
   function ensureSearchStyles() {
@@ -518,7 +518,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
       : searchMessages.postLabel;
   }
 
-  function renderResults(results: Array<any>) {
+  function renderResults(results) {
     if (!resultsEl) return;
 
     if (results.length === 0) {
@@ -534,7 +534,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
       const summary = item.excerpt || snippets[0]?.excerpt || '';
       const badge = snippets.length;
 
-      const snipRows = snippets.map((snippet: any, i: number) =>
+      const snipRows = snippets.map((snippet, i) =>
         `<a href="${snippet.url}" class="sfg-snip" tabindex="-1"><span class="sfg-gutter">${i + 1}</span><span class="sfg-text">${snippet.title && snippet.title !== item.meta?.title ? `${escapeHtml(snippet.title)} · ` : ''}${snippet.excerpt || ''}</span></a>`
       ).join('');
 
@@ -575,7 +575,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
       if (search === null) return;
 
       const results = await Promise.all(
-        search.results.slice(0, 6).map((result: any) => result.data())
+        search.results.slice(0, 6).map((result) => result.data())
       );
 
       renderResults(results);

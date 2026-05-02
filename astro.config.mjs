@@ -8,6 +8,9 @@ import { rehypeFigure } from './src/lib/rehype-figure.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://example.com',
+  build: {
+    inlineStylesheets: 'always',
+  },
   integrations: [mdx(), sitemap()],
   i18n: {
     defaultLocale: 'en',

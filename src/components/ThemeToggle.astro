@@ -27,14 +27,14 @@
   </svg>
 </button>
 
-<script>
+<script is:inline>
   const btn = document.getElementById('theme-toggle');
 
-  function getCurrentTheme(): 'light' | 'dark' {
-    return (document.documentElement.getAttribute('data-theme') ?? 'dark') as 'light' | 'dark';
+  function getCurrentTheme() {
+    return document.documentElement.getAttribute('data-theme') ?? 'dark';
   }
 
-  function setTheme(theme: 'light' | 'dark') {
+  function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('sp-theme', theme);
   }
