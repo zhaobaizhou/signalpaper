@@ -488,16 +488,16 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     return pagefindModulePromise;
   }
 
-  function escapeHtml(s: string) {
+  function escapeHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function renderMessage(message: string, className = 'search-hint') {
+  function renderMessage(message, className = 'search-hint') {
     if (!resultsEl) return;
     resultsEl.innerHTML = `<p class="${className}">${escapeHtml(message)}</p>`;
   }
 
-  function renderEmptyState(title: string, body: string) {
+  function renderEmptyState(title, body) {
     if (!resultsEl) return;
     resultsEl.innerHTML = `
       <div class="search-empty-state">
@@ -512,7 +512,7 @@ if (path.startsWith('/posts/') || path.startsWith('/zh/posts/')) {
     resultsEl.innerHTML = `<p class="search-hint">${input.placeholder}</p>`;
   }
 
-  function getResultKind(url: string) {
+  function getResultKind(url) {
     return url.includes('/projects/')
       ? searchMessages.projectLabel
       : searchMessages.postLabel;
