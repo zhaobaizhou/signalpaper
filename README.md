@@ -2,11 +2,17 @@
 
 中文 / English
 
-SignalPaper 是一个内容优先的 Astro 作者站主题，适合长期写作、项目归档、标签浏览、站内搜索和双语发布。它的默认体验面向作者站和个人知识库，而不是营销落地页。
+SignalPaper：为创造者与长期写作者打造的极简 Astro 主题。它适合长期写作、项目归档、标签浏览、站内搜索和双语发布，面向作者站与 AI 时代的个人内容站，而不是营销落地页。
 
-SignalPaper is a content-first Astro author theme for long-form writing, project archives, tags, on-site search, and bilingual publishing. It is designed for author sites and personal knowledge archives, not marketing landing pages.
+SignalPaper: A minimalist Astro theme for builders, writers, and AI-native personal sites. It is designed for long-form writing, project archives, tags, on-site search, and bilingual publishing rather than marketing-heavy landing pages.
+
+Build, Clarity, Publish.
 
 ## 特性 / Features
+
+- 中英文双语独立优化，不只是翻译，而是导航、内容、页面结构都可分别定制
+- 为长文阅读而设计，字体、间距、层级、暗色模式都服务于深度阅读
+- 面向 AI 时代的内容发现与发布，充分支持 SEO 与 GEO，让内容更容易被搜索引擎与 AI 检索、理解和引用
 
 - Astro 静态站点
 - 英文 / 中文双语路由
@@ -29,6 +35,12 @@ SignalPaper is a content-first Astro author theme for long-form writing, project
 - Light / dark theme toggle
 - Default `/about` and `/now` pages
 - Feature toggles for comments, analytics, and newsletter
+
+## Core Selling Points
+
+- `Bilingual by design`: Independent English and Chinese content architecture, navigation, and page structure.
+- `Long-form reading optimized`: Calm typography, clean hierarchy, and focused reading layouts for serious writing.
+- `SEO & GEO ready`: Structured for search engines and AI-native discovery from day one.
 
 ## 适合谁 / Who It Is For
 
@@ -243,4 +255,3 @@ This is a static site and can be deployed to:
 - Netlify
 - Cloudflare Pages
 - GitHub Pages
-

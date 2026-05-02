@@ -1,10 +1,10 @@
 export const SITE = {
   name: 'SignalPaper',
   tagline: {
-    en: 'A content-first Astro author theme.',
-    zh: '一个内容优先的 Astro 作者站主题。',
+    en: 'A minimalist Astro theme for builders, writers, and AI-native personal sites.',
+    zh: '为创造者与长期写作者打造的极简 Astro 主题。',
   },
-  description: 'A content-first Astro theme for writing, projects, tags, search, bilingual publishing, and long-form reading.',
+  description: 'A minimalist Astro theme for builders, writers, and AI-native personal sites.',
   url: 'https://example.com',
   author: {
     name: 'Demo Author',
@@ -54,7 +54,7 @@ export const SITE = {
     }
   },
   newsletter: {
-    enabled: true,
+    enabled: false,
     actionUrl: '',
   }
 };

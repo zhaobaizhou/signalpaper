@@ -62,7 +62,7 @@ export const ui = {
     'search.projectLabel': 'Project',
 
     // Footer
-    'footer.tagline': 'SignalPaper is a content-first Astro author theme.',
+    'footer.tagline': 'SignalPaper is a minimalist Astro theme for builders, writers, and AI-native personal sites.',
 
     // Newsletter
     'newsletter.title': 'Follow Me',
@@ -70,7 +70,7 @@ export const ui = {
     'newsletter.button': 'Sign Up',
 
     // SEO fallbacks
-    'meta.description': 'Content-first Astro author theme.',
+    'meta.description': 'A minimalist Astro theme for builders, writers, and AI-native personal sites.',
 
     // 404
     '404.title': 'Page not found',
@@ -133,7 +133,7 @@ export const ui = {
     'search.projectLabel': '项目',
 
     // Footer
-    'footer.tagline': 'SignalPaper 是一个内容优先的 Astro 作者站主题。',
+    'footer.tagline': 'SignalPaper 是一个为创造者与长期写作者打造的极简 Astro 主题。',
 
     // Newsletter
     'newsletter.title': '关注我',
@@ -141,7 +141,7 @@ export const ui = {
     'newsletter.button': '邮件订阅',
 
     // SEO fallbacks
-    'meta.description': '内容优先的 Astro 作者站主题。',
+    'meta.description': '为创造者与长期写作者打造的极简 Astro 主题。',
 
     // 404
     '404.title': '页面未找到',

@@ -21,7 +21,7 @@ export const GET: APIRoute = async () => {
     `> ${SITE.description}`,
     ``,
     `## What this is`,
-    `SignalPaper is a content-first Astro author theme for long-form writing, project archives, bilingual publishing, static search, and long-form reading.`,
+    `SignalPaper is a minimalist Astro theme for builders, writers, and AI-native personal sites.`,
     `Site: ${SITE.url}`,
     `Repository: replace this with the public theme repository URL after release.`,
     ``,
