@@ -119,7 +119,7 @@ const t = useTranslations(lang);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     font-weight: 500;
-    color: var(--fg-muted);
+    color: var(--fg-subtle);
   }
 
   .project-title {
@@ -139,10 +139,18 @@ const t = useTranslations(lang);
 
   .project-desc {
     font-size: var(--text-sm);
-    color: var(--fg-muted);
+    color: var(--fg-subtle);
     line-height: 1.6;
     margin-bottom: var(--space-5);
     flex-grow: 1;
+  }
+
+  [data-theme='dark'] .project-year {
+    color: #b9b3aa;
+  }
+
+  [data-theme='dark'] .project-desc {
+    color: #d2ccc3;
   }
 
   .project-tags {
