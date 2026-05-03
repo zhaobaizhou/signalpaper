@@ -1,13 +1,24 @@
 export const SITE = {
   name: 'SignalPaper',
   tagline: {
-    en: 'A minimalist Astro theme for builders, writers, and AI-native personal sites.',
-    zh: '为创造者与长期写作者打造的极简 Astro 主题。',
+    en: 'A bilingual, content-first Astro theme for long-form writing, project archives, and AI-readable personal sites.',
+    zh: '一个双语、内容优先、面向 Agent 可读性的 Astro 作者站主题。',
   },
-  description: 'A minimalist Astro theme for builders, writers, and AI-native personal sites.',
+  description: 'A bilingual, content-first Astro theme for long-form writing, project archives, and AI-readable personal sites.',
   url: 'https://example.com',
+  repository: 'https://github.com/zhaobaizhou/signalpaper',
+  keywords: [
+    'Astro theme',
+    'bilingual publishing',
+    'author site',
+    'project archive',
+    'AI-readable website',
+    'GEO',
+    'llms.txt',
+  ],
   author: {
     name: 'Demo Author',
+    url: 'https://example.com/about',
     bio: {
       en: 'A demo author profile for SignalPaper.\n\nReplace this with your own introduction before publishing.',
       zh: 'SignalPaper 的示例作者信息。\n\n发布前请替换为你自己的介绍。',

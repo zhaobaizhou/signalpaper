@@ -6,9 +6,12 @@ import Comments from '../components/Comments.astro';
 import Newsletter from '../components/Newsletter.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import { SITE } from '../config/site';
 import { getLang, useTranslations, getLocalePath } from '../i18n/utils';
 import { getSlug } from '../lib/content';
 import type { CollectionEntry } from 'astro:content';
+import { getAlternateLinks } from '../lib/discovery';
+import { buildBreadcrumbSchema } from '../lib/schema';
 
 interface Props {
   post: CollectionEntry<'posts'> | CollectionEntry<'projects'>;
@@ -18,9 +21,10 @@ interface Props {
   backUrl?: string;
   backLabel?: string;
   headings?: { depth: number; slug: string; text: string }[];
+  alternates?: Partial<Record<'en' | 'zh', string>>;
 }
 
-const { post, prev, next, relatedPosts = [], headings = [] } = Astro.props;
+const { post, prev, next, relatedPosts = [], headings = [], alternates } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 const isPost = post.collection === 'posts';
@@ -51,6 +55,15 @@ const formattedModDate = modDatetime?.toLocaleDateString(
   { year: 'numeric', month: 'long', day: 'numeric' }
 );
 const postTitleId = `${getSlug(post.id)}-title`;
+const alternateLinks = getAlternateLinks(alternates);
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: SITE.name, path: lang === 'zh' ? '/zh/' : '/' },
+  {
+    name: isPost ? (lang === 'zh' ? '写作' : 'Writings') : (lang === 'zh' ? '项目' : 'Projects'),
+    path: getLocalePath(lang, isPost ? '/posts' : '/projects'),
+  },
+  { name: title, path: Astro.url.pathname },
+]);
 ---
 
 <BaseLayout
@@ -61,7 +74,9 @@ const postTitleId = `${getSlug(post.id)}-title`;
   pubDatetime={pubDatetime}
   modDatetime={modDatetime}
   pagefindType={isPost ? 'post' : 'project'}
-  article={true}
+  contentType={isPost ? 'post' : 'project'}
+  alternateLinks={alternateLinks}
+  schema={breadcrumbSchema}
 >
   {isPost && <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>}
   <Header />

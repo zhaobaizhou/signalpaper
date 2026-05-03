@@ -1,23 +1,58 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
+import { getAlternateLinks } from '../lib/discovery';
+import { buildBreadcrumbSchema, buildFaqSchema } from '../lib/schema';
+
+const questions = [
+  {
+    question: 'What is SignalPaper?',
+    answer: 'SignalPaper is a content-first Astro theme for authors who want to publish writings, projects, tags, bilingual content, and searchable long-form pages.',
+  },
+  {
+    question: 'Is SignalPaper a personal website or a theme?',
+    answer: 'This repository is prepared as a reusable theme. The included content is official demo content and should be replaced when you build your own site.',
+  },
+  {
+    question: 'Does it require a backend?',
+    answer: 'No. SignalPaper builds to a static site. Search is generated at build time with Pagefind.',
+  },
+  {
+    question: 'Can I disable bilingual publishing?',
+    answer: 'The default demo is bilingual. You can remove the second content tree and routes if you want a single-language site, but the first release is optimized for the included English and Chinese structure.',
+  },
+  {
+    question: 'Are analytics, comments, and newsletters enabled by default?',
+    answer: 'No. These integrations are off by default so a fresh install does not send requests to third-party services.',
+  },
+];
+const alternateLinks = getAlternateLinks({ en: '/faq', zh: '/zh/faq' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/' },
+    { name: 'FAQ', path: '/faq' },
+  ]),
+  buildFaqSchema({ path: '/faq', questions }),
+];
 ---
 
 <DocsLayout
   title="FAQ"
   description="Answers to common questions about using SignalPaper as an Astro author theme."
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <h2>What is SignalPaper?</h2>
-  <p>SignalPaper is a minimalist Astro theme for builders, writers, and AI-native personal sites who want to publish writings, projects, tags, bilingual content, and searchable long-form pages.</p>
+  <p>{questions[0].answer}</p>
 
   <h2>Is SignalPaper a personal website or a theme?</h2>
-  <p>This repository is prepared as a reusable theme. The included content is official demo content and should be replaced when you build your own site.</p>
+  <p>{questions[1].answer}</p>
 
   <h2>Does it require a backend?</h2>
-  <p>No. SignalPaper builds to a static site. Search is generated at build time with Pagefind.</p>
+  <p>{questions[2].answer}</p>
 
   <h2>Can I disable bilingual publishing?</h2>
-  <p>The default demo is bilingual. You can remove the second content tree and routes if you want a single-language site, but the first release is optimized for the included English and Chinese structure.</p>
+  <p>{questions[3].answer}</p>
 
   <h2>Are analytics, comments, and newsletters enabled by default?</h2>
-  <p>No. These integrations are off by default so a fresh install does not send requests to third-party services.</p>
+  <p>{questions[4].answer}</p>
 </DocsLayout>

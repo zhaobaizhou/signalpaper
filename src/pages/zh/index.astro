@@ -8,6 +8,8 @@ import TagCloud from '../../components/TagCloud.astro';
 import ProjectGrid from '../../components/ProjectGrid.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { getPosts, getProjects, getTagsWithCount } from '../../lib/content';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildCollectionPageSchema } from '../../lib/schema';
 
 const lang = 'zh';
 const posts = await getPosts(lang);
@@ -17,11 +19,31 @@ const tags = await getTagsWithCount(lang);
 const homePosts = posts.slice(0, 5);
 const homeProjects = projects.slice(0, 2);
 const homeTags = tags.slice(0, 20);
+const alternateLinks = getAlternateLinks({ en: '/', zh: '/zh/' });
+const schema = buildCollectionPageSchema({
+  name: 'SignalPaper 中文首页',
+  description: '一个内容优先的 Astro 作者站主题，支持写作、项目、标签、搜索和双语发布。',
+  path: '/zh/',
+  items: [
+    ...homePosts.map((post) => ({
+      name: post.data.title,
+      path: `/zh/posts/${post.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: post.data.description,
+    })),
+    ...homeProjects.map((project) => ({
+      name: project.data.title,
+      path: `/zh/projects/${project.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: project.data.description,
+    })),
+  ],
+});
 ---
 
 <BaseLayout
   title={undefined}
-  description="为创造者与长期写作者打造的极简 Astro 主题。"
+  description="一个内容优先的 Astro 作者站主题，支持写作、项目、标签、搜索和双语发布。"
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
   <main id="main-content" role="main">

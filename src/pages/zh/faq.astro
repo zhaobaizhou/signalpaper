@@ -1,0 +1,58 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildBreadcrumbSchema, buildFaqSchema } from '../../lib/schema';
+
+const questions = [
+  {
+    question: 'SignalPaper 是什么？',
+    answer: 'SignalPaper 是一个内容优先的 Astro 主题，适合发布文章、项目、标签、双语内容和可搜索的长文页面。',
+  },
+  {
+    question: '它是个人网站，还是主题产品？',
+    answer: '这个仓库正在整理成可复用主题。现在附带的内容是官方 demo 内容，真正使用时应替换成你自己的站点内容。',
+  },
+  {
+    question: '它需要后端吗？',
+    answer: '不需要。SignalPaper 构建后是纯静态站点，搜索由 Pagefind 在构建阶段生成。',
+  },
+  {
+    question: '可以不用双语吗？',
+    answer: '可以。默认 demo 使用中英文双语结构，但如果你只做单语站，可以删除另一套内容目录和对应路由。',
+  },
+  {
+    question: '统计、评论和订阅默认开启吗？',
+    answer: '不会。它们默认安全关闭，避免新站点刚装好就向第三方发送请求。',
+  },
+];
+const alternateLinks = getAlternateLinks({ en: '/faq', zh: '/zh/faq' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/zh/' },
+    { name: 'FAQ', path: '/zh/faq' },
+  ]),
+  buildFaqSchema({ path: '/zh/faq', questions }),
+];
+---
+
+<DocsLayout
+  title="FAQ"
+  description="关于 SignalPaper 的常见问题。"
+  alternateLinks={alternateLinks}
+  schema={schema}
+>
+  <h2>SignalPaper 是什么？</h2>
+  <p>{questions[0].answer}</p>
+
+  <h2>它是个人网站，还是主题产品？</h2>
+  <p>{questions[1].answer}</p>
+
+  <h2>它需要后端吗？</h2>
+  <p>{questions[2].answer}</p>
+
+  <h2>可以不用双语吗？</h2>
+  <p>{questions[3].answer}</p>
+
+  <h2>统计、评论和订阅默认开启吗？</h2>
+  <p>{questions[4].answer}</p>
+</DocsLayout>

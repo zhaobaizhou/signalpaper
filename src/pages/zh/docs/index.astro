@@ -1,0 +1,51 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import { getAlternateLinks } from '../../../lib/discovery';
+import { buildCollectionPageSchema, buildBreadcrumbSchema } from '../../../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/docs', zh: '/zh/docs' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/zh/' },
+    { name: '文档', path: '/zh/docs' },
+  ]),
+  buildCollectionPageSchema({
+    name: 'SignalPaper 中文文档入口',
+    description: '从这里开始查看 SignalPaper 的说明信息。',
+    path: '/zh/docs',
+    items: [
+      { name: '功能概览', path: '/zh/features' },
+      { name: 'FAQ', path: '/zh/faq' },
+      { name: 'Getting started', path: '/docs/getting-started' },
+      { name: 'Configuration', path: '/docs/configuration' },
+      { name: 'Content model', path: '/docs/content-model' },
+      { name: 'Bilingual setup', path: '/docs/bilingual' },
+      { name: 'Search', path: '/docs/search' },
+    ],
+  }),
+];
+---
+
+<DocsLayout
+  title="文档"
+  description="从这里开始查看 SignalPaper 的说明信息。"
+  alternateLinks={alternateLinks}
+  schema={schema}
+>
+  <h2>先看什么</h2>
+  <ul>
+    <li><a href="/zh/features">功能概览</a></li>
+    <li><a href="/zh/faq">FAQ</a></li>
+    <li><a href="/zh/for-agents">给 Agent 的说明</a></li>
+  </ul>
+
+  <h2>实现细节</h2>
+  <p>当前更完整的设置与实现说明仍以英文页面为主。如果你需要进一步查看，请继续阅读这些页面：</p>
+  <ul>
+    <li><a href="/docs/getting-started">Getting started</a></li>
+    <li><a href="/docs/configuration">Configuration</a></li>
+    <li><a href="/docs/content-model">Content model</a></li>
+    <li><a href="/docs/bilingual">Bilingual setup</a></li>
+    <li><a href="/docs/search">Search</a></li>
+  </ul>
+</DocsLayout>

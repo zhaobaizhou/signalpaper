@@ -2,11 +2,15 @@
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../../layouts/PostLayout.astro';
 import { getLang, getLocalePath } from '../../../i18n/utils';
+import { getContentAlternateMap } from '../../../lib/discovery';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ id, data }) => {
-    return id.startsWith('zh/') && !data.draft;
-  });
+  const [projects, alternates] = await Promise.all([
+    getCollection('projects', ({ id, data }) => {
+      return id.startsWith('zh/') && !data.draft;
+    }),
+    getContentAlternateMap(),
+  ]);
 
   // Sort by featured then year descending
   const sorted = projects.sort((a, b) => {
@@ -27,12 +31,13 @@ export async function getStaticPaths() {
         project,
         prev: prevProj ? { title: prevProj.data.title, url: `/zh/projects/${prevProj.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
         next: nextProj ? { title: nextProj.data.title, url: `/zh/projects/${nextProj.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}` } : null,
+        alternates: alternates.get(`project:${project.id.replace(/^zh\//, '').replace(/\.(md|mdx)$/, '')}`),
       },
     };
   });
 }
 
-const { project, prev, next } = Astro.props;
+const { project, prev, next, alternates } = Astro.props;
 const { Content, headings } = await render(project);
 const lang = getLang(Astro.url);
 ---
@@ -44,6 +49,7 @@ const lang = getLang(Astro.url);
   backUrl={getLocalePath(lang, '/projects')} 
   backLabel="返回项目列表"
   headings={headings}
+  alternates={alternates}
 >
   <Content />
 </PostLayout>

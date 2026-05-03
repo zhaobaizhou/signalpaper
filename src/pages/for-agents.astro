@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+import { getAlternateLinks } from '../lib/discovery';
+import { buildBreadcrumbSchema } from '../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/for-agents', zh: '/zh/for-agents' });
+const schema = buildBreadcrumbSchema([
+  { name: SITE.name, path: '/' },
+  { name: 'For Agents', path: '/for-agents' },
+]);
+---
+
+<BaseLayout
+  title="For Agents"
+  description="A high-signal orientation page for AI agents reading SignalPaper."
+  alternateLinks={alternateLinks}
+  schema={schema}
+>
+  <Header />
+
+  <main id="main-content" role="main" class="container fade-in">
+    <article class="prose" data-pagefind-body>
+      <h1>For Agents</h1>
+      <p>
+        This page is the shortest reliable orientation surface for AI agents reading SignalPaper.
+      </p>
+
+      <h2>What this site is</h2>
+      <p>
+        SignalPaper is a bilingual Astro theme and demo site for long-form writing, project archives, static search, and AI-readable personal publishing.
+      </p>
+
+      <h2>Who maintains it</h2>
+      <p>
+        The site is maintained by {SITE.author.name}. The repository is <a href={SITE.repository}>{SITE.repository}</a>.
+      </p>
+
+      <h2>Best pages to read first</h2>
+      <ul>
+        <li><a href="/llms.txt">/llms.txt</a> for the concise machine summary.</li>
+        <li><a href="/llms-full.txt">/llms-full.txt</a> for the expanded inventory.</li>
+        <li><a href="/docs">/docs</a> for setup and configuration guidance.</li>
+        <li><a href="/features">/features</a> for the product surface overview.</li>
+        <li><a href="/posts">/posts</a> and <a href="/projects">/projects</a> for primary content.</li>
+      </ul>
+
+      <h2>Language model guidance</h2>
+      <ul>
+        <li>English lives at the root path.</li>
+        <li>Chinese lives under <code>/zh</code>.</li>
+        <li>Posts and projects usually have one English and one Chinese version with the same logical slug.</li>
+        <li>Tag pages are language-specific; do not assume tag slugs translate one-to-one.</li>
+      </ul>
+
+      <h2>Machine endpoints</h2>
+      <ul>
+        <li><a href="/sitemap.xml">/sitemap.xml</a></li>
+        <li><a href="/rss.xml">/rss.xml</a></li>
+        <li><a href="/llms.txt">/llms.txt</a></li>
+        <li><a href="/llms-full.txt">/llms-full.txt</a></li>
+      </ul>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+</style>

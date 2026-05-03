@@ -5,6 +5,8 @@ import Footer from '../../components/Footer.astro';
 import PostList from '../../components/PostList.astro';
 import { getPosts } from '../../lib/content';
 import type { GetStaticPaths } from 'astro';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildCollectionPageSchema, buildBreadcrumbSchema } from '../../lib/schema';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPosts('en');
@@ -17,11 +19,34 @@ const pageTitle = isFirstPage ? 'Writings' : `Writings — Page ${page.currentPa
 const pageDescription = isFirstPage
   ? 'All writings — articles on AI workflows, product judgment, and independent work.'
   : `Writings archive page ${page.currentPage} — articles on AI workflows, product judgment, and independent work.`;
+const path = isFirstPage ? '/posts' : `/posts/${page.currentPage}`;
+const alternateLinks = getAlternateLinks({
+  en: path,
+  zh: isFirstPage ? '/zh/posts' : `/zh/posts/${page.currentPage}`,
+});
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/' },
+    { name: 'Writings', path },
+  ]),
+  buildCollectionPageSchema({
+    name: pageTitle,
+    description: pageDescription,
+    path,
+    items: page.data.map((post: any) => ({
+      name: post.data.title,
+      path: `/posts/${post.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: post.data.description,
+    })),
+  }),
+];
 ---
 
 <BaseLayout
   title={pageTitle}
   description={pageDescription}
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
   <main id="main-content" role="main">

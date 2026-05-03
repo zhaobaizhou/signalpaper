@@ -4,6 +4,8 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import { getTagsWithCount } from '../../../lib/content';
 import { pinyin } from 'pinyin-pro';
+import { getAlternateLinks } from '../../../lib/discovery';
+import { buildCollectionPageSchema, buildBreadcrumbSchema } from '../../../lib/schema';
 
 const lang = 'zh';
 const tags = await getTagsWithCount(lang);
@@ -31,9 +33,26 @@ const sortedLetters = Object.keys(groupedTags).sort((a, b) => {
   if (b === '#') return -1;
   return a.localeCompare(b);
 });
+const alternateLinks = getAlternateLinks({ en: '/tags', zh: '/zh/tags' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/zh/' },
+    { name: '标签', path: '/zh/tags' },
+  ]),
+  buildCollectionPageSchema({
+    name: '标签',
+    description: '网站使用的所有标签。',
+    path: '/zh/tags',
+    items: tags.map((tag) => ({
+      name: tag.name,
+      path: `/zh/tags/${tag.name}`,
+      description: `${tag.count} 个内容条目`,
+    })),
+  }),
+];
 ---
 
-<BaseLayout title="标签" description="网站使用的所有标签。">
+<BaseLayout title="标签" description="网站使用的所有标签。" alternateLinks={alternateLinks} schema={schema}>
   <Header />
   <main id="main-content" role="main">
     <div class="page-header container">

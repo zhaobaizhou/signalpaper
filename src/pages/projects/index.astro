@@ -4,6 +4,8 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ProjectGrid from '../../components/ProjectGrid.astro';
 import { getProjects } from '../../lib/content';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildCollectionPageSchema, buildBreadcrumbSchema } from '../../lib/schema';
 
 const lang = 'en';
 const projects = await getProjects(lang);
@@ -16,11 +18,30 @@ const groupedProjects = projects.reduce((acc, proj) => {
 }, {} as Record<string, typeof projects>);
 
 const sortedYears = Object.keys(groupedProjects).sort((a, b) => Number(b) - Number(a));
+const alternateLinks = getAlternateLinks({ en: '/projects', zh: '/zh/projects' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/' },
+    { name: 'Projects', path: '/projects' },
+  ]),
+  buildCollectionPageSchema({
+    name: 'Projects',
+    description: 'Demo projects that show how SignalPaper presents tools, systems, documentation, and ongoing work.',
+    path: '/projects',
+    items: projects.map((project) => ({
+      name: project.data.title,
+      path: `/projects/${project.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: project.data.description,
+    })),
+  }),
+];
 ---
 
 <BaseLayout
   title="Projects"
   description="Demo projects that show how SignalPaper presents tools, systems, documentation, and ongoing work."
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
   <main id="main-content" role="main">

@@ -4,16 +4,26 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { SITE } from '../config/site';
+import { getAlternateLinks } from '../lib/discovery';
+import { buildBreadcrumbSchema } from '../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/about', zh: '/zh/about' });
+const schema = buildBreadcrumbSchema([
+  { name: SITE.name, path: '/' },
+  { name: 'About', path: '/about' },
+]);
 ---
 
 <BaseLayout
   title="About"
   description={`${SITE.name} is a minimalist Astro theme for builders, writers, and AI-native personal sites.`}
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
 
   <main id="main-content" role="main" class="container fade-in">
-    <div class="prose">
+    <div class="prose" data-pagefind-body>
       <h1>About SignalPaper</h1>
       <p>
         SignalPaper is a minimalist Astro theme for builders, writers, and AI-native personal sites who want a durable home for writing and projects.
@@ -23,6 +33,9 @@ import { SITE } from '../config/site';
       </p>
       <p>
         Start with the <a href="/features">feature overview</a>, the <a href="/docs">documentation</a>, or the <a href="/faq">FAQ</a> when adapting the theme.
+      </p>
+      <p>
+        For machine-readable discovery surfaces, review <a href="/for-agents">For Agents</a>, <a href="/llms.txt">llms.txt</a>, and <a href="/llms-full.txt">llms-full.txt</a>.
       </p>
       <h2>Who it is for</h2>
       <p>

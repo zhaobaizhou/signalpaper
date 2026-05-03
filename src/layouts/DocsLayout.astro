@@ -6,15 +6,17 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
+  alternateLinks?: { hrefLang: string; href: string }[];
+  schema?: Record<string, any> | Record<string, any>[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, alternateLinks = [], schema } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} alternateLinks={alternateLinks} schema={schema}>
   <Header />
   <main id="main-content" role="main" class="container fade-in">
-    <article class="docs-page">
+    <article class="docs-page" data-pagefind-body>
       <header class="docs-header">
         <h1>{title}</h1>
         <p>{description}</p>
@@ -57,4 +59,3 @@ const { title, description } = Astro.props;
     max-width: 680px;
   }
 </style>
-

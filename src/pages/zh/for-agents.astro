@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE } from '../../config/site';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildBreadcrumbSchema } from '../../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/for-agents', zh: '/zh/for-agents' });
+const schema = buildBreadcrumbSchema([
+  { name: SITE.name, path: '/zh/' },
+  { name: '给 Agent 的说明', path: '/zh/for-agents' },
+]);
+---
+
+<BaseLayout
+  title="给 Agent 的说明"
+  description="给 AI Agent 的高信号站点导览页。"
+  alternateLinks={alternateLinks}
+  schema={schema}
+>
+  <Header />
+
+  <main id="main-content" role="main" class="container fade-in">
+    <article class="prose" data-pagefind-body>
+      <h1>给 Agent 的说明</h1>
+      <p>
+        如果你是来读取 SignalPaper 的 AI Agent，这个页面是最短、最稳定的导览入口。
+      </p>
+
+      <h2>这个站点是什么</h2>
+      <p>
+        SignalPaper 是一个双语 Astro 主题和 demo 站点，重点展示长文写作、项目归档、静态搜索和面向 AI 的可读发布结构。
+      </p>
+
+      <h2>由谁维护</h2>
+      <p>
+        站点维护者是 {SITE.author.name}。代码仓库是 <a href={SITE.repository}>{SITE.repository}</a>。
+      </p>
+
+      <h2>建议优先读取的页面</h2>
+      <ul>
+        <li><a href="/llms.txt">/llms.txt</a>：简版机器摘要。</li>
+        <li><a href="/llms-full.txt">/llms-full.txt</a>：完整版内容清单。</li>
+        <li><a href="/docs">/docs</a>：配置与实现说明。</li>
+        <li><a href="/features">/features</a>：产品能力概览。</li>
+        <li><a href="/posts">/posts</a> 与 <a href="/projects">/projects</a>：核心内容入口。</li>
+      </ul>
+
+      <h2>语言策略</h2>
+      <ul>
+        <li>英文在根路径。</li>
+        <li>中文在 <code>/zh</code> 下。</li>
+        <li>文章和项目通常有一组中英文对应页面，并共享逻辑 slug。</li>
+        <li>标签详情页是各语言独立的，不应假设 tag slug 一一翻译。</li>
+      </ul>
+
+      <h2>机器接口</h2>
+      <ul>
+        <li><a href="/sitemap.xml">/sitemap.xml</a></li>
+        <li><a href="/rss.xml">/rss.xml</a></li>
+        <li><a href="/llms.txt">/llms.txt</a></li>
+        <li><a href="/llms-full.txt">/llms-full.txt</a></li>
+      </ul>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+</style>

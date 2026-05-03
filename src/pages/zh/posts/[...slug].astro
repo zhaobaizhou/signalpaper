@@ -2,11 +2,15 @@
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../../layouts/PostLayout.astro';
 import { getRelatedPosts, getSlug } from '../../../lib/content';
+import { getContentAlternateMap } from '../../../lib/discovery';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ id, data }) => {
-    return id.startsWith('zh/') && !data.draft;
-  });
+  const [posts, alternates] = await Promise.all([
+    getCollection('posts', ({ id, data }) => {
+      return id.startsWith('zh/') && !data.draft;
+    }),
+    getContentAlternateMap(),
+  ]);
 
   // Sort: featured first, then by date
   const sorted = posts.sort((a, b) => {
@@ -26,15 +30,16 @@ export async function getStaticPaths() {
         prev: prevPost ? { title: prevPost.data.title, url: `/zh/posts/${getSlug(prevPost.id)}` } : null,
         next: nextPost ? { title: nextPost.data.title, url: `/zh/posts/${getSlug(nextPost.id)}` } : null,
         relatedPosts: await getRelatedPosts(post, 'zh'),
+        alternates: alternates.get(`post:${getSlug(post.id)}`),
       },
     };
   }));
 }
 
-const { post, prev, next, relatedPosts } = Astro.props;
+const { post, prev, next, relatedPosts, alternates } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<PostLayout post={post} prev={prev} next={next} relatedPosts={relatedPosts} headings={headings}>
+<PostLayout post={post} prev={prev} next={next} relatedPosts={relatedPosts} headings={headings} alternates={alternates}>
   <Content />
 </PostLayout>

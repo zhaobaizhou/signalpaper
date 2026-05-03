@@ -4,16 +4,26 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { SITE } from '../../config/site';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildBreadcrumbSchema } from '../../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/about', zh: '/zh/about' });
+const schema = buildBreadcrumbSchema([
+  { name: SITE.name, path: '/zh/' },
+  { name: '关于', path: '/zh/about' },
+]);
 ---
 
 <BaseLayout
   title="关于"
   description={`${SITE.name} 是一个为创造者与长期写作者打造的极简 Astro 主题。`}
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
 
   <main id="main-content" role="main" class="container fade-in">
-    <div class="prose">
+    <div class="prose" data-pagefind-body>
       <h1>关于 SignalPaper</h1>
       <p>
         SignalPaper 是一个为创造者与长期写作者打造的极简 Astro 主题，适合搭建长期写作与项目归档站。
@@ -22,7 +32,10 @@ import { SITE } from '../../config/site';
         默认站点围绕三个方向展开：中英文双语独立优化、为长文阅读而设计，以及面向 AI 时代的 SEO 与 GEO。
       </p>
       <p>
-        使用前可以先查看 <a href="/features">功能概览</a>、<a href="/docs">文档</a> 和 <a href="/faq">FAQ</a>。
+        使用前可以先查看 <a href="/zh/features">功能概览</a>、<a href="/zh/docs">文档</a> 和 <a href="/zh/faq">FAQ</a>。
+      </p>
+      <p>
+        如果你要接入机器可读入口，也可以先看 <a href="/zh/for-agents">给 Agent 的说明</a>、<a href="/llms.txt">llms.txt</a> 和 <a href="/llms-full.txt">llms-full.txt</a>。
       </p>
       <h2>适合谁</h2>
       <p>

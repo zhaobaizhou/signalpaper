@@ -1,0 +1,33 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildBreadcrumbSchema } from '../../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/features', zh: '/zh/features' });
+const schema = buildBreadcrumbSchema([
+  { name: 'SignalPaper', path: '/zh/' },
+  { name: '功能', path: '/zh/features' },
+]);
+---
+
+<DocsLayout
+  title="功能"
+  description="SignalPaper 的核心能力概览。"
+  alternateLinks={alternateLinks}
+  schema={schema}
+>
+  <h2>核心页面结构</h2>
+  <p>SignalPaper 默认提供文章、项目、标签、About、Now、RSS、sitemap 和搜索。结构刻意保持克制，让归档可以长期增长而不变乱。</p>
+
+  <h2>长文阅读</h2>
+  <p>文章页内置阅读进度、目录、阅读元信息、相关文章、图片放大和代码复制。</p>
+
+  <h2>双语发布</h2>
+  <p>英文位于根路径，中文位于 <code>/zh</code>。每种语言都有独立内容文件、元信息、标签和生成页面。</p>
+
+  <h2>搜索与可发现性</h2>
+  <p>搜索由 Pagefind 在构建时生成。标签页、归档、相关文章、RSS 和 <code>llms.txt</code> 共同构成内容回访路径。</p>
+
+  <h2>安全默认值</h2>
+  <p>评论、统计和 Newsletter 默认安全关闭，只有在你显式配置后才启用。</p>
+</DocsLayout>

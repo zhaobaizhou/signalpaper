@@ -1,10 +1,36 @@
 ---
 import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getAlternateLinks } from '../../lib/discovery';
+import { buildCollectionPageSchema, buildBreadcrumbSchema } from '../../lib/schema';
+
+const alternateLinks = getAlternateLinks({ en: '/docs', zh: '/zh/docs' });
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'SignalPaper', path: '/' },
+    { name: 'Docs', path: '/docs' },
+  ]),
+  buildCollectionPageSchema({
+    name: 'SignalPaper Docs',
+    description: 'Start here to configure SignalPaper, replace the demo content, and prepare the theme for production.',
+    path: '/docs',
+    items: [
+      { name: 'Getting started', path: '/docs/getting-started' },
+      { name: 'Configuration', path: '/docs/configuration' },
+      { name: 'Content model', path: '/docs/content-model' },
+      { name: 'Bilingual setup', path: '/docs/bilingual' },
+      { name: 'Search', path: '/docs/search' },
+      { name: 'Features', path: '/features' },
+      { name: 'FAQ', path: '/faq' },
+    ],
+  }),
+];
 ---
 
 <DocsLayout
   title="Docs"
   description="Start here to configure SignalPaper, replace the demo content, and prepare the theme for production."
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <h2>Start</h2>
   <ul>
@@ -21,4 +47,3 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
     <li><a href="/faq">FAQ</a></li>
   </ul>
 </DocsLayout>
-

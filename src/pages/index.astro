@@ -9,6 +9,8 @@ import ProjectGrid from '../components/ProjectGrid.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { getPosts, getProjects, getTagsWithCount } from '../lib/content';
 import { SITE } from '../config/site';
+import { getAlternateLinks } from '../lib/discovery';
+import { buildCollectionPageSchema } from '../lib/schema';
 
 const lang = 'en';
 const posts = await getPosts(lang);
@@ -18,11 +20,31 @@ const tags = await getTagsWithCount(lang);
 const homePosts = posts.slice(0, 5);
 const homeProjects = projects.slice(0, 2);
 const homeTags = tags.slice(0, 20);
+const alternateLinks = getAlternateLinks({ en: '/', zh: '/zh/' });
+const schema = buildCollectionPageSchema({
+  name: SITE.name,
+  description: SITE.description,
+  path: '/',
+  items: [
+    ...homePosts.map((post) => ({
+      name: post.data.title,
+      path: `/posts/${post.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: post.data.description,
+    })),
+    ...homeProjects.map((project) => ({
+      name: project.data.title,
+      path: `/projects/${project.id.replace(/^en\//, '').replace(/\.(md|mdx)$/, '')}`,
+      description: project.data.description,
+    })),
+  ],
+});
 ---
 
 <BaseLayout
   title={undefined}
   description={SITE.description}
+  alternateLinks={alternateLinks}
+  schema={schema}
 >
   <Header />
 
